@@ -13,9 +13,10 @@ var GameScene = new Phaser.Class({
 
 	create: function () {
 		this.screenEndpoints = {
-			left: config.width/2 - (screen.width/2),
-			right: config.width/2 + (screen.width/2),
+			left: config.width/2 - (window.innerWidth/2) + 27,
+			right: config.width/2 + (window.innerWidth/2) - 27,
 		};
+		console.log(this.screenEndpoints.left);
 		this.progresStages = {
 			1: .5,
 			2: .8,
