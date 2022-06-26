@@ -1,4 +1,3 @@
-var statusBarComplete, statusBar;
 var GameScene = new Phaser.Class({
 
 	Extends: Phaser.Scene,
@@ -17,10 +16,16 @@ var GameScene = new Phaser.Class({
 			left: config.width/2 - (screen.width/2),
 			right: config.width/2 + (screen.width/2),
 		};
+		this.progresStages = {
+			1: .5,
+			2: .8,
+			3: 1,
+		};
+		this.currentGameProgress = 100;
         this.createBg();
 		this.createHampers();
 		this.createCompleteBar();
-		//this.updateBar(55);
+		this.updateBar(this.currentGameProgress);
     },
 
 	createBg(){
@@ -48,29 +53,52 @@ var GameScene = new Phaser.Class({
 
 		this.hamper_2 = this.add.sprite(config.width/2, config.height - 5, 'sprites', 'hamper_2').setScale(.35).setOrigin(.5, 1);
 		
-		this.hamper_1 = this.add.sprite(config.width/2, 500, 'sprites', 'hamper_1').setScale(.35).setOrigin(.5, 1);
+		this.hamper_1 = this.add.sprite(0, 0, 'sprites', 'hamper_1').setScale(.35).setOrigin(.5, 1);
 		this.hamper_1.setPosition(config.width/2 - this.hamper_2.width * .35, config.height - 5);
 
-		this.hamper_3 = this.add.sprite(config.width/2, 500, 'sprites', 'hamper_3').setScale(.35).setOrigin(.5, 1);
+		this.hamper_3 = this.add.sprite(0, 0, 'sprites', 'hamper_3').setScale(.35).setOrigin(.5, 1);
 		this.hamper_3.setPosition(config.width/2 + this.hamper_2.width * .35, config.height - 5);
 	},
 
 	createCompleteBar(){
-		statusBar = this.add.sprite(this.screenEndpoints.left, config.height/2, 'sprites', 'statusBarEmpty');
-		statusBar.alpha = 0.68;
-		statusBarComplete = this.add.sprite(this.screenEndpoints.left, config.height/2, 'sprites', 'statusBarComplete');
-		statusBarComplete.flipY = true;
-		statusBarComplete.frame.cutHeight = 0;
-		statusBarComplete.frame.updateUVs();
-		this.progressArrow = this.add.sprite(statusBar.x + statusBar.width - 24/2, statusBar.y + statusBar.height/2, 'sprites', 'progressArrow').setDisplaySize(24,25).setOrigin(1, 0.5);
+		this.statusBar = this.add.sprite(this.screenEndpoints.left, config.height/2.35, 'sprites', 'statusBarEmpty');
+		this.statusBar.alpha = 0.68;
+		
+		this.statusBarComplete = this.add.sprite(this.screenEndpoints.left, config.height/2.35, 'sprites', 'statusBarComplete');
+		this.statusBarComplete.flipY = true;
+		this.statusBarComplete.frame.cutHeight = 0;
+		this.statusBarComplete.frame.updateUVs();
+
+		this.statusBarStar1 = this.add.sprite(this.screenEndpoints.left, this.statusBar.y - (this.statusBar.height/2) + (this.statusBar.height * (1 - this.progresStages[1])), 'sprites', 'star').setDisplaySize(45, 40);
+		this.statusBarStar2 = this.add.sprite(this.screenEndpoints.left, this.statusBar.y - (this.statusBar.height/2) + (this.statusBar.height * (1 - this.progresStages[2])), 'sprites', 'star').setDisplaySize(45, 40);
+		this.statusBarStar3 = this.add.sprite(this.screenEndpoints.left, this.statusBar.y - (this.statusBar.height/2) + (this.statusBar.height * (1 - this.progresStages[3])), 'sprites', 'star').setDisplaySize(45, 40);
+
+		this.progressArrow = this.add.sprite(this.statusBar.x + this.statusBar.width, this.statusBar.y + this.statusBar.height/2, 'sprites', 'progressArrow').setDisplaySize(18,20).setOrigin(1, 0.5);
 	},
 
 	updateBar(value){
-		let all_heigt = statusBar.height;
+		if (value > 100) {
+			value = 100;
+		}
+		else if (value < 0) {
+			value = 0;
+		}
+
+		let all_heigt = this.statusBar.height;
 		let one_percent = all_heigt / 100;
 		let new_value = one_percent * value;
-		statusBarComplete.frame.cutHeight = new_value;
-		statusBarComplete.frame.updateUVs();
-		this.progressArrow.y = statusBar.y + statusBar.height/2 - new_value; 
+		this.statusBarComplete.frame.cutHeight = new_value;
+		this.statusBarComplete.frame.updateUVs();
+		this.progressArrow.y = this.statusBar.y + this.statusBar.height/2 - new_value;
+
+		if (this.currentGameProgress >= this.progresStages[1] * 100) {
+			this.statusBarStar1.setTexture('sprites', 'star_active');
+			if (this.currentGameProgress >= this.progresStages[2] * 100) {
+				this.statusBarStar2.setTexture('sprites', 'star_active');
+				if (this.currentGameProgress >= this.progresStages[3] * 100) {
+					this.statusBarStar3.setTexture('sprites', 'star_active');
+				}
+			}
+		}
 	},
 });
