@@ -1,3 +1,4 @@
+var star;
 var GameScene = new Phaser.Class({
 
 	Extends: Phaser.Scene,
@@ -12,11 +13,7 @@ var GameScene = new Phaser.Class({
 	},
 
 	create: function () {
-		this.screenEndpoints = {
-			left: config.width/2 - (window.innerWidth/2) + 27,
-			right: config.width/2 + (window.innerWidth/2) - 27,
-		};
-		console.log(this.screenEndpoints.left);
+		this.setEndpoints();
 		this.progresStages = {
 			1: .5,
 			2: .8,
@@ -27,7 +24,24 @@ var GameScene = new Phaser.Class({
 		this.createHampers();
 		this.createCompleteBar();
 		this.updateBar(this.currentGameProgress);
+
+		star = this.add.sprite(this.screenEndpoints.right, 540, 'sprites', 'star_active').setDisplaySize(45, 40);
     },
+
+	setEndpoints(){
+		if (screen.width >= screen.height){
+			this.screenEndpoints = {
+				left: (config.width * .075),
+				right: config.width - (config.width * .075),
+			};
+		}
+		else {
+			this.screenEndpoints = {
+				left: (config.width/2) - screen.width/2 * config.width/screen.height,
+				right: (config.width/2) + screen.width/2 * config.width/screen.height,
+			};
+		}
+	},
 
 	createBg(){
 		this.sceneBG = this.add.sprite(config.width/2, config.height/2, 'sprites', 'scene_bg');
