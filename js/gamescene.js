@@ -63,13 +63,13 @@ var GameScene = new Phaser.Class({
 			};
 		}
 
-		this.hamper_2 = this.add.sprite(config.width/2, config.height - 5, 'sprites', 'hamper_2').setScale(.35).setOrigin(.5, 1);
+		this.hamper_2 = this.add.sprite(config.width/2, config.height - 5, 'sprites', 'hamper_2').setScale(.42).setOrigin(.5, 1);
 		
-		this.hamper_1 = this.add.sprite(0, 0, 'sprites', 'hamper_1').setScale(.35).setOrigin(.5, 1);
-		this.hamper_1.setPosition(config.width/2 - this.hamper_2.width * .35, config.height - 5);
+		this.hamper_1 = this.add.sprite(0, 0, 'sprites', 'hamper_2').setScale(.42).setOrigin(.5, 1);
+		this.hamper_1.setPosition(config.width/2 - this.hamper_2.width * .42, config.height - 5);
 
-		this.hamper_3 = this.add.sprite(0, 0, 'sprites', 'hamper_3').setScale(.35).setOrigin(.5, 1);
-		this.hamper_3.setPosition(config.width/2 + this.hamper_2.width * .35, config.height - 5);
+		this.hamper_3 = this.add.sprite(0, 0, 'sprites', 'hamper_2').setScale(.42).setOrigin(.5, 1);
+		this.hamper_3.setPosition(config.width/2 + this.hamper_2.width * .42, config.height - 5);
 	},
 
 	createCompleteBar(){
