@@ -63,13 +63,22 @@ var GameScene = new Phaser.Class({
 			};
 		}
 
-		this.hamper_2 = this.add.sprite(config.width/2, config.height - 5, 'sprites', 'hamper_2').setScale(.42).setOrigin(.5, 1);
+		this.hamper_2 = this.add.sprite(config.width/2, config.height, 'sprites', 'hamper_2').setScale(.38).setOrigin(.5, 1);
+		this.hamper_2_Frame = this.add.sprite(this.hamper_2.x, this.hamper_2.y - this.hamper_2.displayHeight, 'sprites', 'frame_yellow').setScale(.6).setOrigin(.5, 1);
+		this.hamper_2_Icon = this.add.sprite(this.hamper_2.x, this.hamper_2_Frame.y, 'sprites', 'icon_Underwear').setScale(.6).setOrigin(.5, 1.4);
+		this.hamper_2_MiniIcon = this.add.sprite(this.hamper_2_Icon.x + this.hamper_2_Frame.displayWidth/2, this.hamper_2_Icon.y - this.hamper_2_Frame.displayHeight, 'sprites', 'icon_shelf').setScale(.6).setOrigin(.5,0);
 		
-		this.hamper_1 = this.add.sprite(0, 0, 'sprites', 'hamper_2').setScale(.42).setOrigin(.5, 1);
-		this.hamper_1.setPosition(config.width/2 - this.hamper_2.width * .42, config.height - 5);
+		this.hamper_1 = this.add.sprite(0, 0, 'sprites', 'hamper_1').setScale(.38).setOrigin(.5, 1);
+		this.hamper_1.setPosition(config.width/2 - this.hamper_2.width * .38, config.height);
+		this.hamper_1_Frame = this.add.sprite(this.hamper_1.x, this.hamper_1.y - this.hamper_1.displayHeight, 'sprites', 'frame_pink').setScale(.6).setOrigin(.5, 1);
+		this.hamper_1_Icon = this.add.sprite(this.hamper_1.x, this.hamper_1_Frame.y, 'sprites', 'icon_Dress').setScale(.6).setOrigin(.5, 1.4);
+		this.hamper_1_MiniIcon = this.add.sprite(this.hamper_1_Icon.x + this.hamper_1_Frame.displayWidth/2, this.hamper_1_Icon.y - this.hamper_1_Frame.displayHeight, 'sprites', 'icon_hanger').setScale(.6).setOrigin(.5,0);
 
-		this.hamper_3 = this.add.sprite(0, 0, 'sprites', 'hamper_2').setScale(.42).setOrigin(.5, 1);
-		this.hamper_3.setPosition(config.width/2 + this.hamper_2.width * .42, config.height - 5);
+		this.hamper_3 = this.add.sprite(0, 0, 'sprites', 'hamper_3').setScale(.38).setOrigin(.5, 1);
+		this.hamper_3.setPosition(config.width/2 + this.hamper_2.width * .38, config.height);
+		this.hamper_3_Frame = this.add.sprite(this.hamper_3.x, this.hamper_3.y - this.hamper_3.displayHeight, 'sprites', 'frame_yellow').setScale(.6).setOrigin(.5, 1);
+		this.hamper_3_Icon = this.add.sprite(this.hamper_3.x, this.hamper_3_Frame.y, 'sprites', 'icon_Underpants').setScale(.6).setOrigin(.5, 1.4);
+		this.hamper_3_MiniIcon = this.add.sprite(this.hamper_3_Icon.x + this.hamper_3_Frame.displayWidth/2, this.hamper_3_Icon.y - this.hamper_3_Frame.displayHeight, 'sprites', 'icon_shelf').setScale(.6).setOrigin(.5,0);
 	},
 
 	createCompleteBar(){
