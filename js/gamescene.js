@@ -1,4 +1,3 @@
-var star;
 var GameScene = new Phaser.Class({
 
 	Extends: Phaser.Scene,
@@ -24,8 +23,6 @@ var GameScene = new Phaser.Class({
 		this.createHampers();
 		this.createCompleteBar();
 		this.updateBar(this.currentGameProgress);
-
-		star = this.add.sprite(this.screenEndpoints.right, 540, 'sprites', 'star_active').setDisplaySize(45, 40);
     },
 
 	setEndpoints(){
