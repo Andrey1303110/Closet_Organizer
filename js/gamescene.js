@@ -1,3 +1,4 @@
+var test;
 class GameScene extends Phaser.Scene {
     constructor() {
         super("GameScene");
@@ -16,15 +17,15 @@ class GameScene extends Phaser.Scene {
 		this.createCompleteBar();
 		this.updateBar(this.currentGameProgress);
 
-        this.addDressesInHamper();
+        this.addObjectsInHamper();
         this.addDresses();
     }
 
     createSounds(){
         this.sounds = {
-            dress_on: this.sound.add('dress_on'),
             basketup: this.sound.add('basketup', {volume: 0.25}),
-            //complete: this.sound.add('complete'),
+            dress_on: this.sound.add('dress_on'),
+            encourage: this.sound.add('encourage'),
             //success: this.sound.add('success'),
             theme: this.sound.add('theme', {volume: 0.5}),
             //timeout: this.sound.add('timeout'),
@@ -171,14 +172,31 @@ class GameScene extends Phaser.Scene {
         return rand;
     }
 
-    addDressesInHamper(){
+    addObjectsInHamper(){
         this.hampers.forEach(hamper => {
             hamper.objectsIn = [];
-            if (hamper.name === 'dress') {
-                let step = 6;
-                for (let i = 0; i < config.clothingSettings.dress.nums; i++) {
-                    hamper.objectsIn[i] = this.add.sprite(hamper.x, hamper.y - hamper.displayHeight + 107 - (Math.round(Math.random() * step) * i), 'sprites', 'dress_fold').setDisplaySize(hamper.displayWidth - hamper.displayWidth * .4, hamper.displayWidth - hamper.displayWidth * .25,).setAngle(this.generateRandom(-25, 25));
-                }
+            let step;
+            switch (hamper.name) {
+                case 'dress':
+                    step = 6;
+                    for (let i = 0; i < config.clothingSettings[hamper.name].nums; i++) {
+                        hamper.objectsIn[i] = this.add.sprite(this.generateRandom(hamper.x - hamper.x/30, hamper.x + hamper.x/30), hamper.y - hamper.displayHeight + 107 - (this.generateRandom(0, step) * i), 'sprites', 'dress_fold').setDisplaySize(hamper.displayWidth - hamper.displayWidth * .4, hamper.displayWidth - hamper.displayWidth * .25,).setAngle(this.generateRandom(-25, 25));
+                    }
+                break;
+                case 'underwear':
+                    step = 4;
+                    for (let i = 0; i < config.clothingSettings[hamper.name].nums; i++) {
+                        let sprite_name = 'underwear_' + Math.round(Math.random() * 2);
+                        hamper.objectsIn[i] = this.add.sprite(this.generateRandom(hamper.x - hamper.x/30, hamper.x + hamper.x/30), hamper.y - hamper.displayHeight + 125 - (this.generateRandom(0, step) * i), 'sprites', sprite_name).setDisplaySize(81, 42).setAngle(this.generateRandom(60, 120));
+                    }
+                break;
+                case 'underpants':
+                    step = 4;
+                    for (let i = 0; i < config.clothingSettings[hamper.name].nums; i++) {
+                        let sprite_name = 'underpants_' + Math.round(Math.random() * 2);
+                        hamper.objectsIn[i] = this.add.sprite(this.generateRandom(hamper.x - hamper.x/30, hamper.x + hamper.x/30), hamper.y - hamper.displayHeight + 137 - (this.generateRandom(0, step) * i), 'sprites', sprite_name).setDisplaySize(81, 42).setAngle(this.generateRandom(-40, 40));
+                    }
+                break;
             }
         });
     }
@@ -191,8 +209,14 @@ class GameScene extends Phaser.Scene {
 
         this.dress_area = this.add.sprite(config.width/2, all_width, 'sprites', 'empty').setAlpha(.1).setDisplaySize(320, 460).setInteractive();
         this.dress_area.on('pointerdown', function(){
-            if (this.dresssesOn >= config.clothingSettings.dress.nums || this.selectedСlothing !== 'dress') return;
+            if (this.dresssesOn >= config.clothingSettings.dress.nums || this.selectedСlothing !== 'dress') {
+                return;
+            }
             this.dresssesOn++;
+            if (this.dresssesOn === config.clothingSettings.dress.nums || this.selectedСlothing !== 'dress') {
+                this.sounds.encourage.play();
+            }
+            
             this.sounds.dress_on.play();
             for (let i = 0; i < this.dresssesOn; i++) {
                 this.add.sprite(first_position_y + step * i, 367, 'sprites', 'dress_on_hanger').setDisplaySize(27, 460);
