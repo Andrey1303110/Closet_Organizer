@@ -13,7 +13,7 @@ const config = {
       width: 143,
       height: 210,
     },
-    hamperNames: ['dress', 'underpants', 'underwear'],
+    hamperNames: ['dress', 'underwear', 'underpants'],
     clothingSettings: { 
       dress: {
         nums: 12
