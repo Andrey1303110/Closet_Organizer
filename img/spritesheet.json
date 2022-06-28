@@ -48,5 +48,5 @@
         {"filename":"empty","frame":{"x":0,"y":1080,"w":1,"h":1},"rotated":false,"trimmed":false,"spriteSourceSize":{"x":0,"y":0,"w":1,"h":1},"sourceSize":{"w":1,"h":1}}
     ],
     "meta":
-        {"app":"https://www.leshylabs.com/apps/sstool/","version":"Leshy SpriteSheet Tool v0.8.4","image":"spritesheet.png","size":{"w":2363,"h":1915},"scale":1}
+        {"app":"https://www.leshylabs.com/apps/sstool/","version":"Leshy SpriteSheet Tool v0.8.4","image":"spritesheet.png","size":{"w":2400,"h":1915},"scale":1}
 }
