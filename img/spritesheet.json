@@ -20,7 +20,7 @@
         {"filename":"icon_underpants","frame":{"x":1438,"y":1499,"w":81,"h":75},"rotated":false,"trimmed":false,"spriteSourceSize":{"x":0,"y":0,"w":81,"h":75},"sourceSize":{"w":81,"h":75}},
         {"filename":"icon_underwear","frame":{"x":1520,"y":1499,"w":81,"h":75},"rotated":false,"trimmed":false,"spriteSourceSize":{"x":0,"y":0,"w":81,"h":75},"sourceSize":{"w":81,"h":75}},
         {"filename":"scene_bg","frame":{"x":0,"y":0,"w":1920,"h":1080},"rotated":false,"trimmed":false,"spriteSourceSize":{"x":0,"y":0,"w":1920,"h":1080},"sourceSize":{"w":1920,"h":1080}},
-        {"filename":"shelf","frame":{"x":0,"y":1081,"w":580,"h":270},"rotated":false,"trimmed":false,"spriteSourceSize":{"x":0,"y":0,"w":580,"h":270},"sourceSize":{"w":580,"h":270}},
+        {"filename":"shelf","frame":{"x":0,"y":1081,"w":579,"h":244},"rotated":false,"trimmed":false,"spriteSourceSize":{"x":0,"y":0,"w":579,"h":244},"sourceSize":{"w":579,"h":244}},
         {"filename":"star","frame":{"x":1602,"y":1811,"w":62,"h":59},"rotated":false,"trimmed":false,"spriteSourceSize":{"x":0,"y":0,"w":62,"h":59},"sourceSize":{"w":62,"h":59}},
         {"filename":"star_active","frame":{"x":1539,"y":1811,"w":62,"h":60},"rotated":false,"trimmed":false,"spriteSourceSize":{"x":0,"y":0,"w":62,"h":60},"sourceSize":{"w":62,"h":60}},
         {"filename":"text_0","frame":{"x":965,"y":1811,"w":304,"h":97},"rotated":false,"trimmed":false,"spriteSourceSize":{"x":0,"y":0,"w":304,"h":97},"sourceSize":{"w":304,"h":97}},
@@ -29,6 +29,9 @@
         {"filename":"underpants_0","frame":{"x":1356,"y":1582,"w":390,"h":227},"rotated":false,"trimmed":false,"spriteSourceSize":{"x":0,"y":0,"w":390,"h":227},"sourceSize":{"w":390,"h":227}},
         {"filename":"underpants_1","frame":{"x":965,"y":1582,"w":390,"h":228},"rotated":false,"trimmed":false,"spriteSourceSize":{"x":0,"y":0,"w":390,"h":228},"sourceSize":{"w":390,"h":228}},
         {"filename":"underpants_2","frame":{"x":965,"y":1352,"w":390,"h":229},"rotated":false,"trimmed":false,"spriteSourceSize":{"x":0,"y":0,"w":390,"h":229},"sourceSize":{"w":390,"h":229}},
+        {"filename":"underpants_fold_0","frame":{"x":1733,"y":1100,"w":43,"h":109},"rotated":false,"trimmed":false,"spriteSourceSize":{"x":0,"y":0,"w":43,"h":109},"sourceSize":{"w":43,"h":109}},
+        {"filename":"underpants_fold_1","frame":{"x":1687,"y":1100,"w":43,"h":109},"rotated":false,"trimmed":false,"spriteSourceSize":{"x":0,"y":0,"w":43,"h":109},"sourceSize":{"w":43,"h":109}},
+        {"filename":"underpants_fold_2","frame":{"x":1641,"y":1100,"w":43,"h":109},"rotated":false,"trimmed":false,"spriteSourceSize":{"x":0,"y":0,"w":43,"h":109},"sourceSize":{"w":43,"h":109}},
         {"filename":"waves","frame":{"x":1270,"y":1811,"w":268,"h":66},"rotated":false,"trimmed":false,"spriteSourceSize":{"x":0,"y":0,"w":268,"h":66},"sourceSize":{"w":268,"h":66}},
         {"filename":"icon_hanger","frame":{"x":1665,"y":1811,"w":45,"h":44},"rotated":false,"trimmed":false,"spriteSourceSize":{"x":0,"y":0,"w":45,"h":44},"sourceSize":{"w":45,"h":44}},
         {"filename":"icon_shelf","frame":{"x":1711,"y":1811,"w":45,"h":44},"rotated":false,"trimmed":false,"spriteSourceSize":{"x":0,"y":0,"w":45,"h":44},"sourceSize":{"w":45,"h":44}},
@@ -38,7 +41,8 @@
         {"filename":"additional_0","frame":{"x":1921,"y":1755,"w":111,"h":138},"rotated":false,"trimmed":false,"spriteSourceSize":{"x":0,"y":0,"w":111,"h":138},"sourceSize":{"w":111,"h":138}},
         {"filename":"additional_1","frame":{"x":2173,"y":1755,"w":110,"h":138},"rotated":false,"trimmed":false,"spriteSourceSize":{"x":0,"y":0,"w":110,"h":138},"sourceSize":{"w":110,"h":138}},
         {"filename":"additional_2","frame":{"x":2046,"y":1755,"w":110,"h":138},"rotated":false,"trimmed":false,"spriteSourceSize":{"x":0,"y":0,"w":110,"h":138},"sourceSize":{"w":110,"h":138}},
-        {"filename":"hand","frame":{"x":1390,"y":1120,"w":200,"h":219},"rotated":false,"trimmed":false,"spriteSourceSize":{"x":0,"y":0,"w":200,"h":219},"sourceSize":{"w":200,"h":219}}
+        {"filename":"hand","frame":{"x":1390,"y":1120,"w":200,"h":219},"rotated":false,"trimmed":false,"spriteSourceSize":{"x":0,"y":0,"w":200,"h":219},"sourceSize":{"w":200,"h":219}},
+        {"filename":"empty","frame":{"x":0,"y":1080,"w":1,"h":1},"rotated":false,"trimmed":false,"spriteSourceSize":{"x":0,"y":0,"w":1,"h":1},"sourceSize":{"w":1,"h":1}}
     ],
     "meta":
         {"app":"https://www.leshylabs.com/apps/sstool/","version":"Leshy SpriteSheet Tool v0.8.4","image":"spritesheet.png","size":{"w":2363,"h":1915},"scale":1}
