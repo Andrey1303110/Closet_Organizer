@@ -180,21 +180,21 @@ class GameScene extends Phaser.Scene {
                 case 'dress':
                     step = 6;
                     for (let i = 0; i < config.clothingSettings[hamper.name].nums; i++) {
-                        hamper.objectsIn[i] = this.add.sprite(this.generateRandom(hamper.x - hamper.x/30, hamper.x + hamper.x/30), hamper.y - hamper.displayHeight + 107 - (this.generateRandom(0, step) * i), 'sprites', 'dress_fold').setDisplaySize(hamper.displayWidth - hamper.displayWidth * .4, hamper.displayWidth - hamper.displayWidth * .25,).setAngle(this.generateRandom(-25, 25));
+                        hamper.objectsIn[i] = this.add.sprite(this.generateRandom(hamper.x - hamper.x * 1/33, hamper.x + hamper.x * 1/33), hamper.y - hamper.displayHeight + 107 - (this.generateRandom(0, step) * i), 'sprites', 'dress_fold').setDisplaySize(hamper.displayWidth - hamper.displayWidth * .4, hamper.displayWidth - hamper.displayWidth * .25,).setAngle(this.generateRandom(-25, 25));
                     }
                 break;
                 case 'underwear':
                     step = 4;
                     for (let i = 0; i < config.clothingSettings[hamper.name].nums; i++) {
-                        let sprite_name = 'underwear_' + Math.round(Math.random() * 2);
-                        hamper.objectsIn[i] = this.add.sprite(this.generateRandom(hamper.x - hamper.x/30, hamper.x + hamper.x/30), hamper.y - hamper.displayHeight + 125 - (this.generateRandom(0, step) * i), 'sprites', sprite_name).setDisplaySize(81, 42).setAngle(this.generateRandom(60, 120));
+                        let sprite_name = 'underwear_' + Math.round(Math.random() * 4);
+                        hamper.objectsIn[i] = this.add.sprite(this.generateRandom(hamper.x - hamper.x * 1/33, hamper.x + hamper.x * 1/33), hamper.y - hamper.displayHeight + 125 - (this.generateRandom(0, step) * i), 'sprites', sprite_name).setDisplaySize(81, 42).setAngle(this.generateRandom(60, 120));
                     }
                 break;
                 case 'underpants':
-                    step = 4;
+                    step = 4.5;
                     for (let i = 0; i < config.clothingSettings[hamper.name].nums; i++) {
                         let sprite_name = 'underpants_' + Math.round(Math.random() * 2);
-                        hamper.objectsIn[i] = this.add.sprite(this.generateRandom(hamper.x - hamper.x/30, hamper.x + hamper.x/30), hamper.y - hamper.displayHeight + 137 - (this.generateRandom(0, step) * i), 'sprites', sprite_name).setDisplaySize(81, 42).setAngle(this.generateRandom(-40, 40));
+                        hamper.objectsIn[i] = this.add.sprite(this.generateRandom(hamper.x - hamper.x * 1/33, hamper.x + hamper.x * 1/33), hamper.y - hamper.displayHeight + 137 - (this.generateRandom(0, step) * i), 'sprites', sprite_name).setDisplaySize(81, 42).setAngle(this.generateRandom(-40, 40));
                     }
                 break;
             }
