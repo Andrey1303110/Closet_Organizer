@@ -2,9 +2,9 @@
     "frames":[
         {"filename":"arrow","frame":{"x":1921,"y":1437,"w":243,"h":331},"rotated":false,"trimmed":false,"spriteSourceSize":{"x":0,"y":0,"w":243,"h":331},"sourceSize":{"w":243,"h":331}},
         {"filename":"progressArrow","frame":{"x":1770,"y":1815,"w":32,"h":34},"rotated":false,"trimmed":false,"spriteSourceSize":{"x":0,"y":0,"w":32,"h":34},"sourceSize":{"w":32,"h":34}},
-        {"filename":"bra_0","frame":{"x":847,"y":1180,"w":180,"h":95},"rotated":false,"trimmed":false,"spriteSourceSize":{"x":0,"y":0,"w":180,"h":95},"sourceSize":{"w":180,"h":95}},
-        {"filename":"bra_1","frame":{"x":1356,"y":1352,"w":281,"h":146},"rotated":false,"trimmed":false,"spriteSourceSize":{"x":0,"y":0,"w":281,"h":146},"sourceSize":{"w":281,"h":146}},
-        {"filename":"bra_2","frame":{"x":1638,"y":1352,"w":270,"h":131},"rotated":false,"trimmed":false,"spriteSourceSize":{"x":0,"y":0,"w":270,"h":131},"sourceSize":{"w":270,"h":131}},
+        {"filename":"underwear_0","frame":{"x":847,"y":1180,"w":180,"h":95},"rotated":false,"trimmed":false,"spriteSourceSize":{"x":0,"y":0,"w":180,"h":95},"sourceSize":{"w":180,"h":95}},
+        {"filename":"underwear_1","frame":{"x":1356,"y":1352,"w":281,"h":146},"rotated":false,"trimmed":false,"spriteSourceSize":{"x":0,"y":0,"w":281,"h":146},"sourceSize":{"w":281,"h":146}},
+        {"filename":"underwear_2","frame":{"x":1638,"y":1352,"w":270,"h":131},"rotated":false,"trimmed":false,"spriteSourceSize":{"x":0,"y":0,"w":270,"h":131},"sourceSize":{"w":270,"h":131}},
         {"filename":"btn_bg_done","frame":{"x":1747,"y":1582,"w":162,"h":159},"rotated":false,"trimmed":false,"spriteSourceSize":{"x":0,"y":0,"w":162,"h":159},"sourceSize":{"w":162,"h":159}},
         {"filename":"btn_bg_retry","frame":{"x":2165,"y":1437,"w":161,"h":159},"rotated":false,"trimmed":false,"spriteSourceSize":{"x":0,"y":0,"w":161,"h":159},"sourceSize":{"w":161,"h":159}},
         {"filename":"btn_try2","frame":{"x":1028,"y":1180,"w":106,"h":94},"rotated":false,"trimmed":false,"spriteSourceSize":{"x":0,"y":0,"w":106,"h":94},"sourceSize":{"w":106,"h":94}},
