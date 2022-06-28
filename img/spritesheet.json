@@ -45,7 +45,7 @@
         {"filename":"additional_1","frame":{"x":2173,"y":1755,"w":110,"h":138},"rotated":false,"trimmed":false,"spriteSourceSize":{"x":0,"y":0,"w":110,"h":138},"sourceSize":{"w":110,"h":138}},
         {"filename":"additional_2","frame":{"x":2046,"y":1755,"w":110,"h":138},"rotated":false,"trimmed":false,"spriteSourceSize":{"x":0,"y":0,"w":110,"h":138},"sourceSize":{"w":110,"h":138}},
         {"filename":"hand","frame":{"x":1390,"y":1120,"w":200,"h":219},"rotated":false,"trimmed":false,"spriteSourceSize":{"x":0,"y":0,"w":200,"h":219},"sourceSize":{"w":200,"h":219}},
-        {"filename":"empty","frame":{"x":0,"y":1080,"w":1,"h":1},"rotated":false,"trimmed":false,"spriteSourceSize":{"x":0,"y":0,"w":1,"h":1},"sourceSize":{"w":1,"h":1}}
+        {"filename":"empty","frame":{"x":0,"y":1081,"w":1,"h":1},"rotated":false,"trimmed":false,"spriteSourceSize":{"x":0,"y":0,"w":1,"h":1},"sourceSize":{"w":1,"h":1}}
     ],
     "meta":
         {"app":"https://www.leshylabs.com/apps/sstool/","version":"Leshy SpriteSheet Tool v0.8.4","image":"spritesheet.png","size":{"w":2400,"h":1915},"scale":1}
