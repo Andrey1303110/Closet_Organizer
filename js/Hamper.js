@@ -15,6 +15,7 @@ class Hamper extends Phaser.GameObjects.Sprite {
         this.scene.hampers[hamper_num].additional_images = this.scene.add.sprite(this.scene.hampers[hamper_num].x, this.scene.hampers[hamper_num].y - this.scene.hampers[hamper_num].displayHeight, 'sprites', 'additional_' + hamper_num).setScale(.65).setOrigin(.5, 1);
     }
 
+    /*
     move(params){
         this.scene.tweens.add({
             targets: this,
@@ -63,4 +64,5 @@ class Hamper extends Phaser.GameObjects.Sprite {
             this.flip();
         }
     }
+    */
 }
