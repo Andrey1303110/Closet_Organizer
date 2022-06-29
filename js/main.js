@@ -22,11 +22,15 @@ const config = {
         nums: 18,
         width: 3,
         height: 3,
+        lines: 2,
+        vertical: 3
       },
       underpants: {
-        nums: 30,
-        width: 15,
+        nums: 36,
+        width: 18,
         height: 3,
+        lines: 1,
+        vertical: 2,
       },
     },
     progresStages: {
