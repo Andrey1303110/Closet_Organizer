@@ -38,52 +38,65 @@ var Preloader = new Phaser.Class({
 		this.setPreloadSprite(this.loadingbar_fill);
 		this.load.atlas('sprites', 'img/spritesheet.png', 'img/spritesheet.json');
 		this.load.bitmapFont('fontwhite', 'img/fontwhite.png', 'img/fontwhite.xml');
-		//this.load.image('bg', 'img/bg.jpg');
-		this.load.audio('bg_sound', ['snd/bg.mp3']);
+		this.load.audio('theme', ['snd/bg.mp3']);
+		this.load.audio('dress_on', ['snd/skirt.mp3']);
+		this.load.audio('basketup', ['snd/basketup.mp3']);
+		this.load.audio('shelf', ['snd/Open.mp3']);
+		this.load.audio('encourage', ['snd/encourage.mp3']);
+		this.load.audio('bra', ['snd/currency.mp3']);
+		this.load.audio('underpants', ['snd/trousers.mp3']);
 	},
 
 	create: function () {
 		this.anims.create({
 			frames: [
 				{ key: 'sprites', frame: "arrow" },
+				{ key: 'sprites', frame: "progressArrow" },
+				{ key: 'sprites', frame: "bra_0" },
 				{ key: 'sprites', frame: "bra_1" },
 				{ key: 'sprites', frame: "bra_2" },
 				{ key: 'sprites', frame: "bra_3" },
+				{ key: 'sprites', frame: "bra_4" },
 				{ key: 'sprites', frame: "btn_bg_done" },
 				{ key: 'sprites', frame: "btn_bg_retry" },
 				{ key: 'sprites', frame: "btn_try2" },
-				{ key: 'sprites', frame: "complete_bar" },
+				{ key: 'sprites', frame: "statusBarComplete" },
+				{ key: 'sprites', frame: "statusBarEmpty" },
 				{ key: 'sprites', frame: "dress_on_hanger" },
-				{ key: 'sprites', frame: "frame_pink" },
-				{ key: 'sprites', frame: "frame_yellow" },
-				{ key: 'sprites', frame: "hamper_1" },
+				{ key: 'sprites', frame: "dress_fold" },
 				{ key: 'sprites', frame: "hamper_2" },
-				{ key: 'sprites', frame: "hamper_3" },
-				{ key: 'sprites', frame: "icon_Dress" },
-				{ key: 'sprites', frame: "icon_Underpants" },
-				{ key: 'sprites', frame: "icon_Underwear" },
+				{ key: 'sprites', frame: "hamper_1" },
+				{ key: 'sprites', frame: "hamper_0" },
 				{ key: 'sprites', frame: "scene_bg" },
 				{ key: 'sprites', frame: "shelf" },
 				{ key: 'sprites', frame: "star" },
 				{ key: 'sprites', frame: "star_active" },
+				{ key: 'sprites', frame: "text_0" },
 				{ key: 'sprites', frame: "text_1" },
 				{ key: 'sprites', frame: "text_2" },
-				{ key: 'sprites', frame: "text_3" },
+				{ key: 'sprites', frame: "underpants_0" },
 				{ key: 'sprites', frame: "underpants_1" },
 				{ key: 'sprites', frame: "underpants_2" },
-				{ key: 'sprites', frame: "underpants_3" },
+				{ key: 'sprites', frame: "fold_underpants_0" },
+				{ key: 'sprites', frame: "fold_underpants_1" },
+				{ key: 'sprites', frame: "fold_underpants_2" },
 				{ key: 'sprites', frame: "waves" },
-				{ key: 'sprites', frame: "yijia" },
-				{ key: 'sprites', frame: "yijia3" },
+				{ key: 'sprites', frame: "icon_hanger" },
+				{ key: 'sprites', frame: "icon_shelf" },
 				{ key: 'sprites', frame: "btn_restart" },
 				{ key: 'sprites', frame: "btn_done" },
 				{ key: 'sprites', frame: "dress" },
+				{ key: 'sprites', frame: "additional_0" },
+				{ key: 'sprites', frame: "additional_1" },
+				{ key: 'sprites', frame: "additional_2" },
+				{ key: 'sprites', frame: "hand" },
+				{ key: 'sprites', frame: "empty" },
 			],
 		});
 		this.loadingbar_bg.destroy();
 		this.loadingbar_fill.destroy();
 		this.preloadSprite = null;
 
-		this.scene.start('gamescene');
+		this.scene.start('GameScene');
 	}
 });
