@@ -259,16 +259,16 @@ class GameScene extends Phaser.Scene {
     addClickArea(){
         let clothing_on_level = config.clothingSettings[this.selectedСlothing].height*config.clothingSettings[this.selectedСlothing].width;
         let levels = Math.ceil(config.clothingSettings[this.selectedСlothing].nums/clothing_on_level);
-        let y = this.shelf.y + 15 - this.shelf.displayHeight/2 + this.shelf.displayHeight/config.clothingSettings[this.selectedСlothing].height/2;
-        let x = this.shelf.x - (this.shelf.displayWidth - 70)/2 - (this.shelf.displayWidth - 70)/config.clothingSettings[this.selectedСlothing].width/2;
+        let y = this.shelf.y - (this.shelf.displayHeight*.9)/2 + this.shelf.displayHeight/config.clothingSettings[this.selectedСlothing].height/2;
+        let x = this.shelf.x - (this.shelf.displayWidth*.9)/2 - (this.shelf.displayWidth*.9)/config.clothingSettings[this.selectedСlothing].width/2;
 
         console.log(x);
 
         for (let i = 0; i < clothing_on_level; i++) {
-            x += (this.shelf.displayWidth - 70)/config.clothingSettings[this.selectedСlothing].width;
+            x += this.shelf.displayWidth/config.clothingSettings[this.selectedСlothing].width*.9;
             if(i%config.clothingSettings[this.selectedСlothing].width === 0 && i > 0) {
-                x = this.shelf.x - (this.shelf.displayWidth - 70)/2 + ((this.shelf.displayWidth - 70)/config.clothingSettings[this.selectedСlothing].width / 2);
-                y += (this.shelf.displayHeight/config.clothingSettings[this.selectedСlothing].height) - 7;
+                x = this.shelf.x - (this.shelf.displayWidth*.9)/2 + ((this.shelf.displayWidth*.9)/config.clothingSettings[this.selectedСlothing].width / 2);
+                y += this.shelf.displayHeight*.9/config.clothingSettings[this.selectedСlothing].height;
             }
             this.click_area[this.selectedСlothing].push(this.add.sprite(x, y, 'sprites', 'empty').setAlpha(.35).setDisplaySize(this.shelf.displayWidth / config.clothingSettings[this.selectedСlothing].width, this.shelf.displayHeight / config.clothingSettings[this.selectedСlothing].height - 7).setInteractive());
         }
