@@ -13,18 +13,20 @@ const config = {
       width: 143,
       height: 210,
     },
-    hamperNames: ['dress', 'underwear', 'underpants'],
+    hamperNames: ['dress', 'bra', 'underpants'],
     clothingSettings: { 
       dress: {
         nums: 12
       },
-      underwear: {
+      bra: {
         nums: 18,
-        lines: 3,
+        width: 3,
+        height: 3,
       },
       underpants: {
-        nums: 32,
-        lines: 2
+        nums: 30,
+        width: 15,
+        height: 3,
       },
     },
     progresStages: {
