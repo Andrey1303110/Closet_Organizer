@@ -408,6 +408,7 @@ class GameScene extends Phaser.Scene {
                     }
     
                     if (this.clothing_nums_on[this.selectedСlothing] % (config.clothingSettings[this.selectedСlothing].width * lines) === 0 && this.clothing_nums_on[this.selectedСlothing] < config.clothingSettings[this.selectedСlothing].nums) {
+                        this.active_click_area_nums.underpants = 0;
                         this.addClickAreaUnderpants();
                         this.sounds.encourage.play();
                     }
