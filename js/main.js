@@ -16,14 +16,16 @@ const config = {
     hamperNames: ['dress', 'bra', 'underpants'],
     clothingSettings: { 
       dress: {
-        nums: 12
+        nums: 12,
+        percentage: 1.5,
       },
       bra: {
         nums: 18,
         width: 3,
         height: 3,
         lines: 2,
-        vertical: 3
+        vertical: 3,
+        percentage: 2.5,
       },
       underpants: {
         nums: 36,
@@ -31,6 +33,7 @@ const config = {
         height: 3,
         lines: 1,
         vertical: 2,
+        percentage: 1.03,
       },
     },
     progresStages: {

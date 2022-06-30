@@ -1,4 +1,5 @@
 var test;
+var retry;
 class GameScene extends Phaser.Scene {
     constructor() {
         super("GameScene");
@@ -9,7 +10,15 @@ class GameScene extends Phaser.Scene {
     create(){
         this.createSounds();
         this.setEndpoints();
-		this.currentGameProgress = 78;
+        this.createBackground();
+        this.createLevelText();
+		this.createCompleteBar();
+        this.start();
+    }
+
+    start(){
+        this.currentGameProgress = 0;
+        this.updateBar(this.currentGameProgress);
         this.selectedСlothing = null;
         this.shelfActive = false;
         this.shelf_level = {
@@ -31,14 +40,29 @@ class GameScene extends Phaser.Scene {
             bra: [],
             underpants: [],
         };
-        this.createBackground();
-        this.createLelvelText();
-		this.createHampers();
-		this.createCompleteBar();
-		this.updateBar(this.currentGameProgress);
-
+        this.createHampers();
         this.addObjectsInHamper();
         this.addClickAreaDress();
+
+        retry = this.add.sprite(this.screenEndpoints.right, config.height/2, 'sprites', 'btn_bg_retry').setInteractive();
+        retry.on('pointerdown', this.restart, this);
+    }
+
+    restart(){
+        for (let i = 0; i < this.dress_on_hanger.length; i++) {
+            this.dress_on_hanger[i].destroy();
+        }
+        this.dress_on_hanger = [];
+        this.hampers.forEach(hamper => {
+            hamper.destroy();
+            hamper.additional_images.destroy();
+            hamper.additional_images = [];
+            for (let i = 0; i < hamper.objectsIn.length; i++) {
+                hamper.objectsIn[i].destroy();
+            }
+            hamper.objectsIn = [];
+        });
+        this.start();
     }
 
     createSounds(){
@@ -82,7 +106,7 @@ class GameScene extends Phaser.Scene {
 		this.sceneBG.setScale(scale).setScrollFactor(0);
     }
 
-    createLelvelText(){
+    createLevelText(){
         this.add.text(config.width/2, 75, 'Level 1', {
             font: '32px sans-serif',
             fill: '#fff',
@@ -193,6 +217,11 @@ class GameScene extends Phaser.Scene {
 		}
 	}
 
+    getPercentOfClothe(clothe){
+        this.currentGameProgress += config.clothingSettings[clothe].percentage;
+        this.updateBar(this.currentGameProgress);
+    }
+
     generateRandom(min, max) {
         let difference = max - min;
         let rand = Math.random(); 
@@ -231,10 +260,11 @@ class GameScene extends Phaser.Scene {
     }
 
     addClickAreaDress(){
-        let all_width = 315;
+        this.dress_on_hanger = [];
+        let closet_width = 315;
 
         for (let i = 0; i < config.clothingSettings.dress.nums; i++) {
-            this.click_area['dress'].push(this.add.sprite(config.width/2 - all_width/2 + all_width/config.clothingSettings.dress.nums * i + all_width/config.clothingSettings.dress.nums/2, 340, 'sprites', 'empty').setAlpha(.001).setDisplaySize(all_width/config.clothingSettings.dress.nums, 460).setInteractive());
+            this.click_area['dress'].push(this.add.sprite(config.width/2 - closet_width/2 + closet_width/config.clothingSettings.dress.nums * i + closet_width/config.clothingSettings.dress.nums/2, 340, 'sprites', 'empty').setAlpha(.001).setDisplaySize(closet_width/config.clothingSettings.dress.nums, 460).setInteractive());
         }
 
         this.click_area['dress'].forEach(area => {
@@ -248,18 +278,20 @@ class GameScene extends Phaser.Scene {
                         this.sounds.encourage.play();
                     }
                     this.sounds.dress_on.play();
-                    this.add.sprite(area.x, 367, 'sprites', 'dress_on_hanger').setDisplaySize(27, 460);
+                    this.dress_on_hanger.push(this.add.sprite(area.x, 367, 'sprites', 'dress_on_hanger').setDisplaySize(27, 460));
                     this.hampers.forEach(hamper => {
                         if (hamper.name === 'dress') {
                             hamper.objectsIn.pop().destroy();
                         }
                     });
                     area.removeInteractive();
+
+                    this.getPercentOfClothe(this.selectedСlothing);
                 }
             }, this);
         });
 
-        this.shelf_area = this.add.sprite(config.width/2, config.height * .65, 'sprites', 'empty').setAlpha(.01).setDisplaySize(all_width, 150).setInteractive();
+        this.shelf_area = this.add.sprite(config.width/2, config.height * .65, 'sprites', 'empty').setAlpha(.001).setDisplaySize(closet_width, 150).setInteractive();
         this.shelf_area.on('pointerdown', this.openShelf, this);
     }
 
@@ -289,7 +321,7 @@ class GameScene extends Phaser.Scene {
                 x = this.shelf.x - (this.shelf.displayWidth*.9)/2 + ((this.shelf.displayWidth*.9)/config.clothingSettings[this.selectedСlothing].width / 2);
                 y += this.shelf.displayHeight*.9/config.clothingSettings[this.selectedСlothing].height;
             }
-            this.click_area['bra'].push(this.add.sprite(x, y, 'sprites', 'empty').setAlpha(.35).setDisplaySize(this.shelf.displayWidth / config.clothingSettings[this.selectedСlothing].width * .9, this.shelf.displayHeight / config.clothingSettings[this.selectedСlothing].height - 7).setInteractive());
+            this.click_area['bra'].push(this.add.sprite(x, y, 'sprites', 'empty').setAlpha(.001).setDisplaySize(this.shelf.displayWidth / config.clothingSettings[this.selectedСlothing].width * .9, this.shelf.displayHeight / config.clothingSettings[this.selectedСlothing].height - 7).setInteractive());
         }
 
         this.click_area['bra'].forEach(area => {
@@ -328,6 +360,8 @@ class GameScene extends Phaser.Scene {
                             this.click_area['bra'].splice(j, 1);
                         }
                     }
+
+                    this.getPercentOfClothe(this.selectedСlothing);
                 }
             });
             this.sounds[this.selectedСlothing].play();
@@ -373,7 +407,7 @@ class GameScene extends Phaser.Scene {
                 x = this.shelf.x - (this.shelf.displayWidth*(.9 + this.shelf_level['underpants'] * .05 ))/2 + ((this.shelf.displayWidth*(.9 + this.shelf_level['underpants'] * .05 ))/config.clothingSettings[this.selectedСlothing].width / 2);
                 y += this.shelf.displayHeight*.9/config.clothingSettings[this.selectedСlothing].height;
             }
-            this.click_area['underpants'].push(this.add.sprite(x, y, 'sprites', 'empty').setAlpha(.35).setDisplaySize(this.shelf.displayWidth / config.clothingSettings[this.selectedСlothing].width * .9, this.shelf.displayHeight / config.clothingSettings[this.selectedСlothing].height - 7).setInteractive());
+            this.click_area['underpants'].push(this.add.sprite(x, y, 'sprites', 'empty').setAlpha(.001).setDisplaySize(this.shelf.displayWidth / config.clothingSettings[this.selectedСlothing].width * .9, this.shelf.displayHeight / config.clothingSettings[this.selectedСlothing].height - 7).setInteractive());
         }
 
         this.click_area['underpants'].forEach(area => {
@@ -408,6 +442,8 @@ class GameScene extends Phaser.Scene {
                             this.click_area['underpants'].splice(j, 1);
                         }
                     }
+
+                    this.getPercentOfClothe(this.selectedСlothing);
                 }
             });
             this.sounds[this.selectedСlothing].play();
