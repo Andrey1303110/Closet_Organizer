@@ -69,10 +69,7 @@ class GameScene extends Phaser.Scene {
     }
 
     addRetryButton(){
-        retry = this.add.sprite(this.screenEndpoints.no_margin_right, config.height/2, 'sprites', 'btn_bg_retry').setInteractive().setScale(.6);
-        if (screen.width > screen.height) {
-            retry.setPosition(retry.x - retry.displayWidth/2, retry.y);
-        }
+        retry = this.add.sprite(this.screenEndpoints.no_margin_right, config.height/2, 'sprites', 'btn_bg_retry').setInteractive().setScale(.5).setOrigin(1, .5);
         retry.on('pointerdown', this.restart, this);
     }
 
@@ -102,10 +99,10 @@ class GameScene extends Phaser.Scene {
 		}
 		else {
 			this.screenEndpoints = {
-				left: (config.width/2) - screen.width/2 * config.width/screen.height + screen.width * .025,
-                right: (config.width/2) + screen.width/2 * config.width/screen.height - screen.width * .025,
-                no_margin_left: (config.width/2) - screen.width/2 * config.width/screen.height,
-                no_margin_right: (config.width/2) + screen.width/2 * config.width/screen.height,
+				left: (config.width/2) - screen.width/2 * (config.height/window.innerHeight) + (screen.width * .125),
+                right: (config.width/2) + screen.width/2 * (config.height/window.innerHeight) - (screen.width * .125),
+                no_margin_left: (config.width/2) - screen.width/2 * (config.height/window.innerHeight),
+                no_margin_right: (config.width/2) + screen.width/2 * (config.height/window.innerHeight),
 			};
 		}
 	}
