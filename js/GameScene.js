@@ -282,7 +282,7 @@ class GameScene extends Phaser.Scene {
         let closet_width = 315;
 
         for (let i = 0; i < config.clothingSettings.dress.nums; i++) {
-            this.click_area['dress'].push(this.add.sprite(config.width/2 - closet_width/2 + closet_width/config.clothingSettings.dress.nums * i + closet_width/config.clothingSettings.dress.nums/2, 340, 'sprites', 'empty').setAlpha(.5).setDisplaySize(closet_width/config.clothingSettings.dress.nums, 460).setInteractive());
+            this.click_area['dress'].push(this.add.sprite(config.width/2 - closet_width/2 + closet_width/config.clothingSettings.dress.nums * i + closet_width/config.clothingSettings.dress.nums/2, 340, 'sprites', 'empty').setAlpha(.001).setDisplaySize(closet_width/config.clothingSettings.dress.nums, 460).setInteractive());
         }
 
         this.click_area['dress'].forEach(area => {
