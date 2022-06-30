@@ -12,6 +12,10 @@ class GameScene extends Phaser.Scene {
 		this.currentGameProgress = 78;
         this.selectedСlothing = null;
         this.shelfActive = false;
+        this.shelf_level = {
+            bra: 0,
+            underpants: 0,
+        };
         this.clothing_nums_on = {
             dress: null,
             bra: null,
@@ -140,12 +144,6 @@ class GameScene extends Phaser.Scene {
                     });
                 }
                 this.scene.sounds.basketup.play();
-
-                for (let area = 0; area < this.scene.click_area.length; area++) {
-                    if (this.scene.click_area[area].frame.name === 'empty' && this.scene.selectedСlothing) {
-
-                    }
-                }
             });
 
             this.hampers[1].on('pointerdown', this.addClickAreaBra, this);
@@ -267,31 +265,25 @@ class GameScene extends Phaser.Scene {
 
     addClickAreaBra(){
         if ((this.selectedСlothing != config.hamperNames[1]) || !this.shelfActive) {
-            console.log('this stop');
             return;
         }
 
         if ((this.click_area['bra'].length > 0) && (this.click_area['bra'].length % (config.clothingSettings['bra'].nums / config.clothingSettings['bra'].vertical)) !== 0) {
-            console.log('this stop');
             return;
         }
 
         if (this.active_click_area_nums.bra > 0) {
-            console.log('this stop');
             return;
         }
 
         if (this.hampers[1].objectsIn <= 0) {
-            console.log('this stop');
             return;
         }
-
-        let lines = config.clothingSettings[this.selectedСlothing].lines;
 
         let y = this.shelf.y - (this.shelf.displayHeight*.9)/2 + this.shelf.displayHeight/config.clothingSettings[this.selectedСlothing].height/2;
         let x = this.shelf.x - (this.shelf.displayWidth*.9)/2 - (this.shelf.displayWidth*.9)/config.clothingSettings[this.selectedСlothing].width/2;
 
-        for (let i = 0; i < config.clothingSettings[this.selectedСlothing].width * lines; i++) {
+        for (let i = 0; i < config.clothingSettings[this.selectedСlothing].width * config.clothingSettings[this.selectedСlothing].lines; i++) {
             x += this.shelf.displayWidth/config.clothingSettings[this.selectedСlothing].width*.9;
             if(i%config.clothingSettings[this.selectedСlothing].width === 0 && i > 0) {
                 x = this.shelf.x - (this.shelf.displayWidth*.9)/2 + ((this.shelf.displayWidth*.9)/config.clothingSettings[this.selectedСlothing].width / 2);
@@ -302,49 +294,57 @@ class GameScene extends Phaser.Scene {
 
         this.click_area['bra'].forEach(area => {
             this.active_click_area_nums.bra++;
-            area.on('pointermove', function(pointer){
-                if (this.selectedСlothing) {
-                    if (this.clothing_nums_on[this.selectedСlothing] >= config.clothingSettings[this.selectedСlothing].nums || this.selectedСlothing !== config.hamperNames[1]) {
-                        return;
-                    }
-                    this.clothing_nums_on[this.selectedСlothing]++;
-    
-                    this.hampers.forEach(hamper => {
-                        if (hamper.name === this.selectedСlothing) {
-                            let object = hamper.objectsIn.pop();
-                            let sprite_frame = object.frame.name;
-                            /*
-                            if (this.selectedСlothing === 'underpants') {
-                                sprite_frame = 'fold_' + sprite_frame;
-                            }
-                            */
-                            this.click_area['bra'].push(this.add.sprite(area.x, area.y, 'sprites', sprite_frame).setDisplaySize(this.shelf.displayWidth/config.clothingSettings[this.selectedСlothing].width * .65, this.shelf.displayHeight/config.clothingSettings[this.selectedСlothing].height * .75));
-                            object.destroy();
-                            area.destroy();
-    
-                            for (let j = 0; j < this.click_area['bra'].length; j++) {
-                                if (this.click_area['bra'][j].x === area.x && this.click_area['bra'][j].y === area.y && this.click_area['bra'][j].frame.name === 'empty') {
-                                    this.click_area['bra'].splice(j, 1);
-                                }
-                            }
-                        }
-                    });
-                    this.sounds[this.selectedСlothing].play();
-                    if (this.clothing_nums_on[this.selectedСlothing] === config.clothingSettings[this.selectedСlothing].nums) {
-                        this.sounds.encourage.play();
-                    }
-    
-                    if (this.clothing_nums_on[this.selectedСlothing] % (config.clothingSettings[this.selectedСlothing].width * lines) === 0 && this.clothing_nums_on[this.selectedСlothing] < config.clothingSettings[this.selectedСlothing].nums) {
-                        this.active_click_area_nums.bra = 0;
-                        this.addClickAreaBra();
-                        this.sounds.encourage.play();
-                    }
-                }
-                else {
-                    //стрелочки на корзины
-                }
-            }, this);
+            area.on('pointermove', ()=>{this.addBraInShelf(area)}, this);
         });
+    }
+
+    addBraInShelf(area){
+        if (this.selectedСlothing) {
+            if (this.clothing_nums_on[this.selectedСlothing] >= config.clothingSettings[this.selectedСlothing].nums || this.selectedСlothing !== config.hamperNames[1]) {
+                return;
+            }
+            this.clothing_nums_on[this.selectedСlothing]++;
+
+            this.hampers.forEach(hamper => {
+                if (hamper.name === this.selectedСlothing) {
+                    let object = hamper.objectsIn.pop();
+                    let sprite_frame = object.frame.name;
+                    /*
+                    if (this.selectedСlothing === 'underpants') {
+                        sprite_frame = 'fold_' + sprite_frame;
+                    }
+                    */
+                    let y_gap = 5;
+                    this.click_area['bra'].push(this.add.sprite(area.x, area.y - (this.shelf_level['bra'] * y_gap), 'sprites', sprite_frame).setDisplaySize(this.shelf.displayWidth/config.clothingSettings[this.selectedСlothing].width * .5, this.shelf.displayHeight/config.clothingSettings[this.selectedСlothing].height * .6));
+                    let last_elem = this.click_area['bra'][this.click_area['bra'].length-1];
+                    if (this.shelf_level['bra'] > 0) {
+                        last_elem.setDisplaySize(last_elem.displayWidth * (.065 * this.shelf_level['bra'] + 1), last_elem.displayHeight * (.065 * this.shelf_level['bra'] + 1));
+                    }
+                    object.destroy();
+                    area.destroy();
+
+                    for (let j = 0; j < this.click_area['bra'].length; j++) {
+                        if (this.click_area['bra'][j].x === area.x && this.click_area['bra'][j].y === area.y && this.click_area['bra'][j].frame.name === 'empty') {
+                            this.click_area['bra'].splice(j, 1);
+                        }
+                    }
+                }
+            });
+            this.sounds[this.selectedСlothing].play();
+            if (this.clothing_nums_on[this.selectedСlothing] === config.clothingSettings[this.selectedСlothing].nums) {
+                this.sounds.encourage.play();
+            }
+
+            if (this.clothing_nums_on[this.selectedСlothing] % (config.clothingSettings[this.selectedСlothing].width * config.clothingSettings[this.selectedСlothing].lines) === 0 && this.clothing_nums_on[this.selectedСlothing] < config.clothingSettings[this.selectedСlothing].nums) {
+                this.active_click_area_nums.bra = 0;
+                this.shelf_level['bra']++;
+                this.addClickAreaBra();
+                this.sounds.encourage.play();
+            }
+        }
+        else {
+            //стрелочки на корзины
+        }
     }
 
     addClickAreaUnderpants(){
@@ -360,19 +360,17 @@ class GameScene extends Phaser.Scene {
             return;
         }
 
-        if (this.hampers[1].objectsIn <= 0) {
+        if (this.hampers[2].objectsIn <= 0) {
             return;
         }
 
-        let lines = config.clothingSettings[this.selectedСlothing].lines;
-
         let y = this.shelf.y + (this.shelf.displayHeight*.9)/3;
-        let x = this.shelf.x - (this.shelf.displayWidth*.9)/2 - (this.shelf.displayWidth*.9)/config.clothingSettings[this.selectedСlothing].width/2;
+        let x = this.shelf.x - (this.shelf.displayWidth*(.9 + this.shelf_level['underpants'] * .05 ))/2 - (this.shelf.displayWidth*(.9 + this.shelf_level['underpants'] * .05 ))/config.clothingSettings[this.selectedСlothing].width/2;
 
-        for (let i = 0; i < config.clothingSettings[this.selectedСlothing].width * lines; i++) {
-            x += this.shelf.displayWidth/config.clothingSettings[this.selectedСlothing].width*.9;
+        for (let i = 0; i < config.clothingSettings[this.selectedСlothing].width * config.clothingSettings[this.selectedСlothing].lines; i++) {
+            x += this.shelf.displayWidth/config.clothingSettings[this.selectedСlothing].width*(.9 + this.shelf_level['underpants'] * .05 );
             if(i%config.clothingSettings[this.selectedСlothing].width === 0 && i > 0) {
-                x = this.shelf.x - (this.shelf.displayWidth*.9)/2 + ((this.shelf.displayWidth*.9)/config.clothingSettings[this.selectedСlothing].width / 2);
+                x = this.shelf.x - (this.shelf.displayWidth*(.9 + this.shelf_level['underpants'] * .05 ))/2 + ((this.shelf.displayWidth*(.9 + this.shelf_level['underpants'] * .05 ))/config.clothingSettings[this.selectedСlothing].width / 2);
                 y += this.shelf.displayHeight*.9/config.clothingSettings[this.selectedСlothing].height;
             }
             this.click_area['underpants'].push(this.add.sprite(x, y, 'sprites', 'empty').setAlpha(.35).setDisplaySize(this.shelf.displayWidth / config.clothingSettings[this.selectedСlothing].width * .9, this.shelf.displayHeight / config.clothingSettings[this.selectedСlothing].height - 7).setInteractive());
@@ -380,44 +378,53 @@ class GameScene extends Phaser.Scene {
 
         this.click_area['underpants'].forEach(area => {
             this.active_click_area_nums.underpants++;
-            area.on('pointermove', function(pointer){
-                if (this.selectedСlothing) {
-                    if (this.clothing_nums_on[this.selectedСlothing] >= config.clothingSettings[this.selectedСlothing].nums || this.selectedСlothing !== config.hamperNames[2]) {
-                        return;
-                    }
-                    this.clothing_nums_on[this.selectedСlothing]++;
-    
-                    this.hampers.forEach(hamper => {
-                        if (hamper.name === this.selectedСlothing) {
-                            let object = hamper.objectsIn.pop();
-                            let sprite_frame = 'fold_' + object.frame.name;
-                            this.click_area['underpants'].push(this.add.sprite(area.x, area.y, 'sprites', sprite_frame).setDisplaySize(this.shelf.displayWidth/config.clothingSettings[this.selectedСlothing].width * .85, this.shelf.displayHeight/config.clothingSettings[this.selectedСlothing].height * .85));
-                            object.destroy();
-                            area.destroy();
-    
-                            for (let j = 0; j < this.click_area['underpants'].length; j++) {
-                                if (this.click_area['underpants'][j].x === area.x && this.click_area['underpants'][j].y === area.y && this.click_area['underpants'][j].frame.name === 'empty') {
-                                    this.click_area['underpants'].splice(j, 1);
-                                }
-                            }
-                        }
-                    });
-                    this.sounds[this.selectedСlothing].play();
-                    if (this.clothing_nums_on[this.selectedСlothing] === config.clothingSettings[this.selectedСlothing].nums) {
-                        this.sounds.encourage.play();
-                    }
-    
-                    if (this.clothing_nums_on[this.selectedСlothing] % (config.clothingSettings[this.selectedСlothing].width * lines) === 0 && this.clothing_nums_on[this.selectedСlothing] < config.clothingSettings[this.selectedСlothing].nums) {
-                        this.active_click_area_nums.underpants = 0;
-                        this.addClickAreaUnderpants();
-                        this.sounds.encourage.play();
-                    }
-                }
-                else {
-                    //стрелочки на корзины
-                }
-            }, this);
+            area.on('pointermove', ()=>{this.addUnderwearInShelf(area)}, this);
         });
+    }
+
+    addUnderwearInShelf(area){
+        if (this.selectedСlothing) {
+            if (this.clothing_nums_on[this.selectedСlothing] >= config.clothingSettings[this.selectedСlothing].nums || this.selectedСlothing !== config.hamperNames[2]) {
+                return;
+            }
+            this.clothing_nums_on[this.selectedСlothing]++;
+
+            this.hampers.forEach(hamper => {
+                if (hamper.name === this.selectedСlothing) {
+                    let object = hamper.objectsIn.pop();
+                    let sprite_frame = 'fold_' + object.frame.name;
+                    let y_gap = 5;
+                    this.click_area['underpants'].push(this.add.sprite(area.x, area.y - (this.shelf_level['underpants'] * y_gap) + 2.5, 'sprites', sprite_frame).setDisplaySize(this.shelf.displayWidth/config.clothingSettings[this.selectedСlothing].width * .85, this.shelf.displayHeight/config.clothingSettings[this.selectedСlothing].height * .85));
+                    let last_elem = this.click_area['underpants'][this.click_area['underpants'].length-1];
+                    if (this.shelf_level['underpants'] > 0) {
+                        last_elem.setDisplaySize(last_elem.displayWidth * (.1 * this.shelf_level['underpants'] + 1), last_elem.displayHeight * (.1 * this.shelf_level['underpants'] + 1));
+                    }
+                    
+                    object.destroy();
+                    area.destroy();
+
+                    for (let j = 0; j < this.click_area['underpants'].length; j++) {
+                        if (this.click_area['underpants'][j].x === area.x && this.click_area['underpants'][j].y === area.y && this.click_area['underpants'][j].frame.name === 'empty') {
+                            this.click_area['underpants'].splice(j, 1);
+                        }
+                    }
+                }
+            });
+            this.sounds[this.selectedСlothing].play();
+            if (this.clothing_nums_on[this.selectedСlothing] === config.clothingSettings[this.selectedСlothing].nums) {
+                this.sounds.encourage.play();
+            }
+
+            if (this.clothing_nums_on[this.selectedСlothing] % (config.clothingSettings[this.selectedСlothing].width * config.clothingSettings[this.selectedСlothing].lines) === 0 && this.clothing_nums_on[this.selectedСlothing] < config.clothingSettings[this.selectedСlothing].nums) {
+                this.shelf_level['underpants']++;
+                this.active_click_area_nums.underpants = 0;
+                this.addClickAreaUnderpants();
+                this.sounds.encourage.play();
+            }
+        }
+        else {
+            //стрелочки на корзины
+        }
     }
 
     openShelf(){
@@ -449,9 +456,13 @@ class GameScene extends Phaser.Scene {
             this.shelfActive = true;
             this.shelf = this.add.sprite(config.width/2, this.shelf_area.y - this.shelf_area.displayHeight/2, 'sprites', 'shelf').setScale(.75).setInteractive();
 
-            if (!this.clothing_nums_on[config.hamperNames[1]] && !this.clothing_nums_on[config.hamperNames[2]]) {
-                this.addClickAreaBra();
-                this.addClickAreaUnderpants();
+            if (!this.clothing_nums_on[config.hamperNames[1]] || !this.clothing_nums_on[config.hamperNames[2]]) {
+                if (this.selectedСlothing === 'bra') {
+                    this.addClickAreaBra();
+                }
+                else if (this.selectedСlothing === 'underpants') {
+                    this.addClickAreaUnderpants();
+                }
             }
         }
         this.sounds.shelf.play();
