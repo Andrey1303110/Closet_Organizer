@@ -97,7 +97,7 @@ class Hamper extends Phaser.GameObjects.Sprite {
 
     shakes(){
         let x = this.x;
-        let frames = 8;
+        let frames = 9;
         let gap = 6;
         let frame_duration = 23;
         let timeline = this.scene.tweens.createTimeline();
@@ -108,6 +108,7 @@ class Hamper extends Phaser.GameObjects.Sprite {
                     targets: this,
                     delay: 250,
                     x: x - gap/2,
+                    angle: 0,
                     ease: 'Power3',
                     duration: frame_duration,
                 });
@@ -116,6 +117,7 @@ class Hamper extends Phaser.GameObjects.Sprite {
                 timeline.add({
                     targets: this,
                     x: x,
+                    angle: 0,
                     ease: 'Power3',
                     duration: frame_duration,
                 });
@@ -125,6 +127,7 @@ class Hamper extends Phaser.GameObjects.Sprite {
                     timeline.add({
                         targets: this,
                         x: x - gap,
+                        angle: 3.5, 
                         ease: 'Power3',
                         duration: frame_duration,
                     });
@@ -133,6 +136,7 @@ class Hamper extends Phaser.GameObjects.Sprite {
                     timeline.add({
                         targets: this,
                         x: x + gap,
+                        angle: -3.5, 
                         ease: 'Power3',
                         duration: frame_duration,
                     });
