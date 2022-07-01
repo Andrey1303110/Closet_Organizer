@@ -40,6 +40,7 @@ class GameScene extends Phaser.Scene {
             bra: [],
             underpants: [],
         };
+        this.hands = [];
         this.createHampers();
         this.addObjectsInHamper();
         this.addClosetClickArea();
@@ -50,12 +51,257 @@ class GameScene extends Phaser.Scene {
         this.closet_area = this.add.sprite(config.width/2, config.height * .4, 'sprites', 'empty').setAlpha(.0001).setDisplaySize(config.closet.width * 1.25, config.height * .75).setInteractive();
         this.closet_area.on('pointerdown', ()=>{
             this.closet_area.destroy();
+            this.hands['initial'].destroy();
             this.hampers.forEach(hamper => {
                 hamper.showing_on_screen();
             });
             this.showCompelteBar();
             this.addClickAreaDress();
         }, this);
+
+        this.addInitialHand();
+    }
+
+    addInitialHand(){
+        let hand = this.add.sprite(config.width/2, config.height * .35, 'sprites', 'hand').setOrigin(1);
+        hand.setDisplaySize(82, 88);
+        hand.setPosition(hand.x + hand.displayWidth, hand.y + hand.displayHeight/2);
+
+        this.createWawingTweens(hand);
+
+        this.hands['initial'] = hand;
+    }
+
+    addShelfHand(){
+        if (this.hands['shelf']) {
+            return;
+        }
+        let hand = this.add.sprite(config.width/2, config.height * .35, 'sprites', 'hand').setOrigin(1);
+        hand.setDisplaySize(82, 88);
+        hand.setPosition(this.shelf_area.x + hand.displayWidth, this.shelf_area.y + hand.displayHeight * .25);
+
+        this.createWawingTweens(hand);
+
+        this.hands['shelf'] = hand;
+    }
+
+    addHandOverHamper(hamper){
+        let name = 'hamper_' + hamper.name;
+        this.hands[name] = this.add.sprite(0, 0, 'sprites', 'hand').setOrigin(1);
+        this.hands[name].setDepth(99);
+        this.hands[name].setDisplaySize(82, 88);
+        this.hands[name].setPosition(hamper.x + this.hands[name].displayWidth*1.5, hamper.y - hamper.displayHeight/2);
+
+        this.createWawingTweens(this.hands[name]);
+    }
+
+    addHandOverClickArea(click_area_name, additional = null){
+        let name = 'clickArea_' + click_area_name;
+        if (this.hands[name]) {
+            this.hands[name].destroy();
+        }
+
+        this.hands[name] = this.add.sprite(0, 0, 'sprites', 'hand').setOrigin(1);
+        this.hands[name].setDisplaySize(82, 88);
+
+        if (!additional) {
+            this.createSwipingTweens(this.hands[name], this.click_area[click_area_name]);
+        } else {
+            this.createSwipingAxisTweens(this.hands[name], this.click_area[click_area_name]);
+        }
+    }
+
+    createWawingTweens(hand){
+        let frames = 999;
+        let frame_duration = 585;
+        let timeline = this.tweens.createTimeline();
+
+        for (let i = 0; i <= frames; i++) {
+            if (i === frames) {
+                timeline.add({
+                    targets: hand,
+                    angle: 0,
+                    ease: 'Linear',
+                    duration: frame_duration,
+                });
+            }
+            else {
+                if (i % 2 === 0 || i === 0) {
+                    timeline.add({
+                        targets: hand,
+                        angle: -20,
+                        ease: 'Linear',
+                        duration: frame_duration,
+                    });
+                }
+                else {
+                    timeline.add({
+                        targets: hand,
+                        angle: 0,
+                        ease: 'Linear',
+                        duration: frame_duration,
+                    });
+                }
+            }
+        };
+
+        timeline.play();
+    }
+
+    createSwipingTweens(hand, click_area){
+        let repeats = 999;
+        let frame_duration = 585;
+        let timeline = this.tweens.createTimeline();
+
+        let first_x = click_area[0].x + hand.displayWidth;
+        let last_x = click_area[click_area.length-1].x + hand.displayWidth;
+
+        hand.y = click_area[0].y + hand.displayHeight/2;
+        hand.x = first_x;
+
+        for (let i = 0; i <= repeats; i++) {
+            timeline.add({
+                targets: hand,
+                angle: -20,
+                ease: 'Linear',
+                duration: frame_duration,
+            });
+            timeline.add({
+                targets: hand,
+                angle: -20,
+                x: last_x,
+                ease: 'Linear',
+                duration: frame_duration * 4,
+                onComplete: ()=>{
+                    hand.setAlpha(0);
+                }
+            });
+            timeline.add({
+                targets: hand,
+                angle: 0,
+                x: first_x,
+                ease: 'Linear',
+                duration: 3000,
+                onComplete: ()=>{
+                    hand.setAlpha(1);
+                }
+            });
+        };
+
+        timeline.play();
+    }
+
+    createSwipingAxisTweens(hand, click_area){
+        let repeats = 999;
+        let frame_duration = 585;
+        let timeline = this.tweens.createTimeline();
+
+        let coordinates = {
+            start: {
+                x: click_area[0].x + hand.displayWidth,
+                y: click_area[0].y + hand.displayHeight/2,
+            },
+            end: {
+                x: click_area[click_area.length-1].x + hand.displayWidth,
+                y: click_area[0].y + (config.shelf.height/3) + hand.displayHeight/2,
+            }
+        };
+
+        hand.y = coordinates.start.y;
+        hand.x = coordinates.start.x;
+
+        for (let i = 0; i <= repeats; i++) {
+            timeline.add({
+                targets: hand,
+                x: coordinates.start.x,
+                y: coordinates.start.y,
+                angle: -20,
+                ease: 'Linear',
+                duration: frame_duration,
+            });
+            timeline.add({
+                targets: hand,
+                angle: -20,
+                x: coordinates.end.x,
+                ease: 'Linear',
+                duration: frame_duration * 4,
+                onComplete: ()=>{
+                    hand.setAlpha(0);
+                }
+            });
+            timeline.add({
+                targets: hand,
+                angle: 0,
+                x: coordinates.start.x,
+                y: coordinates.end.y,
+                ease: 'Linear',
+                duration: 500,
+                onComplete: ()=>{
+                    hand.setAlpha(1);
+                }
+            });
+
+
+            timeline.add({
+                targets: hand,
+                angle: -20,
+                ease: 'Linear',
+                duration: frame_duration,
+            });
+            timeline.add({
+                targets: hand,
+                angle: -20,
+                x: coordinates.end.x,
+                ease: 'Linear',
+                duration: frame_duration * 4,
+                onComplete: ()=>{
+                    hand.setAlpha(0);
+                }
+            });
+            timeline.add({
+                targets: hand,
+                x: coordinates.start.x,
+                y: coordinates.start.y,
+                angle: 0,
+                x: coordinates.start.x,
+                ease: 'Linear',
+                duration: 500,
+                onComplete: ()=>{
+                    hand.setAlpha(1);
+                }
+            });
+
+
+            timeline.add({
+                targets: hand,
+                angle: -20,
+                ease: 'Linear',
+                duration: frame_duration,
+            });
+            timeline.add({
+                targets: hand,
+                angle: -20,
+                y: coordinates.end.y,
+                ease: 'Linear',
+                duration: frame_duration,
+                onComplete: ()=>{
+                    hand.setAlpha(0);
+                }
+            });
+            timeline.add({
+                targets: hand,
+                angle: 0,
+                x: coordinates.start.x,
+                y: coordinates.start.y,
+                ease: 'Linear',
+                duration: 2500,
+                onComplete: ()=>{
+                    hand.setAlpha(1);
+                }
+            });
+        };
+
+        timeline.play();
     }
 
     restart(){
@@ -161,8 +407,30 @@ class GameScene extends Phaser.Scene {
         for(let i = 0; i < this.hampers.length; i++) {
             this.hampers[i].add_additional_images(i);
 
-            this.hampers[i].on('pointerdown', this.hampers[i].selecting);
+            this.hampers[i].on('pointerdown', ()=>{
+                this.hampers[i].selecting();
 
+                config.hamperNames.forEach(name => {
+                    if (this.hands['hamper_' + name]){
+                        this.hands['hamper_' + name].destroy();
+                    } 
+                });
+
+                if (i === 0) {
+                    if (this.hampers[0].isActive && this.hampers[0].objectsIn.length) {
+                        this.addHandOverClickArea(this.hampers[0].name);
+                    }
+                }
+                else {
+                    if (this.hampers[i].isActive && this.hampers[i].objectsIn.length && !this.shelf) {
+                        this.addShelfHand();
+                    }
+                }
+            });
+            this.hampers[0].on('pointerdown', ()=>{
+                this.closeShelf();
+                this.hands['hamper_dress'].destroy();
+            }, this);
             this.hampers[1].on('pointerdown', this.addClickAreaBra, this);
             this.hampers[2].on('pointerdown', this.addClickAreaUnderpants, this);
         }
@@ -316,6 +584,10 @@ class GameScene extends Phaser.Scene {
     }
 
     addDressInCloset(area){
+        if (this.hands['clickArea_dress']) {
+            this.hands['clickArea_dress'].destroy();
+        }
+
         if (this.clothing_nums_on[this.selectedСlothing] >= config.clothingSettings.dress.nums || this.selectedСlothing !== 'dress') {
             return;
         }
@@ -330,6 +602,12 @@ class GameScene extends Phaser.Scene {
                 hamper.objectsIn.pop().destroy();
                 if (hamper.objectsIn.length === 0) {
                     hamper.shakes();
+                    if (this.hampers[1].objectsIn.length) {
+                        this.addHandOverHamper(this.hampers[1]);
+                    }
+                    else if (this.hampers[2].objectsIn.length) {
+                        this.addHandOverHamper(this.hampers[2]);
+                    }
                 }
             }
         });
@@ -371,9 +649,14 @@ class GameScene extends Phaser.Scene {
             this.active_click_area_nums.bra++;
             area.on('pointermove', ()=>{this.addBraInShelf(area)}, this);
         });
+
+        if (!this.hands.clickArea_bra) {
+            this.addHandOverClickArea('bra', true);
+        }
     }
 
     addBraInShelf(area){
+        this.hands['clickArea_bra'].destroy();
         if (this.selectedСlothing) {
             if (this.clothing_nums_on[this.selectedСlothing] >= config.clothingSettings[this.selectedСlothing].nums || this.selectedСlothing !== config.hamperNames[1]) {
                 return;
@@ -395,6 +678,7 @@ class GameScene extends Phaser.Scene {
                     if (this.shelf_level['bra'] > 0) {
                         last_elem.setDisplaySize(last_elem.displayWidth * (.065 * this.shelf_level['bra'] + 1), last_elem.displayHeight * (.065 * this.shelf_level['bra'] + 1));
                     }
+                    last_elem.depth = this.clothing_nums_on.bra;
                     object.destroy();
                     area.destroy();
 
@@ -406,6 +690,12 @@ class GameScene extends Phaser.Scene {
 
                     if (hamper.objectsIn.length === 0) {
                         hamper.shakes();
+                        if (this.hampers[2].objectsIn.length === config.clothingSettings[this.hampers[2].name].nums) {
+                            this.addHandOverHamper(this.hampers[2]);
+                        }
+                        else if (this.hampers[0].objectsIn.length === config.clothingSettings[this.hampers[0].name].nums) {
+                            this.addHandOverHamper(this.hampers[0]);
+                        }
                     }
 
                     this.getPercentOfClothe(this.selectedСlothing);
@@ -461,9 +751,14 @@ class GameScene extends Phaser.Scene {
             this.active_click_area_nums.underpants++;
             area.on('pointermove', ()=>{this.addUnderpantsInShelf(area)}, this);
         });
+
+        if (!this.hands.clickArea_underpants) {
+            this.addHandOverClickArea('underpants');
+        }
     }
 
     addUnderpantsInShelf(area){
+        this.hands['clickArea_underpants'].destroy();
         if (this.selectedСlothing) {
             if (this.clothing_nums_on[this.selectedСlothing] >= config.clothingSettings[this.selectedСlothing].nums || this.selectedСlothing !== config.hamperNames[2]) {
                 return;
@@ -480,7 +775,7 @@ class GameScene extends Phaser.Scene {
                     if (this.shelf_level['underpants'] > 0) {
                         last_elem.setDisplaySize(last_elem.displayWidth * (.1 * this.shelf_level['underpants'] + 1), last_elem.displayHeight * (.1 * this.shelf_level['underpants'] + 1));
                     }
-                    
+                    last_elem.depth = this.clothing_nums_on.underpants;
                     object.destroy();
                     area.destroy();
 
@@ -492,6 +787,12 @@ class GameScene extends Phaser.Scene {
 
                     if (hamper.objectsIn.length === 0) {
                         hamper.shakes();
+                        if (this.hampers[1].objectsIn.length === config.clothingSettings[this.hampers[1].name].nums) {
+                            this.addHandOverHamper(this.hampers[1]);
+                        }
+                        else if (this.hampers[0].objectsIn.length === config.clothingSettings[this.hampers[0].name].nums) {
+                            this.addHandOverHamper(this.hampers[0]);
+                        }
                     }
 
                     this.getPercentOfClothe(this.selectedСlothing);
@@ -515,10 +816,18 @@ class GameScene extends Phaser.Scene {
     }
 
     closeShelf(){
-        this.shelfActive = false;
-        if (this.shelf) {
-            this.shelf.destroy();
+        if (!this.shelf) {
+            return;
         }
+
+        config.hamperNames.forEach(name => {
+            if (this.hands['clickArea_' + name]) {
+                this.hands['clickArea_' + name].destroy();
+            }
+        });
+        
+        this.shelfActive = false;
+            this.shelf.destroy();
         this.click_area['bra'].forEach(object => {
             object.setVisible(0);
         });
@@ -528,6 +837,10 @@ class GameScene extends Phaser.Scene {
     }
 
     openShelf(){
+        if (this.hands['shelf']) {
+            this.hands['shelf'].destroy();
+        }
+
         if (!this.selectedСlothing || this.selectedСlothing === config.hamperNames[0]) {
             return;
         }
@@ -535,16 +848,8 @@ class GameScene extends Phaser.Scene {
         if (this.shelfActive) {
             this.closeShelf();
         }
-        else {
-            this.click_area['bra'].forEach(object => {
-                object.setVisible(1);
-                object.depth++;
-            });
-            this.click_area['underpants'].forEach(object => {
-                object.setVisible(1);
-                object.depth++;
-            });
 
+        else {
             this.shelfActive = true;
             this.shelf = this.add.sprite(config.width/2, this.shelf_area.y - config.shelf.height/2, 'sprites', 'shelf').setDisplaySize(config.shelf.width, config.shelf.height).setInteractive();
 
@@ -556,6 +861,15 @@ class GameScene extends Phaser.Scene {
                     this.addClickAreaUnderpants();
                 }
             }
+
+            this.click_area['bra'].forEach(object => {
+                object.setVisible(1);
+                object.depth = this.shelf.depth + 1;
+            });
+            this.click_area['underpants'].forEach(object => {
+                object.setVisible(1);
+                object.depth = this.shelf.depth + 1;
+            });
         }
         this.sounds.shelf.play();
     }

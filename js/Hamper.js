@@ -77,6 +77,11 @@ class Hamper extends Phaser.GameObjects.Sprite {
             y: this.y - config.height/2,
             ease: 'Power1',
             duration: 700,
+            onComplete: () => {
+                if (this.number === 0) {
+                    this.scene.addHandOverHamper(this);
+                }
+            }
         });
         this.scene.tweens.add({
             targets: this.additional_images,
