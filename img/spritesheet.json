@@ -1,5 +1,6 @@
 {
     "frames":[
+        {"filename":"start_text","frame":{"x":0,"y":1920,"w":673,"h":110},"rotated":false,"trimmed":false,"spriteSourceSize":{"x":0,"y":0,"w":673,"h":110},"sourceSize":{"w":673,"h":110}},
         {"filename":"arrow","frame":{"x":1921,"y":1437,"w":243,"h":331},"rotated":false,"trimmed":false,"spriteSourceSize":{"x":0,"y":0,"w":243,"h":331},"sourceSize":{"w":243,"h":331}},
         {"filename":"progressArrow","frame":{"x":1770,"y":1815,"w":32,"h":34},"rotated":false,"trimmed":false,"spriteSourceSize":{"x":0,"y":0,"w":32,"h":34},"sourceSize":{"w":32,"h":34}},
         {"filename":"bra_0","frame":{"x":847,"y":1180,"w":180,"h":95},"rotated":false,"trimmed":false,"spriteSourceSize":{"x":0,"y":0,"w":180,"h":95},"sourceSize":{"w":180,"h":95}},

@@ -50,6 +50,7 @@ var Preloader = new Phaser.Class({
 	create: function () {
 		this.anims.create({
 			frames: [
+				{ key: 'sprites', frame: "start_text" },
 				{ key: 'sprites', frame: "arrow" },
 				{ key: 'sprites', frame: "progressArrow" },
 				{ key: 'sprites', frame: "bra_0" },
