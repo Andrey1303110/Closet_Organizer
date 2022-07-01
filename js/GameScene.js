@@ -53,7 +53,6 @@ class GameScene extends Phaser.Scene {
             this.hampers.forEach(hamper => {
                 hamper.showing_on_screen();
             });
-            this.showRetryButton();
             this.showCompelteBar();
             this.addClickAreaDress();
         }, this);
@@ -94,6 +93,7 @@ class GameScene extends Phaser.Scene {
     }
 
     showRetryButton(){
+        this.retry_button.x = this.screenEndpoints.no_margin_right + this.retry_button.displayWidth;
         this.tweens.add({
             targets: this.retry_button,
             x: this.screenEndpoints.no_margin_right,
@@ -389,8 +389,8 @@ class GameScene extends Phaser.Scene {
                         sprite_frame = 'fold_' + sprite_frame;
                     }
                     */
-                    let y_gap = 5;
-                    this.click_area['bra'].push(this.add.sprite(area.x, area.y - (this.shelf_level['bra'] * y_gap), 'sprites', sprite_frame).setDisplaySize(this.shelf.displayWidth/config.clothingSettings[this.selectedСlothing].width * .6, this.shelf.displayHeight/config.clothingSettings[this.selectedСlothing].height * .63));
+                    let y_gap = 7;
+                    this.click_area['bra'].push(this.add.sprite(area.x, area.y - (this.shelf_level['bra'] * y_gap), 'sprites', sprite_frame).setDisplaySize(this.shelf.displayWidth/config.clothingSettings[this.selectedСlothing].width * .68, this.shelf.displayHeight/config.clothingSettings[this.selectedСlothing].height * .7));
                     let last_elem = this.click_area['bra'][this.click_area['bra'].length-1];
                     if (this.shelf_level['bra'] > 0) {
                         last_elem.setDisplaySize(last_elem.displayWidth * (.065 * this.shelf_level['bra'] + 1), last_elem.displayHeight * (.065 * this.shelf_level['bra'] + 1));
@@ -474,8 +474,8 @@ class GameScene extends Phaser.Scene {
                 if (hamper.name === this.selectedСlothing) {
                     let object = hamper.objectsIn.pop();
                     let sprite_frame = 'fold_' + object.frame.name;
-                    let y_gap = 5;
-                    this.click_area['underpants'].push(this.add.sprite(area.x, area.y - (this.shelf_level['underpants'] * y_gap) + 2.5, 'sprites', sprite_frame).setDisplaySize(this.shelf.displayWidth/config.clothingSettings[this.selectedСlothing].width * .86, this.shelf.displayHeight/config.clothingSettings[this.selectedСlothing].height * .78));
+                    let y_gap = 5.5;
+                    this.click_area['underpants'].push(this.add.sprite(area.x, area.y - (this.shelf_level['underpants'] * y_gap) + 2.5, 'sprites', sprite_frame).setDisplaySize(this.shelf.displayWidth/config.clothingSettings[this.selectedСlothing].width * .86, this.shelf.displayHeight/config.clothingSettings[this.selectedСlothing].height * .72));
                     let last_elem = this.click_area['underpants'][this.click_area['underpants'].length-1];
                     if (this.shelf_level['underpants'] > 0) {
                         last_elem.setDisplaySize(last_elem.displayWidth * (.1 * this.shelf_level['underpants'] + 1), last_elem.displayHeight * (.1 * this.shelf_level['underpants'] + 1));

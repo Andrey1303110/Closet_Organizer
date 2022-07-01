@@ -14,7 +14,7 @@ const config = {
     },
     shelf: {
       width: 434.5,
-      height: 215,
+      height: 225,
     },
     hamper: {
       width: 143,

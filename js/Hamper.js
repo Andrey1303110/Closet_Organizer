@@ -76,13 +76,13 @@ class Hamper extends Phaser.GameObjects.Sprite {
             targets: this,
             y: this.y - config.height/2,
             ease: 'Power1',
-            duration: 750,
+            duration: 700,
         });
         this.scene.tweens.add({
             targets: this.additional_images,
             y: this.y - config.height/2 - config.hamper.height,
             ease: 'Power1',
-            duration: 750,
+            duration: 700,
         });
 
         this.objectsIn.forEach(object => {
@@ -90,7 +90,10 @@ class Hamper extends Phaser.GameObjects.Sprite {
                 targets: object,
                 y: object.y - config.height/2,
                 ease: 'Power1',
-                duration: 750,
+                duration: 700,
+                onComplete: ()=>{
+                    this.scene.showRetryButton();
+                }
             }); 
         });
     }
