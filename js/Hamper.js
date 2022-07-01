@@ -1,6 +1,6 @@
 class Hamper extends Phaser.GameObjects.Sprite {
     constructor(scene, num, name){
-        super(scene, config.width/2, config.height, 'sprites', 'hamper_' + num);
+        super(scene, config.width/2, config.height + config.height/2, 'sprites', 'hamper_' + num);
         this.scene = scene;
         this.number = num;
         this.name = name;
@@ -69,6 +69,30 @@ class Hamper extends Phaser.GameObjects.Sprite {
             });
         }
         this.scene.sounds.basketup.play();
+    }
+
+    showing_on_screen(){
+        this.scene.tweens.add({
+            targets: this,
+            y: this.y - config.height/2,
+            ease: 'Power1',
+            duration: 750,
+        });
+        this.scene.tweens.add({
+            targets: this.additional_images,
+            y: this.y - config.height/2 - config.hamper.height,
+            ease: 'Power1',
+            duration: 750,
+        });
+
+        this.objectsIn.forEach(object => {
+            this.scene.tweens.add({
+                targets: object,
+                y: object.y - config.height/2,
+                ease: 'Power1',
+                duration: 750,
+            }); 
+        });
     }
 
     shakes(){
