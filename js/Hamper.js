@@ -8,11 +8,21 @@ class Hamper extends Phaser.GameObjects.Sprite {
         this.setOrigin(0.5, 1);
         this.setDisplaySize(config.hamper.width, config.hamper.height);
         this.scene.add.existing(this);
+        this.setPositions(num);
         this.setInteractive();
     }
 
     add_additional_images(hamper_num) {
         this.scene.hampers[hamper_num].additional_images = this.scene.add.sprite(this.scene.hampers[hamper_num].x, this.scene.hampers[hamper_num].y - this.scene.hampers[hamper_num].displayHeight, 'sprites', 'additional_' + hamper_num).setScale(.65).setOrigin(.5, 1);
+    }
+
+    setPositions(hamper_num){
+        if (hamper_num === 0) {
+            this.setPosition(this.x - config.hamper.width, this.y);
+        }
+        else if (hamper_num === 2) {
+            this.setPosition(this.x + config.hamper.width, this.y);
+        }
     }
 
     /*

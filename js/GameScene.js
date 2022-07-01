@@ -1,5 +1,4 @@
 var test;
-var retry;
 class GameScene extends Phaser.Scene {
     constructor() {
         super("GameScene");
@@ -47,7 +46,7 @@ class GameScene extends Phaser.Scene {
     }
 
     restart(){
-        this.openShelf();
+        this.closeShelf();
         for (let i = 0; i < this.dress_on_hanger.length; i++) {
             this.dress_on_hanger[i].destroy();
         }
@@ -69,8 +68,8 @@ class GameScene extends Phaser.Scene {
     }
 
     addRetryButton(){
-        retry = this.add.sprite(this.screenEndpoints.no_margin_right, config.height/2, 'sprites', 'btn_bg_retry').setInteractive().setScale(.5).setOrigin(1, .5);
-        retry.on('pointerdown', this.restart, this);
+        this.retry_button = this.add.sprite(this.screenEndpoints.no_margin_right, config.height/2, 'sprites', 'btn_bg_retry').setInteractive().setScale(.5).setOrigin(1, .5);
+        this.retry_button.on('pointerdown', this.restart, this);
     }
 
     createSounds(){
@@ -128,10 +127,8 @@ class GameScene extends Phaser.Scene {
         for(let i = 0; i < 3; i++) {
             this.hampers.push(new Hamper(this, i, config.hamperNames[i]));
         }
-        this.hampers[0].setPosition(config.width/2 - this.hampers[1].width * .38, config.height);
-        this.hampers[2].setPosition(config.width/2 + this.hampers[1].width * .38, config.height);
 
-        for(let i = 0; i < 3; i++) {
+        for(let i = 0; i < this.hampers.length; i++) {
             this.hampers[i].add_additional_images(i);
 
             this.hampers[i].on('pointerdown', function () {
@@ -194,11 +191,12 @@ class GameScene extends Phaser.Scene {
 		this.statusBarComplete.frame.cutHeight = 0;
 		this.statusBarComplete.frame.updateUVs();
 
-		this.statusBarStar1 = this.add.sprite(this.screenEndpoints.left, this.statusBar.y - (this.statusBar.height/2) + (this.statusBar.height * (1 - config.progresStages[1])), 'sprites', 'star').setDisplaySize(45, 40);
-		this.statusBarStar2 = this.add.sprite(this.screenEndpoints.left, this.statusBar.y - (this.statusBar.height/2) + (this.statusBar.height * (1 - config.progresStages[2])), 'sprites', 'star').setDisplaySize(45, 40);
-		this.statusBarStar3 = this.add.sprite(this.screenEndpoints.left, this.statusBar.y - (this.statusBar.height/2) + (this.statusBar.height * (1 - config.progresStages[3])), 'sprites', 'star').setDisplaySize(45, 40);
+        this.progressArrow = this.add.sprite(this.statusBar.x + this.statusBar.width - this.statusBar.width * .15, this.statusBar.y + this.statusBar.height/2, 'sprites', 'progressArrow').setDisplaySize(18,20).setOrigin(1, 0.5);
 
-		this.progressArrow = this.add.sprite(this.statusBar.x + this.statusBar.width, this.statusBar.y + this.statusBar.height/2, 'sprites', 'progressArrow').setDisplaySize(18,20).setOrigin(1, 0.5);
+        this.statusBarStars = [];
+        for (let i = 1; i <= 3; i++) {
+            this.statusBarStars[i] = this.add.sprite(this.screenEndpoints.left, this.statusBar.y - (this.statusBar.height/2) + (this.statusBar.height * (1 - config.progresStages[i])), 'sprites', 'star').setDisplaySize(45, 40);
+        }
 	}
 
 	updateBar(value){
@@ -216,17 +214,16 @@ class GameScene extends Phaser.Scene {
 		this.statusBarComplete.frame.updateUVs();
 		this.progressArrow.y = this.statusBar.y + this.statusBar.height/2 - new_value;
 
-        //set as Object statusBarStars = {1,2,3};
-        this.statusBarStar1.setTexture('sprites', 'star');
-        this.statusBarStar2.setTexture('sprites', 'star');
-        this.statusBarStar3.setTexture('sprites', 'star');
+        for (let i = 1; i <= 3; i++) {
+            this.statusBarStars[i].setTexture('sprites', 'star');
+        }
 
 		if (this.currentGameProgress >= config.progresStages[1] * 100) {
-			this.statusBarStar1.setTexture('sprites', 'star_active');
+			this.statusBarStars[1].setTexture('sprites', 'star_active');
 			if (this.currentGameProgress >= config.progresStages[2] * 100) {
-				this.statusBarStar2.setTexture('sprites', 'star_active');
+				this.statusBarStars[2].setTexture('sprites', 'star_active');
 				if (this.currentGameProgress >= config.progresStages[3] * 100) {
-					this.statusBarStar3.setTexture('sprites', 'star_active');
+					this.statusBarStars[3].setTexture('sprites', 'star_active');
 				}
 			}
 		}
@@ -249,25 +246,31 @@ class GameScene extends Phaser.Scene {
         this.hampers.forEach(hamper => {
             hamper.objectsIn = [];
             let step;
+            let scale_cof;
             switch (hamper.name) {
                 case 'dress':
                     step = 6;
+                    scale_cof = 1/33;
                     for (let i = 0; i < config.clothingSettings[hamper.name].nums; i++) {
-                        hamper.objectsIn[i] = this.add.sprite(this.generateRandom(hamper.x - hamper.x * 1/33, hamper.x + hamper.x * 1/33), hamper.y - hamper.displayHeight + 107 - (this.generateRandom(0, step) * i), 'sprites', 'dress_fold').setDisplaySize(hamper.displayWidth - hamper.displayWidth * .4, hamper.displayWidth - hamper.displayWidth * .25,).setAngle(this.generateRandom(-25, 25));
+                        let sprite_name = hamper.name + '_fold_' + (i % config.clothingSettings[hamper.name].variables);
+                        hamper.objectsIn[i] = this.add.sprite(this.generateRandom(hamper.x - hamper.x * scale_cof, hamper.x + hamper.x * scale_cof), hamper.y - hamper.displayHeight + 107 - (this.generateRandom(0, step) * i), 'sprites', 'dress_fold').setDisplaySize(hamper.displayWidth - hamper.displayWidth * .4, hamper.displayWidth - hamper.displayWidth * .25,).setAngle(this.generateRandom(-25, 25));
                     }
+                    
                 break;
                 case 'bra':
                     step = 7;
+                    scale_cof = 1/50;
                     for (let i = 0; i < config.clothingSettings[hamper.name].nums; i++) {
-                        let sprite_name = 'bra_' + Math.round(Math.random() * 4);
-                        hamper.objectsIn[i] = this.add.sprite(this.generateRandom(hamper.x - hamper.x * 1/50, hamper.x + hamper.x * 1/50), hamper.y - hamper.displayHeight + 133 - (this.generateRandom(0, step) * i), 'sprites', sprite_name).setDisplaySize(100, 50).setAngle(this.generateRandom(-15, 15));
+                        let sprite_name = hamper.name + '_' + (i % config.clothingSettings[hamper.name].variables);
+                        hamper.objectsIn[i] = this.add.sprite(this.generateRandom(hamper.x - hamper.x * scale_cof, hamper.x + hamper.x * scale_cof), hamper.y - hamper.displayHeight + 133 - (this.generateRandom(0, step) * i), 'sprites', sprite_name).setDisplaySize(100, 50).setAngle(this.generateRandom(-15, 15));
                     }
                 break;
                 case 'underpants':
                     step = 3.5;
+                    scale_cof = 1/33;
                     for (let i = 0; i < config.clothingSettings[hamper.name].nums; i++) {
-                        let sprite_name = 'underpants_' + Math.round(Math.random() * 2);
-                        hamper.objectsIn[i] = this.add.sprite(this.generateRandom(hamper.x - hamper.x * 1/33, hamper.x + hamper.x * 1/33), hamper.y - hamper.displayHeight + 137 - (this.generateRandom(0, step) * i), 'sprites', sprite_name).setDisplaySize(81, 42).setAngle(this.generateRandom(-40, 40));
+                        let sprite_name = 'underpants_' + (i % config.clothingSettings[hamper.name].variables);
+                        hamper.objectsIn[i] = this.add.sprite(this.generateRandom(hamper.x - hamper.x * scale_cof, hamper.x + hamper.x * scale_cof), hamper.y - hamper.displayHeight + 137 - (this.generateRandom(0, step) * i), 'sprites', sprite_name).setDisplaySize(81, 42).setAngle(this.generateRandom(-40, 40));
                     }
                 break;
             }
@@ -275,39 +278,39 @@ class GameScene extends Phaser.Scene {
     }
 
     addClickAreaDress(){
-        this.dress_on_hanger = [];
-        let closet_width = 315;
-
         for (let i = 0; i < config.clothingSettings.dress.nums; i++) {
-            this.click_area['dress'].push(this.add.sprite(config.width/2 - closet_width/2 + closet_width/config.clothingSettings.dress.nums * i + closet_width/config.clothingSettings.dress.nums/2, 340, 'sprites', 'empty').setAlpha(.001).setDisplaySize(closet_width/config.clothingSettings.dress.nums, 460).setInteractive());
+            this.click_area['dress'].push(this.add.sprite(config.width/2 - config.closet.width/2 + config.closet.width/config.clothingSettings.dress.nums * i + config.closet.width/config.clothingSettings.dress.nums/2, 340, 'sprites', 'empty').setAlpha(.001).setDisplaySize(config.closet.width/config.clothingSettings.dress.nums, 460).setInteractive());
         }
 
         this.click_area['dress'].forEach(area => {
-            area.on('pointermove', function(pointer){
-                if (pointer.active) {
-                    if (this.clothing_nums_on[this.selectedСlothing] >= config.clothingSettings.dress.nums || this.selectedСlothing !== 'dress') {
-                        return;
-                    }
-                    this.clothing_nums_on[this.selectedСlothing]++;
-                    if (this.clothing_nums_on[this.selectedСlothing] === config.clothingSettings.dress.nums) {
-                        this.sounds.encourage.play();
-                    }
-                    this.sounds.dress_on.play();
-                    this.dress_on_hanger.push(this.add.sprite(area.x, 367, 'sprites', 'dress_on_hanger').setDisplaySize(27, 460));
-                    this.hampers.forEach(hamper => {
-                        if (hamper.name === 'dress') {
-                            hamper.objectsIn.pop().destroy();
-                        }
-                    });
-                    area.removeInteractive();
-
-                    this.getPercentOfClothe(this.selectedСlothing);
-                }
-            }, this);
+            area.on('pointerdown', ()=>{this.addDressInCloset(area)}, this);
+            area.on('pointermove', ()=>{this.addDressInCloset(area)}, this);
         });
 
-        this.shelf_area = this.add.sprite(config.width/2, config.height * .65, 'sprites', 'empty').setAlpha(.001).setDisplaySize(closet_width, 150).setInteractive();
+        this.dress_on_hanger = [];
+
+        this.shelf_area = this.add.sprite(config.width/2, config.height * .65, 'sprites', 'empty').setAlpha(.001).setDisplaySize(config.closet.width, 150).setInteractive();
         this.shelf_area.on('pointerdown', this.openShelf, this);
+    }
+
+    addDressInCloset(area){
+        if (this.clothing_nums_on[this.selectedСlothing] >= config.clothingSettings.dress.nums || this.selectedСlothing !== 'dress') {
+            return;
+        }
+        this.clothing_nums_on[this.selectedСlothing]++;
+        if (this.clothing_nums_on[this.selectedСlothing] === config.clothingSettings.dress.nums) {
+            this.sounds.encourage.play();
+        }
+        this.sounds.dress_on.play();
+        this.dress_on_hanger.push(this.add.sprite(area.x, 367, 'sprites', 'dress_on_hanger').setDisplaySize(27, 460));
+        this.hampers.forEach(hamper => {
+            if (hamper.name === 'dress') {
+                hamper.objectsIn.pop().destroy();
+            }
+        });
+        area.removeInteractive();
+
+        this.getPercentOfClothe(this.selectedСlothing);
     }
 
     addClickAreaBra(){
@@ -362,7 +365,7 @@ class GameScene extends Phaser.Scene {
                     }
                     */
                     let y_gap = 5;
-                    this.click_area['bra'].push(this.add.sprite(area.x, area.y - (this.shelf_level['bra'] * y_gap), 'sprites', sprite_frame).setDisplaySize(this.shelf.displayWidth/config.clothingSettings[this.selectedСlothing].width * .5, this.shelf.displayHeight/config.clothingSettings[this.selectedСlothing].height * .6));
+                    this.click_area['bra'].push(this.add.sprite(area.x, area.y - (this.shelf_level['bra'] * y_gap), 'sprites', sprite_frame).setDisplaySize(this.shelf.displayWidth/config.clothingSettings[this.selectedСlothing].width * .6, this.shelf.displayHeight/config.clothingSettings[this.selectedСlothing].height * .63));
                     let last_elem = this.click_area['bra'][this.click_area['bra'].length-1];
                     if (this.shelf_level['bra'] > 0) {
                         last_elem.setDisplaySize(last_elem.displayWidth * (.065 * this.shelf_level['bra'] + 1), last_elem.displayHeight * (.065 * this.shelf_level['bra'] + 1));
@@ -427,11 +430,11 @@ class GameScene extends Phaser.Scene {
 
         this.click_area['underpants'].forEach(area => {
             this.active_click_area_nums.underpants++;
-            area.on('pointermove', ()=>{this.addUnderwearInShelf(area)}, this);
+            area.on('pointermove', ()=>{this.addUnderpantsInShelf(area)}, this);
         });
     }
 
-    addUnderwearInShelf(area){
+    addUnderpantsInShelf(area){
         if (this.selectedСlothing) {
             if (this.clothing_nums_on[this.selectedСlothing] >= config.clothingSettings[this.selectedСlothing].nums || this.selectedСlothing !== config.hamperNames[2]) {
                 return;
@@ -443,7 +446,7 @@ class GameScene extends Phaser.Scene {
                     let object = hamper.objectsIn.pop();
                     let sprite_frame = 'fold_' + object.frame.name;
                     let y_gap = 5;
-                    this.click_area['underpants'].push(this.add.sprite(area.x, area.y - (this.shelf_level['underpants'] * y_gap) + 2.5, 'sprites', sprite_frame).setDisplaySize(this.shelf.displayWidth/config.clothingSettings[this.selectedСlothing].width * .85, this.shelf.displayHeight/config.clothingSettings[this.selectedСlothing].height * .85));
+                    this.click_area['underpants'].push(this.add.sprite(area.x, area.y - (this.shelf_level['underpants'] * y_gap) + 2.5, 'sprites', sprite_frame).setDisplaySize(this.shelf.displayWidth/config.clothingSettings[this.selectedСlothing].width * .86, this.shelf.displayHeight/config.clothingSettings[this.selectedСlothing].height * .78));
                     let last_elem = this.click_area['underpants'][this.click_area['underpants'].length-1];
                     if (this.shelf_level['underpants'] > 0) {
                         last_elem.setDisplaySize(last_elem.displayWidth * (.1 * this.shelf_level['underpants'] + 1), last_elem.displayHeight * (.1 * this.shelf_level['underpants'] + 1));
@@ -478,21 +481,24 @@ class GameScene extends Phaser.Scene {
         }
     }
 
+    closeShelf(){
+        this.shelfActive = false;
+        this.shelf.destroy();
+        this.click_area['bra'].forEach(object => {
+            object.setVisible(0);
+        });
+        this.click_area['underpants'].forEach(object => {
+            object.setVisible(0);
+        });
+    }
+
     openShelf(){
-        test = this.click_area;
         if (!this.selectedСlothing || this.selectedСlothing === config.hamperNames[0]) {
             return;
         }
 
         if (this.shelfActive) {
-            this.shelfActive = false;
-            this.shelf.destroy();
-            this.click_area['bra'].forEach(object => {
-                object.setVisible(0);
-            });
-            this.click_area['underpants'].forEach(object => {
-                object.setVisible(0);
-            });
+            this.closeShelf();
         }
         else {
             this.click_area['bra'].forEach(object => {
@@ -505,7 +511,7 @@ class GameScene extends Phaser.Scene {
             });
 
             this.shelfActive = true;
-            this.shelf = this.add.sprite(config.width/2, this.shelf_area.y - this.shelf_area.displayHeight/2, 'sprites', 'shelf').setScale(.75).setInteractive();
+            this.shelf = this.add.sprite(config.width/2, this.shelf_area.y - config.shelf.height/2, 'sprites', 'shelf').setDisplaySize(config.shelf.width, config.shelf.height).setInteractive();
 
             if (!this.clothing_nums_on[config.hamperNames[1]] || !this.clothing_nums_on[config.hamperNames[2]]) {
                 if (this.selectedСlothing === 'bra') {
