@@ -25,6 +25,100 @@ class Hamper extends Phaser.GameObjects.Sprite {
         }
     }
 
+    selecting(){
+        if (this.isActive) {
+            for(let j = 0; j < this.scene.hampers.length; j++) {
+                if (this.scene.hampers[j].isActive) {
+                    this.scene.hampers[j].objectsIn.forEach(object => {
+                        object.y += 37;
+                        object.scale -= .12; 
+                        object.depth = 2; 
+                    });
+                }
+            }
+            this.isActive = false;
+            this.scene.selectedСlothing = null;
+            this.setDepth(0);
+            this.setDisplaySize(config.hamper.width, config.hamper.height);
+            this.additional_images.setPosition(this.additional_images.x, this.y - config.hamper.height);
+        }
+        else {
+            for(let i = 0; i < this.scene.hampers.length; i++) {
+                if (this.scene.hampers[i].isActive) {
+                    this.scene.hampers[i].objectsIn.forEach(object => {
+                        object.y += 37;
+                        object.scale -= .12; 
+                        object.depth = 2; 
+                    });
+                }
+                this.scene.hampers[i].isActive = false;
+                this.scene.hampers[i].setDepth(0);
+                this.scene.hampers[i].setDisplaySize(config.hamper.width, config.hamper.height);
+                this.scene.hampers[i].additional_images.setPosition(this.scene.hampers[i].additional_images.x, this.scene.hampers[i].y - config.hamper.height);
+            }
+            this.isActive = true;
+            this.scene.selectedСlothing = this.name;
+            this.setDepth(1);
+            this.setDisplaySize(config.hamper.width + config.hamper.width * .28, config.hamper.height + config.hamper.height * .28);
+            this.additional_images.setPosition(this.additional_images.x, this.additional_images.y - config.hamper.height * .28);
+
+            this.objectsIn.forEach(object => {
+                object.y -= 37;
+                object.scale += .12; 
+                object.depth = 3; 
+            });
+        }
+        this.scene.sounds.basketup.play();
+    }
+
+    shakes(){
+        let x = this.x;
+        let frames = 8;
+        let gap = 6;
+        let frame_duration = 23;
+        let timeline = this.scene.tweens.createTimeline();
+
+        for (let i = 0; i <= frames; i++) {
+            if (i === 0) {
+                timeline.add({
+                    targets: this,
+                    delay: 250,
+                    x: x - gap/2,
+                    ease: 'Power3',
+                    duration: frame_duration,
+                });
+            }
+            else if (i === frames) {
+                timeline.add({
+                    targets: this,
+                    x: x,
+                    ease: 'Power3',
+                    duration: frame_duration,
+                });
+            }
+            else {
+                if (i % 2 === 0) {
+                    timeline.add({
+                        targets: this,
+                        x: x - gap,
+                        ease: 'Power3',
+                        duration: frame_duration,
+                    });
+                }
+                else {
+                    timeline.add({
+                        targets: this,
+                        x: x + gap,
+                        ease: 'Power3',
+                        duration: frame_duration,
+                    });
+                }
+            }
+        };
+
+        timeline.play();
+    }
+
     /*
     move(params){
         this.scene.tweens.add({

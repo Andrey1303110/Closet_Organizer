@@ -131,51 +131,7 @@ class GameScene extends Phaser.Scene {
         for(let i = 0; i < this.hampers.length; i++) {
             this.hampers[i].add_additional_images(i);
 
-            this.hampers[i].on('pointerdown', function () {
-                if (this.isActive) {
-                    for(let j = 0; j < this.scene.hampers.length; j++) {
-                        if (this.scene.hampers[j].isActive) {
-                            this.scene.hampers[j].objectsIn.forEach(object => {
-                                object.y += 37;
-                                object.scale -= .12; 
-                                object.depth = 2; 
-                            });
-                        }
-                    }
-                    this.isActive = false;
-                    this.scene.selectedСlothing = null;
-                    this.setDepth(0);
-                    this.setDisplaySize(config.hamper.width, config.hamper.height);
-                    this.additional_images.setPosition(this.additional_images.x, this.y - config.hamper.height);
-                }
-                else {
-                    for(let i = 0; i < this.scene.hampers.length; i++) {
-                        if (this.scene.hampers[i].isActive) {
-                            this.scene.hampers[i].objectsIn.forEach(object => {
-                                object.y += 37;
-                                object.scale -= .12; 
-                                object.depth = 2; 
-                            });
-                        }
-                        this.scene.hampers[i].isActive = false;
-                        this.scene.hampers[i].setDepth(0);
-                        this.scene.hampers[i].setDisplaySize(config.hamper.width, config.hamper.height);
-                        this.scene.hampers[i].additional_images.setPosition(this.scene.hampers[i].additional_images.x, this.scene.hampers[i].y - config.hamper.height);
-                    }
-                    this.isActive = true;
-                    this.scene.selectedСlothing = this.name;
-                    this.setDepth(1);
-                    this.setDisplaySize(config.hamper.width + config.hamper.width * .28, config.hamper.height + config.hamper.height * .28);
-                    this.additional_images.setPosition(this.additional_images.x, this.additional_images.y - config.hamper.height * .28);
-
-                    this.objectsIn.forEach(object => {
-                        object.y -= 37;
-                        object.scale += .12; 
-                        object.depth = 3; 
-                    });
-                }
-                this.scene.sounds.basketup.play();
-            });
+            this.hampers[i].on('pointerdown', this.hampers[i].selecting);
 
             this.hampers[1].on('pointerdown', this.addClickAreaBra, this);
             this.hampers[2].on('pointerdown', this.addClickAreaUnderpants, this);
@@ -252,8 +208,8 @@ class GameScene extends Phaser.Scene {
                     step = 6;
                     scale_cof = 1/33;
                     for (let i = 0; i < config.clothingSettings[hamper.name].nums; i++) {
-                        let sprite_name = hamper.name + '_fold_' + (i % config.clothingSettings[hamper.name].variables);
-                        hamper.objectsIn[i] = this.add.sprite(this.generateRandom(hamper.x - hamper.x * scale_cof, hamper.x + hamper.x * scale_cof), hamper.y - hamper.displayHeight + 107 - (this.generateRandom(0, step) * i), 'sprites', 'dress_fold').setDisplaySize(hamper.displayWidth - hamper.displayWidth * .4, hamper.displayWidth - hamper.displayWidth * .25,).setAngle(this.generateRandom(-25, 25));
+                        let sprite_name = hamper.name + '_fold';
+                        hamper.objectsIn[i] = this.add.sprite(this.generateRandom(hamper.x - hamper.x * scale_cof, hamper.x + hamper.x * scale_cof), hamper.y - hamper.displayHeight + 107 - (this.generateRandom(0, step) * i), 'sprites', sprite_name).setDisplaySize(hamper.displayWidth - hamper.displayWidth * .4, hamper.displayWidth - hamper.displayWidth * .25,).setAngle(this.generateRandom(-25, 25));
                     }
                     
                 break;
@@ -306,6 +262,9 @@ class GameScene extends Phaser.Scene {
         this.hampers.forEach(hamper => {
             if (hamper.name === 'dress') {
                 hamper.objectsIn.pop().destroy();
+                if (hamper.objectsIn.length === 0) {
+                    hamper.shakes();
+                }
             }
         });
         area.removeInteractive();
@@ -377,6 +336,10 @@ class GameScene extends Phaser.Scene {
                         if (this.click_area['bra'][j].x === area.x && this.click_area['bra'][j].y === area.y && this.click_area['bra'][j].frame.name === 'empty') {
                             this.click_area['bra'].splice(j, 1);
                         }
+                    }
+
+                    if (hamper.objectsIn.length === 0) {
+                        hamper.shakes();
                     }
 
                     this.getPercentOfClothe(this.selectedСlothing);
@@ -459,6 +422,10 @@ class GameScene extends Phaser.Scene {
                         if (this.click_area['underpants'][j].x === area.x && this.click_area['underpants'][j].y === area.y && this.click_area['underpants'][j].frame.name === 'empty') {
                             this.click_area['underpants'].splice(j, 1);
                         }
+                    }
+
+                    if (hamper.objectsIn.length === 0) {
+                        hamper.shakes();
                     }
 
                     this.getPercentOfClothe(this.selectedСlothing);
