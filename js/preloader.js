@@ -72,7 +72,7 @@ var Preloader = new Phaser.Class({
 				{ key: 'sprites', frame: "shelf" },
 				{ key: 'sprites', frame: "star" },
 				{ key: 'sprites', frame: "star_active" },
-				{ key: 'sprites', frame: "text_0" },
+				{ key: 'sprites', frame: "text_3" },
 				{ key: 'sprites', frame: "text_1" },
 				{ key: 'sprites', frame: "text_2" },
 				{ key: 'sprites', frame: "underpants_0" },
