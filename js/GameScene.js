@@ -105,6 +105,13 @@ class GameScene extends Phaser.Scene {
         if (this.hands['shelf']) {
             return;
         }
+
+        config.hamperNames.forEach(name => {
+            if (this.hands['clickArea_' + name]) {
+                this.hands['clickArea_' + name].destroy();
+            }
+        });
+
         let hand = this.add.sprite(config.width/2, config.height * .35, 'sprites', 'hand').setOrigin(1);
         hand.setDisplaySize(82, 88);
         hand.setPosition(this.shelf_area.x + hand.displayWidth, this.shelf_area.y + hand.displayHeight * .25);
@@ -125,10 +132,13 @@ class GameScene extends Phaser.Scene {
     }
 
     addHandOverClickArea(click_area_name, additional = null){
+        config.hamperNames.forEach(name => {
+            if (this.hands['clickArea_' + name]) {
+                this.hands['clickArea_' + name].destroy();
+            }
+        });
+
         let name = 'clickArea_' + click_area_name;
-        if (this.hands[name]) {
-            this.hands[name].destroy();
-        }
 
         this.hands[name] = this.add.sprite(0, 0, 'sprites', 'hand').setOrigin(1);
         this.hands[name].setDisplaySize(82, 88);
@@ -658,7 +668,12 @@ class GameScene extends Phaser.Scene {
     }
 
     addBraInShelf(area){
-        this.hands['clickArea_bra'].destroy();
+        config.hamperNames.forEach(name => {
+            if (this.hands['clickArea_' + name]) {
+                this.hands['clickArea_' + name].destroy();
+            }
+        });
+
         if (this.selectedСlothing) {
             if (this.clothing_nums_on[this.selectedСlothing] >= config.clothingSettings[this.selectedСlothing].nums || this.selectedСlothing !== config.hamperNames[1]) {
                 return;
