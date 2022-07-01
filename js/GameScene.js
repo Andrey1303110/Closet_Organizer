@@ -116,8 +116,8 @@ class GameScene extends Phaser.Scene {
 		}
 		else {
 			this.screenEndpoints = {
-				left: (config.width/2) - screen.width/2 * (config.height/window.innerHeight) + (screen.width * .125),
-                right: (config.width/2) + screen.width/2 * (config.height/window.innerHeight) - (screen.width * .125),
+				left: (config.width/2) - screen.width/2 * (config.height/window.innerHeight) + (screen.width * .06),
+                right: (config.width/2) + screen.width/2 * (config.height/window.innerHeight) - (screen.width * .06),
                 no_margin_left: (config.width/2) - screen.width/2 * (config.height/window.innerHeight),
                 no_margin_right: (config.width/2) + screen.width/2 * (config.height/window.innerHeight),
 			};
@@ -157,19 +157,19 @@ class GameScene extends Phaser.Scene {
     }
 
 	createCompleteBar(){
-		this.statusBar = this.add.sprite(this.screenEndpoints.left, config.height/2.35, 'sprites', 'statusBarEmpty');
+		this.statusBar = this.add.sprite(this.screenEndpoints.left, config.height * .3, 'sprites', 'statusBarEmpty').setScale(.75);
 		this.statusBar.alpha = 0.68;
 		
-		this.statusBarComplete = this.add.sprite(this.screenEndpoints.left, config.height/2.35, 'sprites', 'statusBarComplete');
+		this.statusBarComplete = this.add.sprite(this.screenEndpoints.left, config.height * .3, 'sprites', 'statusBarComplete').setScale(.75);
 		this.statusBarComplete.flipY = true;
 		this.statusBarComplete.frame.cutHeight = 0;
 		this.statusBarComplete.frame.updateUVs();
 
-        this.progressArrow = this.add.sprite(this.statusBar.x + this.statusBar.width - this.statusBar.width * .15, this.statusBar.y + this.statusBar.height/2, 'sprites', 'progressArrow').setDisplaySize(18,20).setOrigin(1, 0.5);
+        this.progressArrow = this.add.sprite(this.statusBar.x + this.statusBar.displayWidth - this.statusBar.displayWidth * .15, this.statusBar.y + this.statusBar.displayHeight/2, 'sprites', 'progressArrow').setDisplaySize(15, 16).setOrigin(1, 0.5);
 
         this.statusBarStars = [];
         for (let i = 1; i <= 3; i++) {
-            this.statusBarStars[i] = this.add.sprite(this.screenEndpoints.left, this.statusBar.y - (this.statusBar.height/2) + (this.statusBar.height * (1 - config.progresStages[i])), 'sprites', 'star').setDisplaySize(45, 40);
+            this.statusBarStars[i] = this.add.sprite(this.screenEndpoints.left, this.statusBar.y - (this.statusBar.displayHeight/2) + (this.statusBar.displayHeight * (1 - config.progresStages[i])), 'sprites', 'star').setDisplaySize(this.statusBar.displayWidth * 1.25, this.statusBar.displayWidth * 1.1);
         }
 	}
 
@@ -181,12 +181,12 @@ class GameScene extends Phaser.Scene {
 			value = 0;
 		}
 
-		let all_heigt = this.statusBar.height;
-		let one_percent = all_heigt / 100;
+		let all_height = this.statusBar.displayHeight;
+		let one_percent = all_height / 100;
 		let new_value = one_percent * value;
-		this.statusBarComplete.frame.cutHeight = new_value;
+		this.statusBarComplete.frame.cutHeight = new_value/75*100;
 		this.statusBarComplete.frame.updateUVs();
-		this.progressArrow.y = this.statusBar.y + this.statusBar.height/2 - new_value;
+		this.progressArrow.y = this.statusBar.y + this.statusBar.displayHeight/2 - new_value;
 
         for (let i = 1; i <= 3; i++) {
             this.statusBarStars[i].setTexture('sprites', 'star');
