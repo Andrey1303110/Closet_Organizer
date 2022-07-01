@@ -12,14 +12,13 @@ class GameScene extends Phaser.Scene {
         this.createBackground();
         this.createLevelText();
 		this.createCompleteBar();
-        this.addRetryButton();
         this.start();
-        test = this.hampers[0];
     }
 
     start(){
         this.currentGameProgress = 0;
         this.updateBar(this.currentGameProgress);
+        this.hideCompelteBar();
         this.selectedСlothing = null;
         this.shelfActive = false;
         this.shelf_level = {
@@ -44,21 +43,24 @@ class GameScene extends Phaser.Scene {
         this.createHampers();
         this.addObjectsInHamper();
         this.addClosetClickArea();
+        this.addRetryButton();
     }
 
     addClosetClickArea(){
-        this.closet_area = this.add.sprite(config.width/2, config.height * .4, 'sprites', 'empty').setAlpha(1).setDisplaySize(config.closet.width * 1.25, config.height * .75).setInteractive();
+        this.closet_area = this.add.sprite(config.width/2, config.height * .4, 'sprites', 'empty').setAlpha(.0001).setDisplaySize(config.closet.width * 1.25, config.height * .75).setInteractive();
         this.closet_area.on('pointerdown', ()=>{
             this.closet_area.destroy();
             this.hampers.forEach(hamper => {
                 hamper.showing_on_screen();
             });
+            this.showRetryButton();
+            this.showCompelteBar();
             this.addClickAreaDress();
-
         }, this);
     }
 
     restart(){
+        this.retry_button.x += this.retry_button.displayWidth;
         this.closeShelf();
         if (this.dress_on_hanger) {
             for (let i = 0; i < this.dress_on_hanger.length; i++) {
@@ -86,8 +88,18 @@ class GameScene extends Phaser.Scene {
     }
 
     addRetryButton(){
-        this.retry_button = this.add.sprite(this.screenEndpoints.no_margin_right, config.height/2, 'sprites', 'btn_bg_retry').setInteractive().setScale(.5).setOrigin(1, .5);
+        this.retry_button = this.add.sprite(this.screenEndpoints.no_margin_right, config.height*1/3, 'sprites', 'btn_bg_retry').setInteractive().setScale(.5).setOrigin(1, .5);
+        this.retry_button.x += this.retry_button.displayWidth;
         this.retry_button.on('pointerdown', this.restart, this);
+    }
+
+    showRetryButton(){
+        this.tweens.add({
+            targets: this.retry_button,
+            x: this.screenEndpoints.no_margin_right,
+            ease: 'Power1',
+            duration: 250,
+        });
     }
 
     createSounds(){
@@ -102,7 +114,7 @@ class GameScene extends Phaser.Scene {
             theme: this.sound.add('theme', {volume: 0.33}),
         }
         this.sounds.theme.loop = true;
-        //this.sounds.theme.play();
+        this.sounds.theme.play();
     }
 
     setEndpoints(){
@@ -172,6 +184,42 @@ class GameScene extends Phaser.Scene {
             this.statusBarStars[i] = this.add.sprite(this.screenEndpoints.left, this.statusBar.y - (this.statusBar.displayHeight/2) + (this.statusBar.displayHeight * (1 - config.progresStages[i])), 'sprites', 'star').setDisplaySize(this.statusBar.displayWidth * 1.25, this.statusBar.displayWidth * 1.1);
         }
 	}
+
+    hideCompelteBar(){
+        this.statusBar.x -= window.innerWidth/2;
+        this.statusBarComplete.x -= window.innerWidth/2;
+        this.progressArrow.x -= window.innerWidth/2;
+        this.statusBarStars.forEach(star => {
+            star.x -= window.innerWidth/2;
+        });
+    }
+
+    showCompelteBar(){
+        this.tweens.add({
+            targets: this.statusBar,
+            x: this.statusBar.x + window.innerWidth/2,
+            ease: 'Power1',
+            duration: 250,
+        });
+        this.tweens.add({
+            targets: this.statusBarComplete,
+            x: this.statusBarComplete.x + window.innerWidth/2,
+            ease: 'Power1',
+            duration: 250,
+        });
+        this.tweens.add({
+            targets: this.progressArrow,
+            x: this.progressArrow.x + window.innerWidth/2,
+            ease: 'Power1',
+            duration: 250,
+        });
+        this.tweens.add({
+            targets: this.statusBarStars,
+            x: this.statusBarStars[1].x + window.innerWidth/2,
+            ease: 'Power1',
+            duration: 250,
+        });
+    }
 
 	updateBar(value){
 		if (value > 100) {
@@ -253,7 +301,7 @@ class GameScene extends Phaser.Scene {
 
     addClickAreaDress(){
         for (let i = 0; i < config.clothingSettings.dress.nums; i++) {
-            this.click_area['dress'].push(this.add.sprite(config.width/2 - config.closet.width/2 + config.closet.width/config.clothingSettings.dress.nums * i + config.closet.width/config.clothingSettings.dress.nums/2, 340, 'sprites', 'empty').setAlpha(.5).setDisplaySize(config.closet.width/config.clothingSettings.dress.nums, 460).setInteractive());
+            this.click_area['dress'].push(this.add.sprite(config.width/2 - config.closet.width/2 + config.closet.width/config.clothingSettings.dress.nums * i + config.closet.width/config.clothingSettings.dress.nums/2, 340, 'sprites', 'empty').setAlpha(.0001).setDisplaySize(config.closet.width/config.clothingSettings.dress.nums, 460).setInteractive());
         }
 
         this.click_area['dress'].forEach(area => {
@@ -263,7 +311,7 @@ class GameScene extends Phaser.Scene {
 
         this.dress_on_hanger = [];
 
-        this.shelf_area = this.add.sprite(config.width/2, config.height * .65, 'sprites', 'empty').setAlpha(1).setDisplaySize(config.closet.width, 150).setInteractive();
+        this.shelf_area = this.add.sprite(config.width/2, config.height * .65, 'sprites', 'empty').setAlpha(.0001).setDisplaySize(config.closet.width, 150).setInteractive();
         this.shelf_area.on('pointerdown', this.openShelf, this);
     }
 
