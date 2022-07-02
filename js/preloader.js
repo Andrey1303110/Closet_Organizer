@@ -36,8 +36,8 @@ var Preloader = new Phaser.Class({
 		this.loadingbar_bg = this.add.sprite(config.width / 2, 300, "loadingbar_bg");
 		this.loadingbar_fill = this.add.sprite(config.width / 2, 300, "loadingbar_fill");
 		this.setPreloadSprite(this.loadingbar_fill);
+		this.load.image('gradient_bg', "img/gradient_bg.png");
 		this.load.atlas('sprites', 'img/spritesheet.png', 'img/spritesheet.json');
-		this.load.bitmapFont('fontwhite', 'img/fontwhite.png', 'img/fontwhite.xml');
 		this.load.audio('theme', ['snd/bg.mp3']);
 		this.load.audio('dress_on', ['snd/skirt.mp3']);
 		this.load.audio('basketup', ['snd/basketup.mp3']);
@@ -45,6 +45,7 @@ var Preloader = new Phaser.Class({
 		this.load.audio('encourage', ['snd/encourage.mp3']);
 		this.load.audio('bra', ['snd/currency.mp3']);
 		this.load.audio('underpants', ['snd/trousers.mp3']);
+		this.load.audio('fireworks', ['snd/fireworks.mp3']);
 	},
 
 	create: function () {
@@ -72,9 +73,13 @@ var Preloader = new Phaser.Class({
 				{ key: 'sprites', frame: "shelf" },
 				{ key: 'sprites', frame: "star" },
 				{ key: 'sprites', frame: "star_active" },
-				{ key: 'sprites', frame: "text_3" },
+				{ key: 'sprites', frame: "bigstar" },
+				{ key: 'sprites', frame: "bigstar_active" },
 				{ key: 'sprites', frame: "text_1" },
 				{ key: 'sprites', frame: "text_2" },
+				{ key: 'sprites', frame: "text_3" },
+				{ key: 'sprites', frame: "text_4" },
+				{ key: 'sprites', frame: "text_5" },
 				{ key: 'sprites', frame: "underpants_0" },
 				{ key: 'sprites', frame: "underpants_1" },
 				{ key: 'sprites', frame: "underpants_2" },
@@ -88,6 +93,9 @@ var Preloader = new Phaser.Class({
 				{ key: 'sprites', frame: "additional_0" },
 				{ key: 'sprites', frame: "additional_1" },
 				{ key: 'sprites', frame: "additional_2" },
+				{ key: 'sprites', frame: "waves_top" },
+				{ key: 'sprites', frame: "waves_texture" },
+				{ key: 'sprites', frame: "finish_closet" },
 				{ key: 'sprites', frame: "hand" },
 				{ key: 'sprites', frame: "empty" },
 			],
