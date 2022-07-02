@@ -42,6 +42,7 @@ class GameScene extends Phaser.Scene {
         };
         this.hands = [];
         this.greeting_text = [];
+        this.endScreen = {};
         this.createHampers();
         this.addObjectsInHamper();
         this.addClosetClickArea();
@@ -124,7 +125,7 @@ class GameScene extends Phaser.Scene {
     addHandOverHamper(hamper){
         let name = 'hamper_' + hamper.name;
         this.hands[name] = this.add.sprite(0, 0, 'sprites', 'hand').setOrigin(1);
-        this.hands[name].setDepth(99);
+        this.hands[name].depth++;
         this.hands[name].setDisplaySize(82, 88);
         this.hands[name].setPosition(hamper.x + this.hands[name].displayWidth*1.5, hamper.y - hamper.displayHeight/2);
 
@@ -346,6 +347,7 @@ class GameScene extends Phaser.Scene {
     addRetryButton(){
         this.retry_button = this.add.sprite(this.screenEndpoints.no_margin_right, config.height*1/3, 'sprites', 'btn_bg_retry').setInteractive().setScale(.5).setOrigin(1, .5);
         this.retry_button.x += this.retry_button.displayWidth;
+        this.retry_button.y += this.retry_button.displayHeight/2;
         this.retry_button.on('pointerdown', this.restart, this);
     }
 
@@ -356,6 +358,112 @@ class GameScene extends Phaser.Scene {
             x: this.screenEndpoints.no_margin_right,
             ease: 'Power1',
             duration: 250,
+            onComplete: ()=>{
+                this.addDoneButton();
+                this.showDoneButton();
+            }
+        });
+    }
+
+    addDoneButton(){
+        this.done_button = this.add.sprite(this.screenEndpoints.no_margin_right, config.height*1/3, 'sprites', 'btn_bg_done').setInteractive().setScale(.5).setOrigin(1, .5);
+        this.done_button.x += this.done_button.displayWidth;
+        this.done_button.y -= this.done_button.displayHeight/2;
+        this.done_button.on('pointerdown', this.showEndScreen, this);
+    }
+
+    showDoneButton(){
+        this.done_button.x = this.screenEndpoints.no_margin_right + this.done_button.displayWidth;
+        this.tweens.add({
+            targets: this.done_button,
+            x: this.screenEndpoints.no_margin_right,
+            ease: 'Power1',
+            duration: 250,
+        });
+    }
+
+    showEndScreen(){
+        this.closeShelf();
+        this.endScreen.bg = this.add.sprite(config.width/2, -config.height, 'gradient_bg').setAlpha(.965).setDepth(99).setInteractive();
+
+        this.tweens.add({
+            targets: this.endScreen.bg,
+            y: config.height/2,
+            ease: 'Power2',
+            duration: 750,
+            onComplete: ()=>{
+                this.addFinishCloset();
+            }
+        });
+    }
+
+    addFinishCloset(){
+        this.endScreen.closet = this.add.sprite(config.width/2, config.height * .6, 'sprites', 'finish_closet').setScale(2/3).setInteractive();
+        this.endScreen.closet.depth = this.endScreen.bg.depth;
+        this.endScreen.stars = [];
+
+        this.endScreen.stars[1] = this.add.sprite(config.width/2 - config.width * .15, config.height * .3, 'sprites', 'bigstar').setScale(.6).setDepth(this.endScreen.bg.depth);
+        this.endScreen.stars[2] = this.add.sprite(config.width/2, config.height * .2, 'sprites', 'bigstar').setScale(.6).setDepth(this.endScreen.bg.depth);
+        this.endScreen.stars[3] = this.add.sprite(config.width/2 + config.width * .15, config.height * .3, 'sprites', 'bigstar').setScale(.6).setDepth(this.endScreen.bg.depth);
+
+        this.setFinishProgress();
+    }
+
+    setFinishProgress(){
+        for (let i = 1; i <= 3; i++) {
+            this.endScreen.stars[i].setTexture('sprites', 'bigstar');
+        }
+
+		if (this.currentGameProgress >= config.progresStages[1] * 100) {
+			this.endScreen.stars[1].setTexture('sprites', 'bigstar_active');
+			if (this.currentGameProgress >= config.progresStages[2] * 100) {
+				this.endScreen.stars[2].setTexture('sprites', 'bigstar_active');
+				if (this.currentGameProgress >= config.progresStages[3] * 100) {
+					this.endScreen.stars[3].setTexture('sprites', 'bigstar_active');
+				}
+			}
+		}
+
+        this.endScreen.waves = this.add.sprite(config.width/2, this.endScreen.closet.y + this.endScreen.closet.displayHeight * .37, 'sprites', 'waves_top').setScale(.665).setDepth(this.endScreen.bg.depth).setOrigin(.5, 1);
+        this.endScreen.waves_texture = this.add.sprite(config.width/2, this.endScreen.closet.y + this.endScreen.closet.displayHeight * .37, 'sprites', 'waves_texture').setDepth(this.endScreen.bg.depth).setOrigin(.5, 1);
+
+        let last_y = this.endScreen.waves.y;
+        let new_y = this.endScreen.closet.y - (this.endScreen.closet.displayHeight * .5) + ((1 - this.currentGameProgress/100) * this.endScreen.closet.displayHeight * .6) + this.endScreen.waves.displayHeight * 1.5;
+
+        
+        this.endScreen.waves_texture.setDisplaySize(this.endScreen.waves.displayWidth, (this.endScreen.waves_texture.y - new_y) * 0.0125 + (this.endScreen.waves_texture.y - new_y));
+        this.endScreen.waves.y = new_y + this.endScreen.waves_texture.displayHeight * .0125;
+
+        test = this.endScreen.waves;
+
+        /*
+        this.tweens.add({
+            targets: this.endScreen.waves,
+            y: new_y,
+            ease: 'Linear',
+            duration: 1250,
+        });
+        */
+
+        this.endScreen.text = {
+            up: this.add.text(config.width/2, this.endScreen.closet.y - this.endScreen.closet.displayHeight * .15, Math.floor(this.currentGameProgress) + '%', {
+                    font: '56px Sublima-Light',
+                    fill: '#fff',
+                }).setOrigin(0.5).setDepth(this.endScreen.bg.depth),
+            down: this.add.text(config.width/2, this.endScreen.closet.y, 'ACCURACY', {
+                    font: '17px Sublima-ExtraBold',
+                    fill: '#fff',
+                }).setOrigin(0.5).setDepth(this.endScreen.bg.depth),
+        };
+
+        if (this.currentGameProgress >= 100) {
+            this.sounds.fireworks.play();
+        }
+    }
+
+    addArrows(hampers){
+        hampers.forEach(hamper => {
+            console.log(hamper);
         });
     }
 
@@ -367,6 +475,7 @@ class GameScene extends Phaser.Scene {
             encourage: this.sound.add('encourage'),
             bra: this.sound.add('bra'),
             underpants: this.sound.add('underpants'),
+            fireworks: this.sound.add('fireworks'),
             //success: this.sound.add('success'),
             theme: this.sound.add('theme', {volume: 0.33}),
         }
@@ -733,7 +842,7 @@ class GameScene extends Phaser.Scene {
             }
         }
         else {
-            //стрелочки на корзины
+            addArrows([this.hampers[1]]);
         }
     }
 
@@ -832,7 +941,7 @@ class GameScene extends Phaser.Scene {
             }
         }
         else {
-            //стрелочки на корзины
+            addArrows([this.hampers[2]]);
         }
     }
 
@@ -896,7 +1005,7 @@ class GameScene extends Phaser.Scene {
     }
 
     addGreetingText(click_area){
-        let num = this.generateRandom(1, 3);
+        let num = this.generateRandom(1, 5);
         let angle = this.generateRandom(-15, 15);
         let coordinates = {
             x: config.width/2,
