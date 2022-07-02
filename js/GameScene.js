@@ -50,6 +50,15 @@ class GameScene extends Phaser.Scene {
     }
 
     restart(){
+        this.sounds.button.play();
+        config.hamperNames.forEach(name => {
+            if (this.hands['hamper_' + name]) {
+                this.hands['hamper_' + name].destroy();
+            }
+        });
+        if (this.done_button) {
+            this.done_button.destroy();
+        }
         this.retry_button.x += this.retry_button.displayWidth;
         this.closeShelf();
         if (this.dress_on_hanger) {
@@ -366,6 +375,9 @@ class GameScene extends Phaser.Scene {
     }
 
     addDoneButton(){
+        if (this.done_button) {
+            this.done_button.destroy();
+        }
         this.done_button = this.add.sprite(this.screenEndpoints.no_margin_right, config.height*1/3, 'sprites', 'btn_bg_done').setInteractive().setScale(.5).setOrigin(1, .5);
         this.done_button.x += this.done_button.displayWidth;
         this.done_button.y -= this.done_button.displayHeight/2;
@@ -461,12 +473,6 @@ class GameScene extends Phaser.Scene {
         }
     }
 
-    addArrows(hampers){
-        hampers.forEach(hamper => {
-            console.log(hamper);
-        });
-    }
-
     createSounds(){
         this.sounds = {
             basketup: this.sound.add('basketup', {volume: 0.5}),
@@ -476,7 +482,7 @@ class GameScene extends Phaser.Scene {
             bra: this.sound.add('bra'),
             underpants: this.sound.add('underpants'),
             fireworks: this.sound.add('fireworks'),
-            //success: this.sound.add('success'),
+            button: this.sound.add('button'),
             theme: this.sound.add('theme', {volume: 0.33}),
         }
         this.sounds.theme.loop = true;
@@ -1049,50 +1055,4 @@ class GameScene extends Phaser.Scene {
 
         timeline.play();
     }
-
-    /*
-
-    start(){
-        this.config = {
-            rows: config.levels[this.currentLevel].rows,
-            cols: config.levels[this.currentLevel].cols,
-            timeout: config.levels[this.currentLevel].timer,
-            cards: config.levels[this.currentLevel].cards,
-        };
-        this.levelText.setText(`Level: ${this.currentLevel}/${this.maxLevel}`);
-        this.createCards();
-        this.initCardsPositions();
-        this.timeout = this.config.timeout;
-        this.timer.paused = false;
-        this.openedCard = null;
-        this.openedCardsCount = 0;
-        this.streak = 0;
-        this.mistake = false;
-        this.initCards();
-        this.showCards();
-        this.isStarted = true;
-    }
-
-    restart(){
-        if (!this.isStarted) {
-            return;
-        }
-        this.isStarted = false;
-        let count = 0;
-        let onCardMoveComplete = () => {
-            count++;
-            if (count >= cards.length) {
-                this.start();
-            }
-        };
-        cards.forEach(card => {
-            card.move({
-                x: config.width + card.width,
-                y: config.height + card.height,
-                delay: card.position.delay,
-                callback: onCardMoveComplete,
-            });
-        });
-    }
-    */
 }
