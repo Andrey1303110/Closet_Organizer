@@ -19,10 +19,30 @@
 		canvas {
 			box-sizing: border-box;
 		}
+		@font-face {
+            font-family: 'Sublima-ExtraBold';
+            src: url("fonts/Sublima-ExtraBold.otf");
+        }
+		@font-face {
+            font-family: 'Sublima-Light';
+            src: url("fonts/Sublima-Light.otf");
+        }
+        .light {
+            font-family: "Sublima-Light";
+            visibility: hidden;
+            position: absolute;
+        }
+		.bold {
+			font-family: "Sublima-ExtraBold";
+            visibility: hidden;
+            position: absolute;
+		}
 	</style>
 </head>
 
 <body>
+	<p class="light">.</p>
+	<p class="bold">.</p>
     <script src="js/phaser.min.js"></script>
 	<script src="js/preloader.js"></script>
 	<script src="js/Hamper.js"></script>
