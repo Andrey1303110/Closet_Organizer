@@ -16,6 +16,10 @@ const config = {
       width: 434.5,
       height: 225,
     },
+    finishStars: {
+      width: 120,
+      height: 115,
+    },
     hamper: {
       width: 143,
       height: 210,

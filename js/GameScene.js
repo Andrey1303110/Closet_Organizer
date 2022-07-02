@@ -414,11 +414,42 @@ class GameScene extends Phaser.Scene {
         this.endScreen.closet.depth = this.endScreen.bg.depth;
         this.endScreen.stars = [];
 
-        this.endScreen.stars[1] = this.add.sprite(config.width/2 - config.width * .15, config.height * .3, 'sprites', 'bigstar').setScale(.6).setDepth(this.endScreen.bg.depth);
-        this.endScreen.stars[2] = this.add.sprite(config.width/2, config.height * .2, 'sprites', 'bigstar').setScale(.6).setDepth(this.endScreen.bg.depth);
-        this.endScreen.stars[3] = this.add.sprite(config.width/2 + config.width * .15, config.height * .3, 'sprites', 'bigstar').setScale(.6).setDepth(this.endScreen.bg.depth);
+        this.endScreen.stars[1] = this.add.sprite(config.width/2 - config.width * .15, config.height * .3, 'sprites', 'bigstar').setDisplaySize(config.finishStars.width, config.finishStars.height).setDepth(this.endScreen.bg.depth);
+        this.endScreen.stars[2] = this.add.sprite(config.width/2, config.height * .2, 'sprites', 'bigstar').setDisplaySize(config.finishStars.width, config.finishStars.height).setDepth(this.endScreen.bg.depth);
+        this.endScreen.stars[3] = this.add.sprite(config.width/2 + config.width * .15, config.height * .3, 'sprites', 'bigstar').setDisplaySize(config.finishStars.width, config.finishStars.height).setDepth(this.endScreen.bg.depth);
 
         this.setFinishProgress();
+    }
+
+    starAnimation(star, num){
+        let delay = num * 250;
+        let timeline = this.tweens.createTimeline();
+
+        timeline.add({
+            targets: star,
+            delay: delay,
+            ease: 'Power3',
+            scale: star.scale * .75,
+            duration: 325,
+            onComplete: ()=>{ 
+                star.setTexture('sprites', 'bigstar_active');
+                this.sounds.star.play();
+            }
+        });
+        timeline.add({
+            targets: star,
+            scale: star.scale * 1.25,
+            ease: 'Power3',
+            duration: 450,
+        });
+        timeline.add({
+            targets: star,
+            scale: star.scale * 1,
+            ease: 'Power3',
+            duration: 325,
+        });
+
+        timeline.play();
     }
 
     setFinishProgress(){
@@ -427,11 +458,12 @@ class GameScene extends Phaser.Scene {
         }
 
 		if (this.currentGameProgress >= config.progresStages[1] * 100) {
-			this.endScreen.stars[1].setTexture('sprites', 'bigstar_active');
+			//this.endScreen.stars[1].setTexture('sprites', 'bigstar_active');
+            this.starAnimation(this.endScreen.stars[1], 1);
 			if (this.currentGameProgress >= config.progresStages[2] * 100) {
-				this.endScreen.stars[2].setTexture('sprites', 'bigstar_active');
+				this.starAnimation(this.endScreen.stars[2], 2);
 				if (this.currentGameProgress >= config.progresStages[3] * 100) {
-					this.endScreen.stars[3].setTexture('sprites', 'bigstar_active');
+					this.starAnimation(this.endScreen.stars[3], 3);
 				}
 			}
 		}
@@ -445,8 +477,6 @@ class GameScene extends Phaser.Scene {
         
         this.endScreen.waves_texture.setDisplaySize(this.endScreen.waves.displayWidth, (this.endScreen.waves_texture.y - new_y) * 0.0125 + (this.endScreen.waves_texture.y - new_y));
         this.endScreen.waves.y = new_y + this.endScreen.waves_texture.displayHeight * .0125;
-
-        test = this.endScreen.waves;
 
         /*
         this.tweens.add({
@@ -483,6 +513,7 @@ class GameScene extends Phaser.Scene {
             underpants: this.sound.add('underpants'),
             fireworks: this.sound.add('fireworks'),
             button: this.sound.add('button'),
+            star: this.sound.add('star'),
             theme: this.sound.add('theme', {volume: 0.33}),
         }
         this.sounds.theme.loop = true;
