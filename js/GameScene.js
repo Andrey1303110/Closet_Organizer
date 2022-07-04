@@ -526,6 +526,24 @@ class GameScene extends Phaser.Scene {
 
         let animDuration = this.sounds.progress.duration * this.currentGameProgress/100 * 1000;
 
+        this.anims.create(
+			{
+				key: 'live_waves',
+				frames: [
+					{ key: 'sprites', frame: 'wave1' },
+					{ key: 'sprites', frame: 'wave2' },
+					{ key: 'sprites', frame: 'wave3' },
+					{ key: 'sprites', frame: 'wave4' },
+					{ key: 'sprites', frame: 'wave5' },
+					{ key: 'sprites', frame: 'wave6' },
+                    { key: 'sprites', frame: 'wave7' },
+				],
+				frameRate: 10,
+				repeat: -1
+			});
+
+        this.endScreen.waves.anims.play("live_waves");
+
         this.sounds.progress.play();
 
         this.tweens.add({

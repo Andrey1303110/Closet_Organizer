@@ -37,7 +37,7 @@ var Preloader = new Phaser.Class({
 		this.loadingbar_fill = this.add.sprite(config.width / 2, 300, "loadingbar_fill");
 		this.setPreloadSprite(this.loadingbar_fill);
 		this.load.image('gradient_bg', "img/gradient_bg.png");
-		this.load.atlas('sprites', 'img/spritesheet.png', 'img/spritesheet.json');
+		this.load.atlas('sprites', 'img/spritesheet_hd.png', 'img/spritesheet.json');
 		this.load.audio('theme', ['snd/bg.mp3']);
 		this.load.audio('dress_on', ['snd/skirt.mp3']);
 		this.load.audio('basketup', ['snd/basketup.mp3']);
@@ -93,6 +93,13 @@ var Preloader = new Phaser.Class({
 				{ key: 'sprites', frame: "fold_underpants_2" },
 				{ key: 'sprites', frame: "fold_underpants_3" },
 				{ key: 'sprites', frame: "waves" },
+				{ key: 'sprites', frame: 'wave1' },
+				{ key: 'sprites', frame: 'wave2' },
+				{ key: 'sprites', frame: 'wave3' },
+				{ key: 'sprites', frame: 'wave4' },
+				{ key: 'sprites', frame: 'wave5' },
+				{ key: 'sprites', frame: 'wave6' },
+				{ key: 'sprites', frame: 'wave7' },
 				{ key: 'sprites', frame: "dress" },
 				{ key: 'sprites', frame: "additional_0" },
 				{ key: 'sprites', frame: "additional_1" },
@@ -104,6 +111,7 @@ var Preloader = new Phaser.Class({
 				{ key: 'sprites', frame: "empty" },
 			],
 		});
+
 		this.loadingbar_bg.destroy();
 		this.loadingbar_fill.destroy();
 		this.preloadSprite = null;

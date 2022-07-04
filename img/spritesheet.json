@@ -1030,6 +1030,153 @@
             }
         },
         {
+            "filename": "wave1",
+            "frame": {
+                "x": 1440,
+                "y": 1900,
+                "w": 268,
+                "h": 59
+            },
+            "rotated": false,
+            "trimmed": false,
+            "spriteSourceSize": {
+                "x": 0,
+                "y": 0,
+                "w": 268,
+                "h": 59
+            },
+            "sourceSize": {
+                "w": 268,
+                "h": 59
+            }
+        },
+        {
+            "filename": "wave2",
+            "frame": {
+                "x": 1716,
+                "y": 1900,
+                "w": 268,
+                "h": 59
+            },
+            "rotated": false,
+            "trimmed": false,
+            "spriteSourceSize": {
+                "x": 0,
+                "y": 0,
+                "w": 268,
+                "h": 59
+            },
+            "sourceSize": {
+                "w": 268,
+                "h": 59
+            }
+        },
+        {
+            "filename": "wave3",
+            "frame": {
+                "x": 1990,
+                "y": 1900,
+                "w": 268,
+                "h": 59
+            },
+            "rotated": false,
+            "trimmed": false,
+            "spriteSourceSize": {
+                "x": 0,
+                "y": 0,
+                "w": 268,
+                "h": 59
+            },
+            "sourceSize": {
+                "w": 268,
+                "h": 59
+            }
+        },
+        {
+            "filename": "wave4",
+            "frame": {
+                "x": 1440,
+                "y": 1965,
+                "w": 268,
+                "h": 59
+            },
+            "rotated": false,
+            "trimmed": false,
+            "spriteSourceSize": {
+                "x": 0,
+                "y": 0,
+                "w": 268,
+                "h": 59
+            },
+            "sourceSize": {
+                "w": 268,
+                "h": 59
+            }
+        },
+        {
+            "filename": "wave5",
+            "frame": {
+                "x": 1716,
+                "y": 1965,
+                "w": 268,
+                "h": 59
+            },
+            "rotated": false,
+            "trimmed": false,
+            "spriteSourceSize": {
+                "x": 0,
+                "y": 0,
+                "w": 268,
+                "h": 59
+            },
+            "sourceSize": {
+                "w": 268,
+                "h": 59
+            }
+        },
+        {
+            "filename": "wave6",
+            "frame": {
+                "x": 1990,
+                "y": 1965,
+                "w": 268,
+                "h": 59
+            },
+            "rotated": false,
+            "trimmed": false,
+            "spriteSourceSize": {
+                "x": 0,
+                "y": 0,
+                "w": 268,
+                "h": 59
+            },
+            "sourceSize": {
+                "w": 268,
+                "h": 59
+            }
+        },
+        {
+            "filename": "wave7",
+            "frame": {
+                "x": 2450,
+                "y": 1310,
+                "w": 268,
+                "h": 59
+            },
+            "rotated": false,
+            "trimmed": false,
+            "spriteSourceSize": {
+                "x": 0,
+                "y": 0,
+                "w": 268,
+                "h": 59
+            },
+            "sourceSize": {
+                "w": 268,
+                "h": 59
+            }
+        },
+        {
             "filename": "empty",
             "frame": {
                 "x": 0,
@@ -1054,9 +1201,9 @@
     "meta": {
         "app": "https://www.leshylabs.com/apps/sstool/",
         "version": "Leshy SpriteSheet Tool v0.8.4",
-        "image": "spritesheet.png",
+        "image": "spritesheet_hd.png",
         "size": {
-            "w": 2730,
+            "w": 2750,
             "h": 2030
         },
         "scale": 1
