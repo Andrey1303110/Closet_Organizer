@@ -528,7 +528,6 @@ class GameScene extends Phaser.Scene {
 
         this.sounds.progress.play();
 
-        
         this.tweens.add({
             targets: this.endScreen.waves,
             y: new_y,
