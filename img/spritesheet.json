@@ -1012,9 +1012,9 @@
             "filename": "waves_texture",
             "frame": {
                 "x": 2460,
-                "y": 1330,
+                "y": 1611,
                 "w": 268,
-                "h": 31
+                "h": 400
             },
             "rotated": false,
             "trimmed": false,
@@ -1022,11 +1022,11 @@
                 "x": 0,
                 "y": 0,
                 "w": 268,
-                "h": 31
+                "h": 400
             },
             "sourceSize": {
                 "w": 268,
-                "h": 31
+                "h": 400
             }
         },
         {

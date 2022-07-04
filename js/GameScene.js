@@ -487,18 +487,18 @@ class GameScene extends Phaser.Scene {
             scale: star.scale * 1,
             ease: 'Power3',
             duration: 325,
+            onComplete: ()=>{
+                if (this.currentGameProgress >= 100 && !this.sounds.fireworks.isPlaying) {
+                    this.sounds.fireworks.play();
+                }
+            }
         });
 
         timeline.play();
     }
 
-    setFinishProgress(){
-        for (let i = 1; i <= 3; i++) {
-            this.endScreen.stars[i].setTexture('sprites', 'bigstar');
-        }
-
-		if (this.currentGameProgress >= config.progresStages[1] * 100) {
-			//this.endScreen.stars[1].setTexture('sprites', 'bigstar_active');
+    setFinishStars(){
+        if (this.currentGameProgress >= config.progresStages[1] * 100) {
             this.starAnimation(this.endScreen.stars[1], 1);
 			if (this.currentGameProgress >= config.progresStages[2] * 100) {
 				this.starAnimation(this.endScreen.stars[2], 2);
@@ -507,25 +507,45 @@ class GameScene extends Phaser.Scene {
 				}
 			}
 		}
+    }
 
-        this.endScreen.waves = this.add.sprite(config.width/2, this.endScreen.closet.y + this.endScreen.closet.displayHeight * .37, 'sprites', 'waves_top').setScale(.665).setDepth(this.endScreen.bg.depth).setOrigin(.5, 1);
-        this.endScreen.waves_texture = this.add.sprite(config.width/2, this.endScreen.closet.y + this.endScreen.closet.displayHeight * .37, 'sprites', 'waves_texture').setDepth(this.endScreen.bg.depth).setOrigin(.5, 1);
+    setFinishProgress(){
+        for (let i = 1; i <= 3; i++) {
+            this.endScreen.stars[i].setTexture('sprites', 'bigstar');
+        }
+
+        this.endScreen.waves = this.add.sprite(config.width/2, this.endScreen.closet.y + this.endScreen.closet.displayHeight * .42, 'sprites', 'waves_top').setScale(.665).setDepth(this.endScreen.bg.depth).setOrigin(.5, 1);
+        this.endScreen.waves_texture = this.add.sprite(config.width/2, this.endScreen.closet.y + this.endScreen.closet.displayHeight * .42, 'sprites', 'waves_texture').setDepth(this.endScreen.bg.depth).setOrigin(.5, 1);
 
         let last_y = this.endScreen.waves.y;
-        let new_y = this.endScreen.closet.y - (this.endScreen.closet.displayHeight * .5) + ((1 - this.currentGameProgress/100) * this.endScreen.closet.displayHeight * .6) + this.endScreen.waves.displayHeight * 1.5;
+        let new_y = Math.floor(this.endScreen.waves.y - ((this.currentGameProgress/100) * ((this.endScreen.closet.displayHeight * .58) + this.endScreen.waves.displayHeight * 1.5)));
+
+        this.endScreen.waves_texture.setDisplaySize(this.endScreen.waves.displayWidth, this.endScreen.waves.displayHeight/2);
+
+        let scaleY = ((last_y - new_y) / this.endScreen.waves_texture.displayHeight) * this.endScreen.waves_texture.scaleY;
+
+        let animDuration = this.sounds.progress.duration * this.currentGameProgress/100 * 1000;
+
+        this.sounds.progress.play();
 
         
-        this.endScreen.waves_texture.setDisplaySize(this.endScreen.waves.displayWidth, (this.endScreen.waves_texture.y - new_y) * 0.0125 + (this.endScreen.waves_texture.y - new_y));
-        this.endScreen.waves.y = new_y + this.endScreen.waves_texture.displayHeight * .0125;
-
-        /*
         this.tweens.add({
             targets: this.endScreen.waves,
             y: new_y,
             ease: 'Linear',
-            duration: 1250,
+            duration: animDuration,
         });
-        */
+
+        this.tweens.add({
+            targets: this.endScreen.waves_texture,
+            scaleY: scaleY,
+            ease: 'Linear',
+            duration: animDuration,
+            onComplete: ()=>{
+                this.sounds.progress.stop();
+                this.setFinishStars();
+            }
+        });
 
         this.endScreen.text = {
             up: this.add.text(config.width/2, this.endScreen.closet.y - this.endScreen.closet.displayHeight * .15, Math.floor(this.currentGameProgress) + '%', {
@@ -537,10 +557,6 @@ class GameScene extends Phaser.Scene {
                     fill: '#fff',
                 }).setOrigin(0.5).setDepth(this.endScreen.bg.depth),
         };
-
-        if (this.currentGameProgress >= 100) {
-            this.sounds.fireworks.play();
-        }
     }
 
     createSounds(){
@@ -553,6 +569,7 @@ class GameScene extends Phaser.Scene {
             underpants: this.sound.add('underpants'),
             fireworks: this.sound.add('fireworks'),
             button: this.sound.add('button'),
+            progress: this.sound.add('progress'),
             star: this.sound.add('star'),
             theme: this.sound.add('theme', {volume: 0.33}),
         }

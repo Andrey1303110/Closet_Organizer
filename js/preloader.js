@@ -46,6 +46,7 @@ var Preloader = new Phaser.Class({
 		this.load.audio('bra', ['snd/currency.mp3']);
 		this.load.audio('underpants', ['snd/trousers.mp3']);
 		this.load.audio('fireworks', ['snd/fireworks.mp3']);
+		this.load.audio('progress', ['snd/progress.mp3']);
 		this.load.audio('button', ['snd/button.mp3']);
 		this.load.audio('star', ['snd/stars.mp3']);
 	},
