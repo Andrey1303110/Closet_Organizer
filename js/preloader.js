@@ -62,6 +62,7 @@ var Preloader = new Phaser.Class({
 				{ key: 'sprites', frame: "bra_3" },
 				{ key: 'sprites', frame: "bra_4" },
 				{ key: 'sprites', frame: "btn_bg_done" },
+				{ key: 'sprites', frame: "btn_bg_done_green" },
 				{ key: 'sprites', frame: "btn_bg_retry" },
 				{ key: 'sprites', frame: "btn_try2" },
 				{ key: 'sprites', frame: "statusBarComplete" },

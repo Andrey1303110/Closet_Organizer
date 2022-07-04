@@ -160,10 +160,49 @@ class GameScene extends Phaser.Scene {
         }
     }
 
-    createWawingTweens(hand){
+    checkAllDone(hamper){
+        let result = true;
+        for (let i = 0; i < this.hampers.length; i++) {
+            const elem = this.hampers[i];
+
+            if (elem.objectsIn.length) {
+                this.addHandOverHamper(elem);
+                if (hamper === elem) {
+                    return;
+                }
+                result = false;
+                break;
+            }
+        }
+
+        if (result) {
+            this.done_button.setTexture('sprites', 'btn_bg_done_green')
+            this.addHandOverBtn(this.done_button);
+        }
+    }
+
+    addHandOverBtn(button){
+        if (this.hands[button.name]) {
+            this.hands[button.name].destroy();
+        }
+
+        this.hands[button.name] = this.add.sprite(button.x - button.displayWidth, button.y + button.displayHeight/2, 'sprites', 'hand');
+        this.hands[button.name].setDisplaySize(82, 88);
+        this.hands[button.name].setOrigin(1, 0.5);
+        this.hands[button.name].flipX = true;
+
+        this.createWawingTweens(this.hands[button.name], true);
+    }
+
+    createWawingTweens(hand, reverse = false){
         let frames = 999;
         let frame_duration = 585;
         let timeline = this.tweens.createTimeline();
+
+        let cof = 1;
+        if (reverse) {
+            cof = -1;
+        }
 
         for (let i = 0; i <= frames; i++) {
             if (i === frames) {
@@ -178,7 +217,7 @@ class GameScene extends Phaser.Scene {
                 if (i % 2 === 0 || i === 0) {
                     timeline.add({
                         targets: hand,
-                        angle: -20,
+                        angle: -20 * cof,
                         ease: 'Linear',
                         duration: frame_duration,
                     });
@@ -381,6 +420,7 @@ class GameScene extends Phaser.Scene {
         this.done_button = this.add.sprite(this.screenEndpoints.no_margin_right, config.height*1/3, 'sprites', 'btn_bg_done').setInteractive().setScale(.5).setOrigin(1, .5);
         this.done_button.x += this.done_button.displayWidth;
         this.done_button.y -= this.done_button.displayHeight/2;
+        this.done_button.name = 'done_btn';
         this.done_button.on('pointerdown', this.showEndScreen, this);
     }
 
@@ -756,16 +796,11 @@ class GameScene extends Phaser.Scene {
         this.sounds.dress_on.play();
         this.dress_on_hanger.push(this.add.sprite(area.x, 367, 'sprites', 'dress_on_hanger').setDisplaySize(27, 460));
         this.hampers.forEach(hamper => {
-            if (hamper.name === 'dress') {
+            if (hamper.name === this.selectedСlothing) {
                 hamper.objectsIn.pop().destroy();
                 if (hamper.objectsIn.length === 0) {
                     hamper.shakes();
-                    if (this.hampers[1].objectsIn.length) {
-                        this.addHandOverHamper(this.hampers[1]);
-                    }
-                    else if (this.hampers[2].objectsIn.length) {
-                        this.addHandOverHamper(this.hampers[2]);
-                    }
+                    this.checkAllDone(hamper);
                 }
             }
         });
@@ -853,12 +888,7 @@ class GameScene extends Phaser.Scene {
 
                     if (hamper.objectsIn.length === 0) {
                         hamper.shakes();
-                        if (this.hampers[2].objectsIn.length === config.clothingSettings[this.hampers[2].name].nums) {
-                            this.addHandOverHamper(this.hampers[2]);
-                        }
-                        else if (this.hampers[0].objectsIn.length === config.clothingSettings[this.hampers[0].name].nums) {
-                            this.addHandOverHamper(this.hampers[0]);
-                        }
+                        this.checkAllDone(hamper);
                     }
 
                     this.getPercentOfClothe(this.selectedСlothing);
@@ -952,12 +982,7 @@ class GameScene extends Phaser.Scene {
 
                     if (hamper.objectsIn.length === 0) {
                         hamper.shakes();
-                        if (this.hampers[1].objectsIn.length === config.clothingSettings[this.hampers[1].name].nums) {
-                            this.addHandOverHamper(this.hampers[1]);
-                        }
-                        else if (this.hampers[0].objectsIn.length === config.clothingSettings[this.hampers[0].name].nums) {
-                            this.addHandOverHamper(this.hampers[0]);
-                        }
+                        this.checkAllDone(hamper);
                     }
 
                     this.getPercentOfClothe(this.selectedСlothing);
