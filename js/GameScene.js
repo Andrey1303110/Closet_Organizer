@@ -134,7 +134,7 @@ class GameScene extends Phaser.Scene {
     addHandOverHamper(hamper){
         let name = 'hamper_' + hamper.name;
         this.hands[name] = this.add.sprite(0, 0, 'sprites', 'hand').setOrigin(1);
-        this.hands[name].depth++;
+        this.hands[name].depth = hamper.objectsIn[hamper.objectsIn.length-1].depth + 1;
         this.hands[name].setDisplaySize(82, 88);
         this.hands[name].setPosition(hamper.x + this.hands[name].displayWidth*1.5, hamper.y - hamper.displayHeight/2);
 
