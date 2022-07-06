@@ -1,6 +1,6 @@
 const config = {
     type: Phaser.AUTO,
-    width: 1080,
+    width: 1920,
     height: 1080,
     backgroundColor: '#CCC9C9',
     orientation: Phaser.Scale.PORTRAIT, 
