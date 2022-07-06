@@ -11,14 +11,12 @@ class GameScene extends Phaser.Scene {
         this.setEndpoints();
         this.createBackground();
         this.createLevelText();
-		this.createCompleteBar();
         this.start();
+        this.addListeners();
     }
 
     start(){
         this.currentGameProgress = 0;
-        this.updateBar(this.currentGameProgress);
-        this.hideCompelteBar();
         this.selectedСlothing = null;
         this.shelfActive = false;
         this.shelf_level = {
@@ -51,6 +49,7 @@ class GameScene extends Phaser.Scene {
 
     restart(){
         this.sounds.button.play();
+        this.deleteCompelteBar();
         config.hamperNames.forEach(name => {
             if (this.hands['hamper_' + name]) {
                 this.hands['hamper_' + name].destroy();
@@ -86,6 +85,27 @@ class GameScene extends Phaser.Scene {
         this.start();
     }
 
+    addListeners(){
+        window.addEventListener("orientationchange", ()=>{ this.reinitHUD() });
+        window.addEventListener("resize", ()=>{ this.reinitHUD() });
+    }
+
+    reinitHUD(){
+        this.setEndpoints();
+        if (this.statusBar) {
+            this.deleteCompelteBar();
+            this.createCompleteBar();
+            if (this.retry_button) {
+                this.retry_button.destroy();
+                if (this.done_button) {
+                    this.done_button.destroy();
+                }
+                this.addRetryButton();
+                this.showRetryButton();
+            }
+        }
+    };
+
     addClosetClickArea(){
         this.closet_area = this.add.sprite(config.width/2, config.height * .4, 'sprites', 'empty').setAlpha(.0001).setDisplaySize(config.closet.width * 1.25, config.height * .75).setInteractive();
         this.closet_area.on('pointerdown', ()=>{
@@ -94,7 +114,7 @@ class GameScene extends Phaser.Scene {
             this.hampers.forEach(hamper => {
                 hamper.showing_on_screen();
             });
-            this.showCompelteBar();
+            this.createCompleteBar();
             this.addClickAreaDress();
         }, this);
 
@@ -588,20 +608,29 @@ class GameScene extends Phaser.Scene {
             button: this.sound.add('button'),
             progress: this.sound.add('progress'),
             star: this.sound.add('star'),
-            theme: this.sound.add('theme', {volume: 0.33}),
+            theme: this.sound.add('theme', {volume: 0.25}),
         }
         this.sounds.theme.loop = true;
-        this.sounds.theme.play();
     }
 
     setEndpoints(){
-		if (screen.width >= screen.height){
-			this.screenEndpoints = {
-				left: (config.width * .075),
-				right: config.width - (config.width * .075),
-                no_margin_left: 0,
-                no_margin_right: config.width,
-			};
+        if (screen.width >= screen.height){
+            if (screen.width/screen.height < 16/9){
+                this.screenEndpoints = {
+                    left: (config.width/2) - screen.width/2 * (config.height/window.innerHeight) + (screen.width * .06),
+                    right: (config.width/2) + screen.width/2 * (config.height/window.innerHeight) - (screen.width * .06),
+                    no_margin_left: (config.width/2) - screen.width/2 * (config.height/window.innerHeight),
+                    no_margin_right: (config.width/2) + screen.width/2 * (config.height/window.innerHeight),
+                };
+            }
+            else {
+                this.screenEndpoints = {
+                    left: (config.width * .075),
+                    right: config.width - (config.width * .075),
+                    no_margin_left: 0,
+                    no_margin_right: config.width,
+                };
+            }
 		}
 		else {
 			this.screenEndpoints = {
@@ -668,10 +697,10 @@ class GameScene extends Phaser.Scene {
     }
 
 	createCompleteBar(){
-		this.statusBar = this.add.sprite(this.screenEndpoints.left, config.height * .3, 'sprites', 'statusBarEmpty').setScale(.75);
+		this.statusBar = this.add.sprite(this.screenEndpoints.left - window.innerWidth/2, config.height * .3, 'sprites', 'statusBarEmpty').setScale(.75);
 		this.statusBar.alpha = 0.68;
 		
-		this.statusBarComplete = this.add.sprite(this.screenEndpoints.left, config.height * .3, 'sprites', 'statusBarComplete').setScale(.75);
+		this.statusBarComplete = this.add.sprite(this.screenEndpoints.left - window.innerWidth/2, config.height * .3, 'sprites', 'statusBarComplete').setScale(.75);
 		this.statusBarComplete.flipY = true;
 		this.statusBarComplete.frame.cutHeight = 0;
 		this.statusBarComplete.frame.updateUVs();
@@ -680,20 +709,9 @@ class GameScene extends Phaser.Scene {
 
         this.statusBarStars = [];
         for (let i = 1; i <= 3; i++) {
-            this.statusBarStars[i] = this.add.sprite(this.screenEndpoints.left, this.statusBar.y - (this.statusBar.displayHeight/2) + (this.statusBar.displayHeight * (1 - config.progresStages[i])), 'sprites', 'star').setDisplaySize(this.statusBar.displayWidth * 1.25, this.statusBar.displayWidth * 1.1);
+            this.statusBarStars[i] = this.add.sprite(this.screenEndpoints.left - window.innerWidth/2, this.statusBar.y - (this.statusBar.displayHeight/2) + (this.statusBar.displayHeight * (1 - config.progresStages[i])), 'sprites', 'star').setDisplaySize(this.statusBar.displayWidth * 1.25, this.statusBar.displayWidth * 1.1);
         }
-	}
 
-    hideCompelteBar(){
-        this.statusBar.x -= window.innerWidth/2;
-        this.statusBarComplete.x -= window.innerWidth/2;
-        this.progressArrow.x -= window.innerWidth/2;
-        this.statusBarStars.forEach(star => {
-            star.x -= window.innerWidth/2;
-        });
-    }
-
-    showCompelteBar(){
         this.tweens.add({
             targets: this.statusBar,
             x: this.statusBar.x + window.innerWidth/2,
@@ -717,6 +735,17 @@ class GameScene extends Phaser.Scene {
             x: this.statusBarStars[1].x + window.innerWidth/2,
             ease: 'Power1',
             duration: 250,
+        });
+
+        this.updateBar(this.currentGameProgress);
+	}
+
+    deleteCompelteBar(){
+        this.statusBar.destroy();
+        this.statusBarComplete.destroy();
+        this.progressArrow.destroy();
+        this.statusBarStars.forEach(star => {
+            star.destroy();
         });
     }
 
@@ -799,6 +828,7 @@ class GameScene extends Phaser.Scene {
     }
 
     addClickAreaDress(){
+        this.sounds.theme.play();
         for (let i = 0; i < config.clothingSettings.dress.nums; i++) {
             this.click_area['dress'].push(this.add.sprite(config.width/2 - config.closet.width/2 + config.closet.width/config.clothingSettings.dress.nums * i + config.closet.width/config.clothingSettings.dress.nums/2, config.height * .37, 'sprites', 'empty').setAlpha(.0001).setDisplaySize(config.closet.width/config.clothingSettings.dress.nums, config.height * .4).setInteractive());
         }
