@@ -454,9 +454,9 @@ class GameScene extends Phaser.Scene {
         this.endScreen.closet.depth = this.endScreen.bg.depth;
         this.endScreen.stars = [];
 
-        this.endScreen.stars[1] = this.add.sprite(config.width/2 - config.width * .15, config.height * .3, 'sprites', 'bigstar').setDisplaySize(config.finishStars.width, config.finishStars.height).setDepth(this.endScreen.bg.depth);
+        this.endScreen.stars[1] = this.add.sprite(config.width/2 - config.finishStars.width * 1.5, config.height * .3, 'sprites', 'bigstar').setDisplaySize(config.finishStars.width, config.finishStars.height).setDepth(this.endScreen.bg.depth);
         this.endScreen.stars[2] = this.add.sprite(config.width/2, config.height * .2, 'sprites', 'bigstar').setDisplaySize(config.finishStars.width, config.finishStars.height).setDepth(this.endScreen.bg.depth);
-        this.endScreen.stars[3] = this.add.sprite(config.width/2 + config.width * .15, config.height * .3, 'sprites', 'bigstar').setDisplaySize(config.finishStars.width, config.finishStars.height).setDepth(this.endScreen.bg.depth);
+        this.endScreen.stars[3] = this.add.sprite(config.width/2 + config.finishStars.width * 1.5, config.height * .3, 'sprites', 'bigstar').setDisplaySize(config.finishStars.width, config.finishStars.height).setDepth(this.endScreen.bg.depth);
 
         this.setFinishProgress();
     }
