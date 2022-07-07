@@ -36,7 +36,7 @@ var Preloader = new Phaser.Class({
 		this.loadingbar_bg = this.add.sprite(config.width / 2, 300, "loadingbar_bg");
 		this.loadingbar_fill = this.add.sprite(config.width / 2, 300, "loadingbar_fill");
 		this.setPreloadSprite(this.loadingbar_fill);
-		this.load.image('gradient_bg', "img/gradient_bg.png");
+		this.load.image('gradient_bg', 'img/gradient_bg.png');
 		this.load.atlas('sprites', 'img/spritesheet.png', 'img/spritesheet.json');
 		this.load.audio('theme', ['snd/bg.mp3']);
 		this.load.audio('dress_on', ['snd/skirt.mp3']);

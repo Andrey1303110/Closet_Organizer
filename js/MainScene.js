@@ -4,7 +4,7 @@ class GameScene extends Phaser.Scene {
         super("GameScene");
     }
 
-    preload() { }
+    preload() {}
 
     create() {
         this.createSounds();
