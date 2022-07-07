@@ -1,3 +1,5 @@
+var store_link = "https://www.google.com/";
+
 const config = {
     type: Phaser.AUTO,
     width: 1920,
@@ -7,7 +9,7 @@ const config = {
     scale: {
         mode: Phaser.Scale.ENVELOP,
         autoCenter: Phaser.Scale.CENTER_BOTH,
-      },
+    },
     scene: [Preloader, GameScene],
     closet: {
       width: 315,

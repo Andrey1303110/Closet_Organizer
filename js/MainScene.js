@@ -4,9 +4,9 @@ class GameScene extends Phaser.Scene {
         super("GameScene");
     }
 
-    preload(){}
+    preload() { }
 
-    create(){
+    create() {
         this.createSounds();
         this.setEndpoints();
         this.createBackground();
@@ -15,7 +15,7 @@ class GameScene extends Phaser.Scene {
         this.addListeners();
     }
 
-    start(){
+    start() {
         this.currentGameProgress = 0;
         this.selectedСlothing = null;
         this.shelfActive = false;
@@ -47,7 +47,7 @@ class GameScene extends Phaser.Scene {
         this.addRetryButton();
     }
 
-    restart(){
+    restart() {
         this.sounds.button.play();
         this.deleteCompelteBar();
         config.hamperNames.forEach(name => {
@@ -65,7 +65,7 @@ class GameScene extends Phaser.Scene {
                 this.dress_on_hanger[i].destroy();
             }
         }
-        if (this.click_area['dress']){
+        if (this.click_area['dress']) {
             for (let i = 0; i < this.click_area['dress'].length; i++) {
                 this.click_area['dress'][i].destroy();
             }
@@ -85,12 +85,12 @@ class GameScene extends Phaser.Scene {
         this.start();
     }
 
-    addListeners(){
-        window.addEventListener("orientationchange", ()=>{ this.reinitHUD() });
-        window.addEventListener("resize", ()=>{ this.reinitHUD() });
+    addListeners() {
+        window.addEventListener("orientationchange", () => { this.reinitHUD() });
+        window.addEventListener("resize", () => { this.reinitHUD() });
     }
 
-    reinitHUD(){
+    reinitHUD() {
         this.setEndpoints();
         if (this.statusBar) {
             this.deleteCompelteBar();
@@ -106,9 +106,9 @@ class GameScene extends Phaser.Scene {
         }
     };
 
-    addClosetClickArea(){
-        this.closet_area = this.add.sprite(config.width/2, config.height * .4, 'sprites', 'empty').setAlpha(.0001).setDisplaySize(config.closet.width * 1.25, config.height * .75).setInteractive();
-        this.closet_area.on('pointerdown', ()=>{
+    addClosetClickArea() {
+        this.closet_area = this.add.sprite(config.width / 2, config.height * .4, 'sprites', 'empty').setAlpha(.0001).setDisplaySize(config.closet.width * 1.25, config.height * .75).setInteractive();
+        this.closet_area.on('pointerdown', () => {
             this.closet_area.destroy();
             this.hands['initial'].destroy();
             this.hampers.forEach(hamper => {
@@ -121,17 +121,17 @@ class GameScene extends Phaser.Scene {
         this.addInitialHand();
     }
 
-    addInitialHand(){
-        let hand = this.add.sprite(config.width/2, config.height * .35, 'sprites', 'hand').setOrigin(1);
+    addInitialHand() {
+        let hand = this.add.sprite(config.width / 2, config.height * .35, 'sprites', 'hand').setOrigin(1);
         hand.setDisplaySize(82, 88);
-        hand.setPosition(hand.x + hand.displayWidth, hand.y + hand.displayHeight/2);
+        hand.setPosition(hand.x + hand.displayWidth, hand.y + hand.displayHeight / 2);
 
         this.createWawingTweens(hand);
 
         this.hands['initial'] = hand;
     }
 
-    addShelfHand(){
+    addShelfHand() {
         if (this.hands['shelf']) {
             return;
         }
@@ -142,7 +142,7 @@ class GameScene extends Phaser.Scene {
             }
         });
 
-        let hand = this.add.sprite(config.width/2, config.height * .35, 'sprites', 'hand').setOrigin(1);
+        let hand = this.add.sprite(config.width / 2, config.height * .35, 'sprites', 'hand').setOrigin(1);
         hand.setDisplaySize(82, 88);
         hand.setPosition(this.shelf_area.x + hand.displayWidth, this.shelf_area.y + hand.displayHeight * .25);
 
@@ -151,17 +151,17 @@ class GameScene extends Phaser.Scene {
         this.hands['shelf'] = hand;
     }
 
-    addHandOverHamper(hamper){
+    addHandOverHamper(hamper) {
         let name = 'hamper_' + hamper.name;
         this.hands[name] = this.add.sprite(0, 0, 'sprites', 'hand').setOrigin(1);
-        this.hands[name].depth = hamper.objectsIn[hamper.objectsIn.length-1].depth + 1;
+        this.hands[name].depth = hamper.objectsIn[hamper.objectsIn.length - 1].depth + 1;
         this.hands[name].setDisplaySize(82, 88);
-        this.hands[name].setPosition(hamper.x + this.hands[name].displayWidth*1.5, hamper.y - hamper.displayHeight/2);
+        this.hands[name].setPosition(hamper.x + this.hands[name].displayWidth * 1.5, hamper.y - hamper.displayHeight / 2);
 
         this.createWawingTweens(this.hands[name]);
     }
 
-    addHandOverClickArea(click_area_name, additional = null){
+    addHandOverClickArea(click_area_name, additional = null) {
         config.hamperNames.forEach(name => {
             if (this.hands['clickArea_' + name]) {
                 this.hands['clickArea_' + name].destroy();
@@ -180,7 +180,7 @@ class GameScene extends Phaser.Scene {
         }
     }
 
-    checkAllDone(hamper){
+    checkAllDone(hamper) {
         let result = true;
         for (let i = 0; i < this.hampers.length; i++) {
             const elem = this.hampers[i];
@@ -201,12 +201,12 @@ class GameScene extends Phaser.Scene {
         }
     }
 
-    addHandOverBtn(button){
+    addHandOverBtn(button) {
         if (this.hands[button.name]) {
             this.hands[button.name].destroy();
         }
 
-        this.hands[button.name] = this.add.sprite(button.x - button.displayWidth, button.y + button.displayHeight/2, 'sprites', 'hand');
+        this.hands[button.name] = this.add.sprite(button.x - button.displayWidth, button.y + button.displayHeight / 2, 'sprites', 'hand');
         this.hands[button.name].setDisplaySize(82, 88);
         this.hands[button.name].setOrigin(1, 0.5);
         this.hands[button.name].flipX = true;
@@ -214,7 +214,7 @@ class GameScene extends Phaser.Scene {
         this.createWawingTweens(this.hands[button.name], true);
     }
 
-    createWawingTweens(hand, reverse = false){
+    createWawingTweens(hand, reverse = false) {
         let frames = 999;
         let frame_duration = 585;
         let timeline = this.tweens.createTimeline();
@@ -256,15 +256,15 @@ class GameScene extends Phaser.Scene {
         timeline.play();
     }
 
-    createSwipingTweens(hand, click_area){
+    createSwipingTweens(hand, click_area) {
         let repeats = 999;
         let frame_duration = 585;
         let timeline = this.tweens.createTimeline();
 
         let first_x = click_area[0].x + hand.displayWidth;
-        let last_x = click_area[click_area.length-1].x + hand.displayWidth;
+        let last_x = click_area[click_area.length - 1].x + hand.displayWidth;
 
-        hand.y = click_area[0].y + hand.displayHeight/2;
+        hand.y = click_area[0].y + hand.displayHeight / 2;
         hand.x = first_x;
 
         for (let i = 0; i <= repeats; i++) {
@@ -280,7 +280,7 @@ class GameScene extends Phaser.Scene {
                 x: last_x,
                 ease: 'Linear',
                 duration: frame_duration * 4,
-                onComplete: ()=>{
+                onComplete: () => {
                     hand.setAlpha(0);
                 }
             });
@@ -290,7 +290,7 @@ class GameScene extends Phaser.Scene {
                 x: first_x,
                 ease: 'Linear',
                 duration: 3000,
-                onComplete: ()=>{
+                onComplete: () => {
                     hand.setAlpha(1);
                 }
             });
@@ -299,7 +299,7 @@ class GameScene extends Phaser.Scene {
         timeline.play();
     }
 
-    createSwipingAxisTweens(hand, click_area){
+    createSwipingAxisTweens(hand, click_area) {
         let repeats = 999;
         let frame_duration = 585;
         let timeline = this.tweens.createTimeline();
@@ -307,11 +307,11 @@ class GameScene extends Phaser.Scene {
         let coordinates = {
             start: {
                 x: click_area[0].x + hand.displayWidth,
-                y: click_area[0].y + hand.displayHeight/2,
+                y: click_area[0].y + hand.displayHeight / 2,
             },
             end: {
-                x: click_area[click_area.length-1].x + hand.displayWidth,
-                y: click_area[0].y + (config.shelf.height/3) + hand.displayHeight/2,
+                x: click_area[click_area.length - 1].x + hand.displayWidth,
+                y: click_area[0].y + (config.shelf.height / 3) + hand.displayHeight / 2,
             }
         };
 
@@ -333,7 +333,7 @@ class GameScene extends Phaser.Scene {
                 x: coordinates.end.x,
                 ease: 'Linear',
                 duration: frame_duration * 4,
-                onComplete: ()=>{
+                onComplete: () => {
                     hand.setAlpha(0);
                 }
             });
@@ -344,7 +344,7 @@ class GameScene extends Phaser.Scene {
                 y: coordinates.end.y,
                 ease: 'Linear',
                 duration: 500,
-                onComplete: ()=>{
+                onComplete: () => {
                     hand.setAlpha(1);
                 }
             });
@@ -362,7 +362,7 @@ class GameScene extends Phaser.Scene {
                 x: coordinates.end.x,
                 ease: 'Linear',
                 duration: frame_duration * 4,
-                onComplete: ()=>{
+                onComplete: () => {
                     hand.setAlpha(0);
                 }
             });
@@ -374,7 +374,7 @@ class GameScene extends Phaser.Scene {
                 x: coordinates.start.x,
                 ease: 'Linear',
                 duration: 500,
-                onComplete: ()=>{
+                onComplete: () => {
                     hand.setAlpha(1);
                 }
             });
@@ -392,7 +392,7 @@ class GameScene extends Phaser.Scene {
                 y: coordinates.end.y,
                 ease: 'Linear',
                 duration: frame_duration,
-                onComplete: ()=>{
+                onComplete: () => {
                     hand.setAlpha(0);
                 }
             });
@@ -403,7 +403,7 @@ class GameScene extends Phaser.Scene {
                 y: coordinates.start.y,
                 ease: 'Linear',
                 duration: 2500,
-                onComplete: ()=>{
+                onComplete: () => {
                     hand.setAlpha(1);
                 }
             });
@@ -412,39 +412,39 @@ class GameScene extends Phaser.Scene {
         timeline.play();
     }
 
-    addRetryButton(){
-        this.retry_button = this.add.sprite(this.screenEndpoints.no_margin_right, config.height*1/3, 'sprites', 'btn_bg_retry').setInteractive().setScale(.5).setOrigin(1, .5);
+    addRetryButton() {
+        this.retry_button = this.add.sprite(this.screenEndpoints.no_margin_right, config.height * 1 / 3, 'sprites', 'btn_bg_retry').setInteractive().setScale(.5).setOrigin(1, .5);
         this.retry_button.x += this.retry_button.displayWidth;
-        this.retry_button.y += this.retry_button.displayHeight/2;
+        this.retry_button.y += this.retry_button.displayHeight / 2;
         this.retry_button.on('pointerdown', this.restart, this);
     }
 
-    showRetryButton(){
+    showRetryButton() {
         this.retry_button.x = this.screenEndpoints.no_margin_right + this.retry_button.displayWidth;
         this.tweens.add({
             targets: this.retry_button,
             x: this.screenEndpoints.no_margin_right,
             ease: 'Power1',
             duration: 250,
-            onComplete: ()=>{
+            onComplete: () => {
                 this.addDoneButton();
                 this.showDoneButton();
             }
         });
     }
 
-    addDoneButton(){
+    addDoneButton() {
         if (this.done_button) {
             this.done_button.destroy();
         }
-        this.done_button = this.add.sprite(this.screenEndpoints.no_margin_right, config.height*1/3, 'sprites', 'btn_bg_done').setInteractive().setScale(.5).setOrigin(1, .5);
+        this.done_button = this.add.sprite(this.screenEndpoints.no_margin_right, config.height * 1 / 3, 'sprites', 'btn_bg_done').setInteractive().setScale(.5).setOrigin(1, .5);
         this.done_button.x += this.done_button.displayWidth;
-        this.done_button.y -= this.done_button.displayHeight/2;
+        this.done_button.y -= this.done_button.displayHeight / 2;
         this.done_button.name = 'done_btn';
         this.done_button.on('pointerdown', this.showEndScreen, this);
     }
 
-    showDoneButton(){
+    showDoneButton() {
         this.done_button.x = this.screenEndpoints.no_margin_right + this.done_button.displayWidth;
         this.tweens.add({
             targets: this.done_button,
@@ -454,34 +454,68 @@ class GameScene extends Phaser.Scene {
         });
     }
 
-    showEndScreen(){
+    showEndScreen() {
         this.closeShelf();
-        this.endScreen.bg = this.add.sprite(config.width/2, -config.height, 'gradient_bg').setAlpha(.965).setDepth(99).setInteractive();
+        this.endScreen.bg = this.add.sprite(config.width / 2, -config.height, 'gradient_bg').setAlpha(.965).setDepth(99).setInteractive();
 
         this.tweens.add({
             targets: this.endScreen.bg,
-            y: config.height/2,
+            y: config.height / 2,
             ease: 'Power2',
             duration: 750,
-            onComplete: ()=>{
+            onComplete: () => {
                 this.addFinishCloset();
             }
         });
     }
 
-    addFinishCloset(){
-        this.endScreen.closet = this.add.sprite(config.width/2, config.height * .6, 'sprites', 'finish_closet').setScale(2/3).setInteractive();
+    addFinishCloset() {
+        this.endScreen.closet = this.add.sprite(config.width / 2, config.height / 2, 'sprites', 'finish_closet').setScale(2 / 3).setInteractive();
         this.endScreen.closet.depth = this.endScreen.bg.depth;
         this.endScreen.stars = [];
 
-        this.endScreen.stars[1] = this.add.sprite(config.width/2 - config.finishStars.width * 1.5, config.height * .3, 'sprites', 'bigstar').setDisplaySize(config.finishStars.width, config.finishStars.height).setDepth(this.endScreen.bg.depth);
-        this.endScreen.stars[2] = this.add.sprite(config.width/2, config.height * .2, 'sprites', 'bigstar').setDisplaySize(config.finishStars.width, config.finishStars.height).setDepth(this.endScreen.bg.depth);
-        this.endScreen.stars[3] = this.add.sprite(config.width/2 + config.finishStars.width * 1.5, config.height * .3, 'sprites', 'bigstar').setDisplaySize(config.finishStars.width, config.finishStars.height).setDepth(this.endScreen.bg.depth);
+        this.endScreen.stars[1] = this.add.sprite(config.width / 2 - config.finishStars.width * 1.35, config.height * .2, 'sprites', 'bigstar').setDisplaySize(config.finishStars.width, config.finishStars.height).setDepth(this.endScreen.bg.depth);
+        this.endScreen.stars[2] = this.add.sprite(config.width / 2, config.height * .2 - config.finishStars.height, 'sprites', 'bigstar').setDisplaySize(config.finishStars.width, config.finishStars.height).setDepth(this.endScreen.bg.depth);
+        this.endScreen.stars[3] = this.add.sprite(config.width / 2 + config.finishStars.width * 1.35, config.height * .2, 'sprites', 'bigstar').setDisplaySize(config.finishStars.width, config.finishStars.height).setDepth(this.endScreen.bg.depth);
 
         this.setFinishProgress();
     }
 
-    starAnimation(star, num){
+    addButtonPlayNow() {
+        let btn_width = screen.width * 3 / 4;
+        let font_cof = 1.5;
+        if (screen.width > 480) {
+            btn_width = 480;
+            font_cof = 2;
+        }
+        let btn_height = btn_width / 3.15;
+        this.playNowButton = this.add.sprite(config.width / 2, this.endScreen.closet.y + this.endScreen.closet.displayHeight, 'sprites', 'playNowButton').setDisplaySize(btn_width, btn_height).setDepth(this.endScreen.bg.depth).setInteractive();
+        this.playNowButton.on('pointerdown', (e) => { 
+            window.open(store_link, '_self') }, this);
+        this.playNowButton.text = this.add.text(this.playNowButton.x, this.playNowButton.y, 'PLAY NOW', {
+            font: `${btn_height / font_cof}px Sublima-ExtraBold`,
+            fill: '#fff',
+        }).setOrigin(0.5).setDepth(this.endScreen.bg.depth).setScale(this.playNowButton.scale);
+
+        let timeline = this.tweens.createTimeline();
+        for (let i = 0; i < 99; i++) {
+            timeline.add({
+                targets: [this.playNowButton, this.playNowButton.text],
+                ease: 'Linear',
+                scale: this.playNowButton.scale + .08,
+                duration: 400,
+            });
+            timeline.add({
+                targets: [this.playNowButton, this.playNowButton.text],
+                scale: this.playNowButton.scale - .08,
+                ease: 'Linear',
+                duration: 400,
+            });
+        }
+        timeline.play();
+    }
+
+    starAnimation(star, num) {
         let delay = num * 250;
         let timeline = this.tweens.createTimeline();
 
@@ -491,7 +525,7 @@ class GameScene extends Phaser.Scene {
             ease: 'Power3',
             scale: star.scale * .75,
             duration: 325,
-            onComplete: ()=>{ 
+            onComplete: () => {
                 star.setTexture('sprites', 'bigstar_active');
                 this.sounds.star.play();
             }
@@ -507,7 +541,7 @@ class GameScene extends Phaser.Scene {
             scale: star.scale * 1,
             ease: 'Power3',
             duration: 325,
-            onComplete: ()=>{
+            onComplete: () => {
                 if (this.currentGameProgress >= 100 && !this.sounds.fireworks.isPlaying) {
                     this.sounds.fireworks.play();
                 }
@@ -517,50 +551,50 @@ class GameScene extends Phaser.Scene {
         timeline.play();
     }
 
-    setFinishStars(){
+    setFinishStars() {
         if (this.currentGameProgress >= config.progresStages[1] * 100) {
             this.starAnimation(this.endScreen.stars[1], 1);
-			if (this.currentGameProgress >= config.progresStages[2] * 100) {
-				this.starAnimation(this.endScreen.stars[2], 2);
-				if (this.currentGameProgress >= config.progresStages[3] * 100) {
-					this.starAnimation(this.endScreen.stars[3], 3);
-				}
-			}
-		}
+            if (this.currentGameProgress >= config.progresStages[2] * 100) {
+                this.starAnimation(this.endScreen.stars[2], 2);
+                if (this.currentGameProgress >= config.progresStages[3] * 100) {
+                    this.starAnimation(this.endScreen.stars[3], 3);
+                }
+            }
+        }
     }
 
-    setFinishProgress(){
+    setFinishProgress() {
         for (let i = 1; i <= 3; i++) {
             this.endScreen.stars[i].setTexture('sprites', 'bigstar');
         }
 
-        this.endScreen.waves = this.add.sprite(config.width/2, this.endScreen.closet.y + this.endScreen.closet.displayHeight * .42, 'sprites', 'waves_top').setScale(.665).setDepth(this.endScreen.bg.depth).setOrigin(.5, 1);
-        this.endScreen.waves_texture = this.add.sprite(config.width/2, this.endScreen.closet.y + this.endScreen.closet.displayHeight * .42, 'sprites', 'waves_texture').setDepth(this.endScreen.bg.depth).setOrigin(.5, 1);
+        this.endScreen.waves = this.add.sprite(config.width / 2, this.endScreen.closet.y + this.endScreen.closet.displayHeight * .42, 'sprites', 'waves_top').setScale(.665).setDepth(this.endScreen.bg.depth).setOrigin(.5, 1);
+        this.endScreen.waves_texture = this.add.sprite(config.width / 2, this.endScreen.closet.y + this.endScreen.closet.displayHeight * .42, 'sprites', 'waves_texture').setDepth(this.endScreen.bg.depth).setOrigin(.5, 1);
 
         let last_y = this.endScreen.waves.y;
-        let new_y = Math.floor(this.endScreen.waves.y - ((this.currentGameProgress/100) * ((this.endScreen.closet.displayHeight * .58) + this.endScreen.waves.displayHeight * 1.5)));
+        let new_y = Math.floor(this.endScreen.waves.y - ((this.currentGameProgress / 100) * ((this.endScreen.closet.displayHeight * .58) + this.endScreen.waves.displayHeight * 1.5)));
 
-        this.endScreen.waves_texture.setDisplaySize(this.endScreen.waves.displayWidth, this.endScreen.waves.displayHeight/2);
+        this.endScreen.waves_texture.setDisplaySize(this.endScreen.waves.displayWidth, this.endScreen.waves.displayHeight / 2);
 
         let scaleY = ((last_y - new_y) / this.endScreen.waves_texture.displayHeight) * this.endScreen.waves_texture.scaleY;
 
-        let animDuration = this.sounds.progress.duration * this.currentGameProgress/100 * 1000;
+        let animDuration = this.sounds.progress.duration * this.currentGameProgress / 100 * 1000;
 
         this.anims.create(
-			{
-				key: 'live_waves',
-				frames: [
-					{ key: 'sprites', frame: 'wave1' },
-					{ key: 'sprites', frame: 'wave2' },
-					{ key: 'sprites', frame: 'wave3' },
-					{ key: 'sprites', frame: 'wave4' },
-					{ key: 'sprites', frame: 'wave5' },
-					{ key: 'sprites', frame: 'wave6' },
+            {
+                key: 'live_waves',
+                frames: [
+                    { key: 'sprites', frame: 'wave1' },
+                    { key: 'sprites', frame: 'wave2' },
+                    { key: 'sprites', frame: 'wave3' },
+                    { key: 'sprites', frame: 'wave4' },
+                    { key: 'sprites', frame: 'wave5' },
+                    { key: 'sprites', frame: 'wave6' },
                     { key: 'sprites', frame: 'wave7' },
-				],
-				frameRate: 10,
-				repeat: -1
-			});
+                ],
+                frameRate: 10,
+                repeat: -1
+            });
 
         this.endScreen.waves.anims.play("live_waves");
 
@@ -578,28 +612,29 @@ class GameScene extends Phaser.Scene {
             scaleY: scaleY,
             ease: 'Linear',
             duration: animDuration,
-            onComplete: ()=>{
+            onComplete: () => {
                 this.sounds.progress.stop();
                 this.setFinishStars();
+                setTimeout(() => { this.addButtonPlayNow() }, 750);
             }
         });
 
         this.endScreen.text = {
-            up: this.add.text(config.width/2, this.endScreen.closet.y - this.endScreen.closet.displayHeight * .15, Math.floor(this.currentGameProgress) + '%', {
-                    font: '56px Sublima-Light',
-                    fill: '#fff',
-                }).setOrigin(0.5).setDepth(this.endScreen.bg.depth),
-            down: this.add.text(config.width/2, this.endScreen.closet.y, 'ACCURACY', {
-                    font: '17px Sublima-ExtraBold',
-                    fill: '#fff',
-                }).setOrigin(0.5).setDepth(this.endScreen.bg.depth),
+            up: this.add.text(config.width / 2, this.endScreen.closet.y - this.endScreen.closet.displayHeight * .15, Math.floor(this.currentGameProgress) + '%', {
+                font: '56px Sublima-Light',
+                fill: '#fff',
+            }).setOrigin(0.5).setDepth(this.endScreen.bg.depth),
+            down: this.add.text(config.width / 2, this.endScreen.closet.y, 'ACCURACY', {
+                font: '17px Sublima-ExtraBold',
+                fill: '#fff',
+            }).setOrigin(0.5).setDepth(this.endScreen.bg.depth),
         };
     }
 
-    createSounds(){
+    createSounds() {
         this.sounds = {
-            basketup: this.sound.add('basketup', {volume: 0.5}),
-            shelf: this.sound.add('shelf', {volume: 0.5}),
+            basketup: this.sound.add('basketup', { volume: 0.5 }),
+            shelf: this.sound.add('shelf', { volume: 0.5 }),
             dress_on: this.sound.add('dress_on'),
             encourage: this.sound.add('encourage'),
             bra: this.sound.add('bra'),
@@ -608,19 +643,19 @@ class GameScene extends Phaser.Scene {
             button: this.sound.add('button'),
             progress: this.sound.add('progress'),
             star: this.sound.add('star'),
-            theme: this.sound.add('theme', {volume: 0.25}),
+            theme: this.sound.add('theme', { volume: 0.25 }),
         }
         this.sounds.theme.loop = true;
     }
 
-    setEndpoints(){
-        if (screen.width >= screen.height){
-            if (screen.width/screen.height < 16/9){
+    setEndpoints() {
+        if (screen.width >= screen.height) {
+            if (screen.width / screen.height < 16 / 9) {
                 this.screenEndpoints = {
-                    left: (config.width/2) - screen.width/2 * (config.height/window.innerHeight) + (screen.width * .06),
-                    right: (config.width/2) + screen.width/2 * (config.height/window.innerHeight) - (screen.width * .06),
-                    no_margin_left: (config.width/2) - screen.width/2 * (config.height/window.innerHeight),
-                    no_margin_right: (config.width/2) + screen.width/2 * (config.height/window.innerHeight),
+                    left: (config.width / 2) - screen.width / 2 * (config.height / window.innerHeight) + (screen.width * .06),
+                    right: (config.width / 2) + screen.width / 2 * (config.height / window.innerHeight) - (screen.width * .06),
+                    no_margin_left: (config.width / 2) - screen.width / 2 * (config.height / window.innerHeight),
+                    no_margin_right: (config.width / 2) + screen.width / 2 * (config.height / window.innerHeight),
                 };
             }
             else {
@@ -631,49 +666,49 @@ class GameScene extends Phaser.Scene {
                     no_margin_right: config.width,
                 };
             }
-		}
-		else {
-			this.screenEndpoints = {
-				left: (config.width/2) - screen.width/2 * (config.height/window.innerHeight) + (screen.width * .06),
-                right: (config.width/2) + screen.width/2 * (config.height/window.innerHeight) - (screen.width * .06),
-                no_margin_left: (config.width/2) - screen.width/2 * (config.height/window.innerHeight),
-                no_margin_right: (config.width/2) + screen.width/2 * (config.height/window.innerHeight),
-			};
-		}
-	}
-
-    createBackground(){
-        this.sceneBG = this.add.sprite(config.width/2, config.height/2, 'sprites', 'scene_bg');
-
-		let scaleX = this.cameras.main.width / this.sceneBG.width;
-		let scaleY = this.cameras.main.height / this.sceneBG.height;
-		let scale = Math.max(scaleX, scaleY);
-		this.sceneBG.setScale(scale).setScrollFactor(0);
+        }
+        else {
+            this.screenEndpoints = {
+                left: (config.width / 2) - screen.width / 2 * (config.height / window.innerHeight) + (screen.width * .06),
+                right: (config.width / 2) + screen.width / 2 * (config.height / window.innerHeight) - (screen.width * .06),
+                no_margin_left: (config.width / 2) - screen.width / 2 * (config.height / window.innerHeight),
+                no_margin_right: (config.width / 2) + screen.width / 2 * (config.height / window.innerHeight),
+            };
+        }
     }
 
-    createLevelText(){
-        this.add.text(config.width/2, 75, 'Level 1', {
+    createBackground() {
+        this.sceneBG = this.add.sprite(config.width / 2, config.height / 2, 'sprites', 'scene_bg');
+
+        let scaleX = this.cameras.main.width / this.sceneBG.width;
+        let scaleY = this.cameras.main.height / this.sceneBG.height;
+        let scale = Math.max(scaleX, scaleY);
+        this.sceneBG.setScale(scale).setScrollFactor(0);
+    }
+
+    createLevelText() {
+        this.add.text(config.width / 2, 75, 'Level 1', {
             font: '32px sans-serif',
             fill: '#fff',
         }).setOrigin(0.5);
     }
 
-    createHampers(){
+    createHampers() {
         this.hampers = [];
-        for(let i = 0; i < 3; i++) {
+        for (let i = 0; i < 3; i++) {
             this.hampers.push(new Hamper(this, i, config.hamperNames[i]));
         }
 
-        for(let i = 0; i < this.hampers.length; i++) {
+        for (let i = 0; i < this.hampers.length; i++) {
             this.hampers[i].add_additional_images(i);
 
-            this.hampers[i].on('pointerdown', ()=>{
+            this.hampers[i].on('pointerdown', () => {
                 this.hampers[i].selecting();
 
                 config.hamperNames.forEach(name => {
-                    if (this.hands['hamper_' + name]){
+                    if (this.hands['hamper_' + name]) {
                         this.hands['hamper_' + name].destroy();
-                    } 
+                    }
                 });
 
                 if (i === 0) {
@@ -687,7 +722,7 @@ class GameScene extends Phaser.Scene {
                     }
                 }
             });
-            this.hampers[0].on('pointerdown', ()=>{
+            this.hampers[0].on('pointerdown', () => {
                 this.closeShelf();
                 this.hands['hamper_dress'].destroy();
             }, this);
@@ -696,51 +731,51 @@ class GameScene extends Phaser.Scene {
         }
     }
 
-	createCompleteBar(){
-		this.statusBar = this.add.sprite(this.screenEndpoints.left - window.innerWidth/2, config.height * .3, 'sprites', 'statusBarEmpty').setScale(.75);
-		this.statusBar.alpha = 0.68;
-		
-		this.statusBarComplete = this.add.sprite(this.screenEndpoints.left - window.innerWidth/2, config.height * .3, 'sprites', 'statusBarComplete').setScale(.75);
-		this.statusBarComplete.flipY = true;
-		this.statusBarComplete.frame.cutHeight = 0;
-		this.statusBarComplete.frame.updateUVs();
+    createCompleteBar() {
+        this.statusBar = this.add.sprite(this.screenEndpoints.left - window.innerWidth / 2, config.height * .3, 'sprites', 'statusBarEmpty').setScale(.75);
+        this.statusBar.alpha = 0.68;
 
-        this.progressArrow = this.add.sprite(this.statusBar.x + this.statusBar.displayWidth - this.statusBar.displayWidth * .15, this.statusBar.y + this.statusBar.displayHeight/2, 'sprites', 'progressArrow').setDisplaySize(15, 16).setOrigin(1, 0.5);
+        this.statusBarComplete = this.add.sprite(this.screenEndpoints.left - window.innerWidth / 2, config.height * .3, 'sprites', 'statusBarComplete').setScale(.75);
+        this.statusBarComplete.flipY = true;
+        this.statusBarComplete.frame.cutHeight = 0;
+        this.statusBarComplete.frame.updateUVs();
+
+        this.progressArrow = this.add.sprite(this.statusBar.x + this.statusBar.displayWidth - this.statusBar.displayWidth * .15, this.statusBar.y + this.statusBar.displayHeight / 2, 'sprites', 'progressArrow').setDisplaySize(15, 16).setOrigin(1, 0.5);
 
         this.statusBarStars = [];
         for (let i = 1; i <= 3; i++) {
-            this.statusBarStars[i] = this.add.sprite(this.screenEndpoints.left - window.innerWidth/2, this.statusBar.y - (this.statusBar.displayHeight/2) + (this.statusBar.displayHeight * (1 - config.progresStages[i])), 'sprites', 'star').setDisplaySize(this.statusBar.displayWidth * 1.25, this.statusBar.displayWidth * 1.1);
+            this.statusBarStars[i] = this.add.sprite(this.screenEndpoints.left - window.innerWidth / 2, this.statusBar.y - (this.statusBar.displayHeight / 2) + (this.statusBar.displayHeight * (1 - config.progresStages[i])), 'sprites', 'star').setDisplaySize(this.statusBar.displayWidth * 1.25, this.statusBar.displayWidth * 1.1);
         }
 
         this.tweens.add({
             targets: this.statusBar,
-            x: this.statusBar.x + window.innerWidth/2,
+            x: this.statusBar.x + window.innerWidth / 2,
             ease: 'Power1',
             duration: 250,
         });
         this.tweens.add({
             targets: this.statusBarComplete,
-            x: this.statusBarComplete.x + window.innerWidth/2,
+            x: this.statusBarComplete.x + window.innerWidth / 2,
             ease: 'Power1',
             duration: 250,
         });
         this.tweens.add({
             targets: this.progressArrow,
-            x: this.progressArrow.x + window.innerWidth/2,
+            x: this.progressArrow.x + window.innerWidth / 2,
             ease: 'Power1',
             duration: 250,
         });
         this.tweens.add({
             targets: this.statusBarStars,
-            x: this.statusBarStars[1].x + window.innerWidth/2,
+            x: this.statusBarStars[1].x + window.innerWidth / 2,
             ease: 'Power1',
             duration: 250,
         });
 
         this.updateBar(this.currentGameProgress);
-	}
+    }
 
-    deleteCompelteBar(){
+    deleteCompelteBar() {
         this.statusBar.destroy();
         this.statusBarComplete.destroy();
         this.progressArrow.destroy();
@@ -749,50 +784,50 @@ class GameScene extends Phaser.Scene {
         });
     }
 
-	updateBar(value){
-		if (value > 100) {
-			value = 100;
-		}
-		else if (value < 0) {
-			value = 0;
-		}
+    updateBar(value) {
+        if (value > 100) {
+            value = 100;
+        }
+        else if (value < 0) {
+            value = 0;
+        }
 
-		let all_height = this.statusBar.displayHeight;
-		let one_percent = all_height / 100;
-		let new_value = one_percent * value;
-		this.statusBarComplete.frame.cutHeight = new_value/75*100;
-		this.statusBarComplete.frame.updateUVs();
-		this.progressArrow.y = this.statusBar.y + this.statusBar.displayHeight/2 - new_value;
+        let all_height = this.statusBar.displayHeight;
+        let one_percent = all_height / 100;
+        let new_value = one_percent * value;
+        this.statusBarComplete.frame.cutHeight = new_value / 75 * 100;
+        this.statusBarComplete.frame.updateUVs();
+        this.progressArrow.y = this.statusBar.y + this.statusBar.displayHeight / 2 - new_value;
 
         for (let i = 1; i <= 3; i++) {
             this.statusBarStars[i].setTexture('sprites', 'star');
         }
 
-		if (this.currentGameProgress >= config.progresStages[1] * 100) {
-			this.statusBarStars[1].setTexture('sprites', 'star_active');
-			if (this.currentGameProgress >= config.progresStages[2] * 100) {
-				this.statusBarStars[2].setTexture('sprites', 'star_active');
-				if (this.currentGameProgress >= config.progresStages[3] * 100) {
-					this.statusBarStars[3].setTexture('sprites', 'star_active');
-				}
-			}
-		}
-	}
+        if (this.currentGameProgress >= config.progresStages[1] * 100) {
+            this.statusBarStars[1].setTexture('sprites', 'star_active');
+            if (this.currentGameProgress >= config.progresStages[2] * 100) {
+                this.statusBarStars[2].setTexture('sprites', 'star_active');
+                if (this.currentGameProgress >= config.progresStages[3] * 100) {
+                    this.statusBarStars[3].setTexture('sprites', 'star_active');
+                }
+            }
+        }
+    }
 
-    getPercentOfClothe(clothe){
+    getPercentOfClothe(clothe) {
         this.currentGameProgress += config.clothingSettings[clothe].percentage;
         this.updateBar(this.currentGameProgress);
     }
 
     generateRandom(min, max) {
         let difference = max - min;
-        let rand = Math.random(); 
+        let rand = Math.random();
         rand = Math.round(rand * difference);
         rand = rand + min;
         return rand;
     }
 
-    addObjectsInHamper(){
+    addObjectsInHamper() {
         this.hampers.forEach(hamper => {
             hamper.objectsIn = [];
             let step;
@@ -800,51 +835,51 @@ class GameScene extends Phaser.Scene {
             switch (hamper.name) {
                 case 'dress':
                     step = 6;
-                    scale_cof = 1/33;
+                    scale_cof = 1 / 33;
                     for (let i = 0; i < config.clothingSettings[hamper.name].nums; i++) {
                         let sprite_name = hamper.name + '_fold';
                         hamper.objectsIn[i] = this.add.sprite(this.generateRandom(hamper.x - hamper.x * scale_cof, hamper.x + hamper.x * scale_cof), hamper.y - hamper.displayHeight + 107 - (this.generateRandom(0, step) * i), 'sprites', sprite_name).setDisplaySize(hamper.displayWidth - hamper.displayWidth * .4, hamper.displayWidth - hamper.displayWidth * .25,).setAngle(this.generateRandom(-25, 25));
                     }
-                    
-                break;
+
+                    break;
                 case 'bra':
                     step = 7;
-                    scale_cof = 1/50;
+                    scale_cof = 1 / 50;
                     for (let i = 0; i < config.clothingSettings[hamper.name].nums; i++) {
                         let sprite_name = hamper.name + '_' + (i % config.clothingSettings[hamper.name].variables);
                         hamper.objectsIn[i] = this.add.sprite(this.generateRandom(hamper.x - hamper.x * scale_cof, hamper.x + hamper.x * scale_cof), hamper.y - hamper.displayHeight + 133 - (this.generateRandom(0, step) * i), 'sprites', sprite_name).setDisplaySize(100, 50).setAngle(this.generateRandom(-15, 15));
                     }
-                break;
+                    break;
                 case 'underpants':
                     step = 3.5;
-                    scale_cof = 1/33;
+                    scale_cof = 1 / 33;
                     for (let i = 0; i < config.clothingSettings[hamper.name].nums; i++) {
                         let sprite_name = 'underpants_' + (i % config.clothingSettings[hamper.name].variables);
                         hamper.objectsIn[i] = this.add.sprite(this.generateRandom(hamper.x - hamper.x * scale_cof, hamper.x + hamper.x * scale_cof), hamper.y - hamper.displayHeight + 137 - (this.generateRandom(0, step) * i), 'sprites', sprite_name).setDisplaySize(81, 42).setAngle(this.generateRandom(-40, 40));
                     }
-                break;
+                    break;
             }
         });
     }
 
-    addClickAreaDress(){
+    addClickAreaDress() {
         this.sounds.theme.play();
         for (let i = 0; i < config.clothingSettings.dress.nums; i++) {
-            this.click_area['dress'].push(this.add.sprite(config.width/2 - config.closet.width/2 + config.closet.width/config.clothingSettings.dress.nums * i + config.closet.width/config.clothingSettings.dress.nums/2, config.height * .37, 'sprites', 'empty').setAlpha(.0001).setDisplaySize(config.closet.width/config.clothingSettings.dress.nums, config.height * .4).setInteractive());
+            this.click_area['dress'].push(this.add.sprite(config.width / 2 - config.closet.width / 2 + config.closet.width / config.clothingSettings.dress.nums * i + config.closet.width / config.clothingSettings.dress.nums / 2, config.height * .37, 'sprites', 'empty').setAlpha(.0001).setDisplaySize(config.closet.width / config.clothingSettings.dress.nums, config.height * .4).setInteractive());
         }
 
         this.click_area['dress'].forEach(area => {
-            area.on('pointerdown', ()=>{this.addDressInCloset(area)}, this);
-            area.on('pointermove', ()=>{this.addDressInCloset(area)}, this);
+            area.on('pointerdown', () => { this.addDressInCloset(area) }, this);
+            area.on('pointermove', () => { this.addDressInCloset(area) }, this);
         });
 
         this.dress_on_hanger = [];
 
-        this.shelf_area = this.add.sprite(config.width/2, config.height * .65, 'sprites', 'empty').setAlpha(.0001).setDisplaySize(config.closet.width, 150).setInteractive();
+        this.shelf_area = this.add.sprite(config.width / 2, config.height * .65, 'sprites', 'empty').setAlpha(.0001).setDisplaySize(config.closet.width, 150).setInteractive();
         this.shelf_area.on('pointerdown', this.openShelf, this);
     }
 
-    addDressInCloset(area){
+    addDressInCloset(area) {
         if (this.hands['clickArea_dress']) {
             this.hands['clickArea_dress'].destroy();
         }
@@ -873,7 +908,7 @@ class GameScene extends Phaser.Scene {
         this.getPercentOfClothe(this.selectedСlothing);
     }
 
-    addClickAreaBra(){
+    addClickAreaBra() {
         if ((this.selectedСlothing != config.hamperNames[1]) || !this.shelfActive) {
             return;
         }
@@ -890,21 +925,21 @@ class GameScene extends Phaser.Scene {
             return;
         }
 
-        let y = this.shelf.y - (this.shelf.displayHeight*.9)/2 + this.shelf.displayHeight/config.clothingSettings[this.selectedСlothing].height/2;
-        let x = this.shelf.x - (this.shelf.displayWidth*.9)/2 - (this.shelf.displayWidth*.9)/config.clothingSettings[this.selectedСlothing].width/2;
+        let y = this.shelf.y - (this.shelf.displayHeight * .9) / 2 + this.shelf.displayHeight / config.clothingSettings[this.selectedСlothing].height / 2;
+        let x = this.shelf.x - (this.shelf.displayWidth * .9) / 2 - (this.shelf.displayWidth * .9) / config.clothingSettings[this.selectedСlothing].width / 2;
 
         for (let i = 0; i < config.clothingSettings[this.selectedСlothing].width * config.clothingSettings[this.selectedСlothing].lines; i++) {
-            x += this.shelf.displayWidth/config.clothingSettings[this.selectedСlothing].width*.9;
-            if(i%config.clothingSettings[this.selectedСlothing].width === 0 && i > 0) {
-                x = this.shelf.x - (this.shelf.displayWidth*.9)/2 + ((this.shelf.displayWidth*.9)/config.clothingSettings[this.selectedСlothing].width / 2);
-                y += this.shelf.displayHeight*.9/config.clothingSettings[this.selectedСlothing].height;
+            x += this.shelf.displayWidth / config.clothingSettings[this.selectedСlothing].width * .9;
+            if (i % config.clothingSettings[this.selectedСlothing].width === 0 && i > 0) {
+                x = this.shelf.x - (this.shelf.displayWidth * .9) / 2 + ((this.shelf.displayWidth * .9) / config.clothingSettings[this.selectedСlothing].width / 2);
+                y += this.shelf.displayHeight * .9 / config.clothingSettings[this.selectedСlothing].height;
             }
             this.click_area['bra'].push(this.add.sprite(x, y, 'sprites', 'empty').setAlpha(.001).setDisplaySize(this.shelf.displayWidth / config.clothingSettings[this.selectedСlothing].width * .9, this.shelf.displayHeight / config.clothingSettings[this.selectedСlothing].height - 7).setInteractive());
         }
 
         this.click_area['bra'].forEach(area => {
             this.active_click_area_nums.bra++;
-            area.on('pointermove', ()=>{this.addBraInShelf(area)}, this);
+            area.on('pointermove', () => { this.addBraInShelf(area) }, this);
         });
 
         if (!this.hands.clickArea_bra) {
@@ -912,7 +947,7 @@ class GameScene extends Phaser.Scene {
         }
     }
 
-    addBraInShelf(area){
+    addBraInShelf(area) {
         config.hamperNames.forEach(name => {
             if (this.hands['clickArea_' + name]) {
                 this.hands['clickArea_' + name].destroy();
@@ -935,8 +970,8 @@ class GameScene extends Phaser.Scene {
                     }
                     */
                     let y_gap = 7;
-                    this.click_area['bra'].push(this.add.sprite(area.x, area.y - (this.shelf_level['bra'] * y_gap), 'sprites', sprite_frame).setDisplaySize(this.shelf.displayWidth/config.clothingSettings[this.selectedСlothing].width * .68, this.shelf.displayHeight/config.clothingSettings[this.selectedСlothing].height * .7));
-                    let last_elem = this.click_area['bra'][this.click_area['bra'].length-1];
+                    this.click_area['bra'].push(this.add.sprite(area.x, area.y - (this.shelf_level['bra'] * y_gap), 'sprites', sprite_frame).setDisplaySize(this.shelf.displayWidth / config.clothingSettings[this.selectedСlothing].width * .68, this.shelf.displayHeight / config.clothingSettings[this.selectedСlothing].height * .7));
+                    let last_elem = this.click_area['bra'][this.click_area['bra'].length - 1];
                     if (this.shelf_level['bra'] > 0) {
                         last_elem.setDisplaySize(last_elem.displayWidth * (.065 * this.shelf_level['bra'] + 1), last_elem.displayHeight * (.065 * this.shelf_level['bra'] + 1));
                     }
@@ -977,7 +1012,7 @@ class GameScene extends Phaser.Scene {
         }
     }
 
-    addClickAreaUnderpants(){
+    addClickAreaUnderpants() {
         if ((this.selectedСlothing != config.hamperNames[2]) || !this.shelfActive) {
             return;
         }
@@ -994,21 +1029,21 @@ class GameScene extends Phaser.Scene {
             return;
         }
 
-        let y = this.shelf.y + (this.shelf.displayHeight*.9)/3;
-        let x = this.shelf.x - (this.shelf.displayWidth*(.9 + this.shelf_level['underpants'] * .05 ))/2 - (this.shelf.displayWidth*(.9 + this.shelf_level['underpants'] * .05 ))/config.clothingSettings[this.selectedСlothing].width/2;
+        let y = this.shelf.y + (this.shelf.displayHeight * .9) / 3;
+        let x = this.shelf.x - (this.shelf.displayWidth * (.9 + this.shelf_level['underpants'] * .05)) / 2 - (this.shelf.displayWidth * (.9 + this.shelf_level['underpants'] * .05)) / config.clothingSettings[this.selectedСlothing].width / 2;
 
         for (let i = 0; i < config.clothingSettings[this.selectedСlothing].width * config.clothingSettings[this.selectedСlothing].lines; i++) {
-            x += this.shelf.displayWidth/config.clothingSettings[this.selectedСlothing].width*(.9 + this.shelf_level['underpants'] * .05 );
-            if(i%config.clothingSettings[this.selectedСlothing].width === 0 && i > 0) {
-                x = this.shelf.x - (this.shelf.displayWidth*(.9 + this.shelf_level['underpants'] * .05 ))/2 + ((this.shelf.displayWidth*(.9 + this.shelf_level['underpants'] * .05 ))/config.clothingSettings[this.selectedСlothing].width / 2);
-                y += this.shelf.displayHeight*.9/config.clothingSettings[this.selectedСlothing].height;
+            x += this.shelf.displayWidth / config.clothingSettings[this.selectedСlothing].width * (.9 + this.shelf_level['underpants'] * .05);
+            if (i % config.clothingSettings[this.selectedСlothing].width === 0 && i > 0) {
+                x = this.shelf.x - (this.shelf.displayWidth * (.9 + this.shelf_level['underpants'] * .05)) / 2 + ((this.shelf.displayWidth * (.9 + this.shelf_level['underpants'] * .05)) / config.clothingSettings[this.selectedСlothing].width / 2);
+                y += this.shelf.displayHeight * .9 / config.clothingSettings[this.selectedСlothing].height;
             }
             this.click_area['underpants'].push(this.add.sprite(x, y, 'sprites', 'empty').setAlpha(.001).setDisplaySize(this.shelf.displayWidth / config.clothingSettings[this.selectedСlothing].width * .9, this.shelf.displayHeight / config.clothingSettings[this.selectedСlothing].height - 7).setInteractive());
         }
 
         this.click_area['underpants'].forEach(area => {
             this.active_click_area_nums.underpants++;
-            area.on('pointermove', ()=>{this.addUnderpantsInShelf(area)}, this);
+            area.on('pointermove', () => { this.addUnderpantsInShelf(area) }, this);
         });
 
         if (!this.hands.clickArea_underpants) {
@@ -1016,7 +1051,7 @@ class GameScene extends Phaser.Scene {
         }
     }
 
-    addUnderpantsInShelf(area){
+    addUnderpantsInShelf(area) {
         this.hands['clickArea_underpants'].destroy();
         if (this.selectedСlothing) {
             if (this.clothing_nums_on[this.selectedСlothing] >= config.clothingSettings[this.selectedСlothing].nums || this.selectedСlothing !== config.hamperNames[2]) {
@@ -1029,8 +1064,8 @@ class GameScene extends Phaser.Scene {
                     let object = hamper.objectsIn.pop();
                     let sprite_frame = 'fold_' + object.frame.name;
                     let y_gap = 5.5;
-                    this.click_area['underpants'].push(this.add.sprite(area.x, area.y - (this.shelf_level['underpants'] * y_gap) + 2.5, 'sprites', sprite_frame).setDisplaySize(this.shelf.displayWidth/config.clothingSettings[this.selectedСlothing].width * .86, this.shelf.displayHeight/config.clothingSettings[this.selectedСlothing].height * .72));
-                    let last_elem = this.click_area['underpants'][this.click_area['underpants'].length-1];
+                    this.click_area['underpants'].push(this.add.sprite(area.x, area.y - (this.shelf_level['underpants'] * y_gap) + 2.5, 'sprites', sprite_frame).setDisplaySize(this.shelf.displayWidth / config.clothingSettings[this.selectedСlothing].width * .86, this.shelf.displayHeight / config.clothingSettings[this.selectedСlothing].height * .72));
+                    let last_elem = this.click_area['underpants'][this.click_area['underpants'].length - 1];
                     if (this.shelf_level['underpants'] > 0) {
                         last_elem.setDisplaySize(last_elem.displayWidth * (.1 * this.shelf_level['underpants'] + 1), last_elem.displayHeight * (.1 * this.shelf_level['underpants'] + 1));
                     }
@@ -1071,7 +1106,7 @@ class GameScene extends Phaser.Scene {
         }
     }
 
-    closeShelf(){
+    closeShelf() {
         if (!this.shelf) {
             return;
         }
@@ -1081,9 +1116,9 @@ class GameScene extends Phaser.Scene {
                 this.hands['clickArea_' + name].destroy();
             }
         });
-        
+
         this.shelfActive = false;
-            this.shelf.destroy();
+        this.shelf.destroy();
         this.click_area['bra'].forEach(object => {
             object.setVisible(0);
         });
@@ -1092,7 +1127,7 @@ class GameScene extends Phaser.Scene {
         });
     }
 
-    openShelf(){
+    openShelf() {
         if (this.hands['shelf']) {
             this.hands['shelf'].destroy();
         }
@@ -1107,7 +1142,7 @@ class GameScene extends Phaser.Scene {
 
         else {
             this.shelfActive = true;
-            this.shelf = this.add.sprite(config.width/2, this.shelf_area.y - config.shelf.height/2, 'sprites', 'shelf').setDisplaySize(config.shelf.width, config.shelf.height).setInteractive();
+            this.shelf = this.add.sprite(config.width / 2, this.shelf_area.y - config.shelf.height / 2, 'sprites', 'shelf').setDisplaySize(config.shelf.width, config.shelf.height).setInteractive();
 
             if (!this.clothing_nums_on[config.hamperNames[1]] || !this.clothing_nums_on[config.hamperNames[2]]) {
                 if (this.selectedСlothing === 'bra') {
@@ -1130,22 +1165,22 @@ class GameScene extends Phaser.Scene {
         this.sounds.shelf.play();
     }
 
-    addGreetingText(click_area){
+    addGreetingText(click_area) {
         let num = this.generateRandom(1, 5);
         let angle = this.generateRandom(-15, 15);
         let coordinates = {
-            x: config.width/2,
+            x: config.width / 2,
             y: 0,
         };
-        if (click_area.displayHeight > config.height * 1/3) {
-            coordinates.y = click_area.y - click_area.displayHeight * 2/3;
+        if (click_area.displayHeight > config.height * 1 / 3) {
+            coordinates.y = click_area.y - click_area.displayHeight * 2 / 3;
         }
         else {
             coordinates.y = this.shelf.y - this.shelf.displayHeight;
         }
 
         this.greeting_text.push(this.add.sprite(coordinates.x, coordinates.y, 'sprites', 'text_' + num).setScale(.25));
-        let last_elem = this.greeting_text[this.greeting_text.length-1];
+        let last_elem = this.greeting_text[this.greeting_text.length - 1];
         last_elem.depth = this.clothing_nums_on[this.selectedСlothing] * 2;
 
         let timeline = this.tweens.createTimeline();
@@ -1168,7 +1203,7 @@ class GameScene extends Phaser.Scene {
             alpha: 0,
             ease: 'Linear',
             duration: 475,
-            onComplete: ()=>{
+            onComplete: () => {
                 last_elem.destroy();
             }
         });

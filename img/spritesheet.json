@@ -1177,6 +1177,27 @@
             }
         },
         {
+            "filename": "playNowButton",
+            "frame": {
+                "x": 0,
+                "y": 2035,
+                "w": 524,
+                "h": 160
+            },
+            "rotated": false,
+            "trimmed": false,
+            "spriteSourceSize": {
+                "x": 0,
+                "y": 0,
+                "w": 524,
+                "h": 160
+            },
+            "sourceSize": {
+                "w": 524,
+                "h": 160
+            }
+        },
+        {
             "filename": "empty",
             "frame": {
                 "x": 0,
@@ -1204,7 +1225,7 @@
         "image": "spritesheet_hd.png",
         "size": {
             "w": 2750,
-            "h": 2030
+            "h": 2200
         },
         "scale": 1
     }
