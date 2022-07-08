@@ -1,42 +1,9 @@
-var Preloader = new Phaser.Class({
+class Preloader extends Phaser.Scene {
+	constructor() {
+        super("Preloader");
+    }
 
-	Extends: Phaser.Scene,
-
-	initialize:
-
-		function Preloader() {
-			Phaser.Scene.call(this, {
-				key: 'Preloader',
-				pack: {
-					files: [
-						{ type: 'image', key: 'loadingbar_bg', url: 'img/loadingbar_bg.png' },
-						{ type: 'image', key: 'loadingbar_fill', url: 'img/loadingbar_fill.png' }
-					]
-				}
-			});
-		},
-
-	setPreloadSprite: function (sprite) {
-		this.preloadSprite = { sprite: sprite, width: sprite.width, height: sprite.height };
-		sprite.visible = true;
-		this.load.on('progress', this.onProgress, this);
-	},
-
-	onProgress: function (value) {
-
-		if (this.preloadSprite) {
-			var w = Math.floor(this.preloadSprite.width * value);
-			this.preloadSprite.sprite.frame.width = (w <= 0 ? 1 : w);
-			this.preloadSprite.sprite.frame.cutWidth = w;
-			this.preloadSprite.sprite.frame.updateUVs();
-		}
-	},
-
-	preload: function () {
-		this.loadingbar_bg = this.add.sprite(config.width / 2, 300, "loadingbar_bg");
-		this.loadingbar_fill = this.add.sprite(config.width / 2, 300, "loadingbar_fill");
-		this.setPreloadSprite(this.loadingbar_fill);
-
+	preload() {
 		this.textures.addBase64('progressArrow', base64.progressArrow);
 		this.textures.addBase64('bra_0', base64.bra_0);
 		this.textures.addBase64('bra_1', base64.bra_1);
@@ -100,13 +67,14 @@ var Preloader = new Phaser.Class({
 		this.load.audio('progress', ['snd/progress.mp3']);
 		this.load.audio('button', ['snd/button.mp3']);
 		this.load.audio('star', ['snd/stars.mp3']);
-	},
+	}
 
-	create: function () {
-		this.loadingbar_bg.destroy();
-		this.loadingbar_fill.destroy();
-		this.preloadSprite = null;
+	create() {
+		
+		document.querySelector('body').style.display = 'block';
+		document.querySelector('#logo').remove();
+		document.querySelector('.loader').remove();
 
 		this.scene.start('GameScene');
 	}
-});
+}

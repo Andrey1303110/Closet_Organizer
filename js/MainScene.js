@@ -1,4 +1,4 @@
-var test;
+//var test;
 class GameScene extends Phaser.Scene {
     constructor() {
         super("GameScene");
@@ -44,7 +44,6 @@ class GameScene extends Phaser.Scene {
         this.createHampers();
         this.addObjectsInHamper();
         this.addClosetClickArea();
-        this.addRetryButton();
     }
 
     restart() {
@@ -116,6 +115,7 @@ class GameScene extends Phaser.Scene {
             });
             this.createCompleteBar();
             this.addClickAreaDress();
+            this.addRetryButton();
         }, this);
 
         this.addInitialHand();
@@ -414,7 +414,7 @@ class GameScene extends Phaser.Scene {
 
     addRetryButton() {
         this.retry_button = this.add.sprite(this.screenEndpoints.no_margin_right, config.height * 1 / 3, 'btn_bg_retry').setInteractive().setScale(.5).setOrigin(1, .5);
-        this.retry_button.x += this.retry_button.displayWidth;
+        this.retry_button.x += this.retry_button.displayWidth * 2;
         this.retry_button.y += this.retry_button.displayHeight / 2;
         this.retry_button.on('pointerdown', this.restart, this);
     }

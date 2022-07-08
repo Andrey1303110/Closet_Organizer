@@ -58,7 +58,8 @@ const config = {
   type: Phaser.AUTO,
   width: 1920,
   height: 1080,
-  backgroundColor: '#CCC9C9',
+  backgroundColor: 'black',
+  parent: 'game',
   orientation: Phaser.Scale.PORTRAIT,
   scale: {
       mode: Phaser.Scale.ENVELOP,
