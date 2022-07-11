@@ -1,6 +1,6 @@
 class Hamper extends Phaser.GameObjects.Sprite {
     constructor(scene, num, name){
-        super(scene, config.width/2, config.height + config.height/2, 'hamper_' + num);
+        super(scene, config.width/2, 0, 'hamper_' + num);
         this.scene = scene;
         this.number = num;
         this.name = name;
@@ -17,6 +17,7 @@ class Hamper extends Phaser.GameObjects.Sprite {
     }
 
     setPositions(hamper_num){
+        this.setPosition(this.x, config.height * .935 + config.height/2);
         if (hamper_num === 0) {
             this.setPosition(this.x - config.hamper.width, this.y);
         }
