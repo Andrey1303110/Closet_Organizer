@@ -836,7 +836,6 @@ class GameScene extends Phaser.Scene {
                         this.addHandOverClickArea(this.hampers[0].name);
                         if (this.hands.shelf) {
                             this.hands.shelf.destroy();
-                            console.log('this');
                         }
                     }
                 }
