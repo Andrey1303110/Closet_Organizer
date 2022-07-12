@@ -767,14 +767,13 @@ class GameScene extends Phaser.Scene {
 
 
     setEndpoints() {
-        if (screen.width >= screen.height) {
-            if (screen.width / screen.height < 16 / 9) {
+        if (document.body.clientWidth >= document.body.clientHeight) {
+            if (document.body.clientWidth / document.body.clientHeight < 16 / 9) {
                 this.screenEndpoints = {
-                    left: (config.width / 2) - screen.width / 2 * (config.height / document.body.clientHeight) + (screen.width * .09),
-                    right: (config.width / 2) + screen.width / 2 * (config.height / document.body.clientHeight) - (screen.width * .09),
-                    no_margin_left: (config.width / 2) - screen.width / 2 * (config.height / document.body.clientHeight),
-                    //no_margin_right: (config.width / 2) + screen.width / 2 * (config.height / document.body.clientHeight),
-                    no_margin_right: config.width+(screen.width/(document.body.clientHeight/config.height)-config.width)*.5,
+                    left: (config.width / 2) - document.body.clientWidth / 2 * (config.height / document.body.clientHeight) + (document.body.clientWidth * .09),
+                    right: (config.width / 2) + document.body.clientWidth / 2 * (config.height / document.body.clientHeight) - (document.body.clientWidth * .09),
+                    no_margin_left: (config.width / 2) - (((config.height / document.body.clientHeight) * document.body.clientWidth) / 2),
+                    no_margin_right: (config.width / 2) + (((config.height / document.body.clientHeight) * document.body.clientWidth) / 2),
                 };
             }
             else {
@@ -788,11 +787,10 @@ class GameScene extends Phaser.Scene {
         }
         else {
             this.screenEndpoints = {
-                left: (config.width / 2) - screen.width / 2 * (config.height / document.body.clientHeight) + (screen.width * .09),
-                right: (config.width / 2) + screen.width / 2 * (config.height / document.body.clientHeight) - (screen.width * .09),
-                no_margin_left: (config.width / 2) - screen.width / 2 * (config.height / document.body.clientHeight),
-                //no_margin_right: (config.width / 2) + screen.width / 2 * (config.height / document.body.clientHeight),
-                no_margin_right: config.width+(screen.width/(document.body.clientHeight/config.height)-config.width)*.5,
+                left: (config.width / 2) - document.body.clientWidth / 2 * (config.height / document.body.clientHeight) + (document.body.clientWidth * .09),
+                right: (config.width / 2) + document.body.clientWidth / 2 * (config.height / document.body.clientHeight) - (document.body.clientWidth * .09),
+                no_margin_left: (config.width / 2) - (((config.height / document.body.clientHeight) * document.body.clientWidth) / 2),
+                no_margin_right: (config.width / 2) + (((config.height / document.body.clientHeight) * document.body.clientWidth) / 2),
             };
         }
     }
